@@ -1,6 +1,5 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
-
 #include "Table.h"
 
 
