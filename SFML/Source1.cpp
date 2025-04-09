@@ -60,19 +60,22 @@ void main() {
 	float deltaTimeAnimation = 0, f;
 	int currentFrame = 0;
 
-/*
+
 	sf::Texture spriteSheet = LoadSpriteSheet("../Assets/Spritesheets/ParchisTable.png");
 	sf::Sprite sprite = sf::Sprite(spriteSheet);
 
 	sf::Vector2f newOrigin = sf::Vector2f(sprite.getTexture().getSize().x * 0.5, sprite.getTexture().getSize().y * 0.5);
-	sprite.setOrigin(newOrigin);
+	//sprite.setOrigin(newOrigin);
 
-	sprite.setScale({ 0.265, 0.265});
 
 	sf::Vector2f newPosition = sf::Vector2f(WIDTH * 0.5f, HEIGHT * 0.5f);
-	sprite.setPosition(newPosition);
-	*/
+	//sprite.setPosition(newPosition);
+	Render(*window, sprite);
+	
 	Table* table = new Table(*window);
+	table->Draw();
+
+
 	while (window->isOpen()) 
 	{
 		float deltaTime = deltaTimeClock.restart().asSeconds();
@@ -80,8 +83,8 @@ void main() {
 		while (const std::optional event = window->pollEvent()) {
 			//aqui va lo que quiero que ocurra si hay un input/evento
 			HandleEvent(*event, *window);
+
 		}
-		table->Draw();
 	}
 	delete window;
 }

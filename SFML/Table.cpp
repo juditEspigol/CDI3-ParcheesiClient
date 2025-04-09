@@ -10,7 +10,7 @@ Table::Table(sf::RenderWindow& window)
     _window = &window;
 
     // Abrir el archivo JSON exportado desde Tiled
-    std::ifstream file("Assets/Tiled/ParchisMap.json");
+    std::ifstream file("../Assets/Tiled/ParchisMap.json");
     if (!file.is_open()) {
         std::cerr << "Error: No se pudo abrir ParchisMap.json" << std::endl;
         return;
@@ -62,6 +62,7 @@ Table::Table(sf::RenderWindow& window)
             }
         }
     }
+    std::cout << "Total de celdas cargadas: " << _cells.size() << std::endl;
 }
 
 void Table::Draw()

@@ -4,11 +4,10 @@
 Cell::Cell(int id, sf::Vector2f position)
 {
 	_id = id;
-	_position = position;
-	
+	_position = position;	
 	sf::Vector2f newSize = sf::Vector2f(CELL_WIDTH, CELL_HEIGTH);
+	_shape.setFillColor(sf::Color::Magenta);
 	_shape.setSize(newSize);
-	_shape.setFillColor(sf::Color::White);
 	_shape.setPosition(position);
 }
 

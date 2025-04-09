@@ -6,7 +6,7 @@
 #include "Token.h"
 
 
-#define CELL_WIDTH 64
+#define CELL_WIDTH 32
 #define CELL_HEIGTH 32
 
 class Cell

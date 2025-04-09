@@ -187,8 +187,8 @@
                  "type":"",
                  "visible":true,
                  "width":0,
-                 "x":476.941,
-                 "y":36.2519
+                 "x":478.941,
+                 "y":37.2519
                 },
             
                 {
@@ -2005,12 +2005,12 @@
  "nextobjectid":326,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"1.10.1",
+ "tiledversion":"1.11.1",
  "tileheight":960,
  "tilesets":[
         {
          "firstgid":1,
-         "source":"ParchisMap.tsx"
+         "source":"Parxis.tsx"
         }],
  "tilewidth":960,
  "type":"map",

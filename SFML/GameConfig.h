@@ -1,8 +1,8 @@
 #pragma once
 
 #define GC GameConfig::instance()
-#define WIDTH 960	
-#define HEIGHT 960
+#define WIDTH 950	
+#define HEIGHT 950
 
 class GameConfig
 {
