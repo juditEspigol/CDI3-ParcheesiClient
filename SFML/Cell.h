@@ -1,8 +1,6 @@
 #pragma once
-
 #include <iostream>
 #include <SFML/Graphics.hpp>
-
 #include "Token.h"
 
 
@@ -26,7 +24,7 @@ public:
 	void RemovePlayer(Token* token);
 
 	inline int GetId() { return _id; }
-	sf::Vector2f GetPosition();
+	inline sf::Vector2f GetPosition() { return _position;}
 	std::vector<Token*> GetTokens();
 
 };

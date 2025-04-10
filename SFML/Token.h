@@ -1,5 +1,4 @@
 #pragma once
-
 #include <iostream>
 #include <SFML/Graphics.hpp>
 
@@ -9,7 +8,7 @@ private:
 	int _playerId;
 	int _currentCell;
 	bool _inBase;
-	sf::CircleShape _cell;
+	sf::CircleShape _shape;
 
 public:
 	Token(int playerId);
