@@ -2,6 +2,9 @@
 
 Token::Token(int playerId)
 {
+
+	_idPosition = 12;
+
 	switch (playerId)
 	{
 	case 1:
@@ -23,17 +26,21 @@ Token::Token(int playerId)
 		break;
 	}
 
-	_shape.setRadius(4);
+	_shape.setRadius(10);
 	
-	//_shape.setPosition(TABLE.GetCell(10)->GetPosition());	
 }
 
 void Token::Draw(sf::RenderWindow& window)
 {
 	window.draw(_shape);
-	window.display();
 }
 
 void Token::Move(int value)
 {
+	_idPosition += value;
+}
+
+void Token::SetPosition(sf::Vector2f newPositon)
+{
+	_shape.setPosition(newPositon);
 }

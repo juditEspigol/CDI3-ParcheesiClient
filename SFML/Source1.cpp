@@ -27,11 +27,9 @@ sf::Texture LoadSpriteSheet(const std::string& filePath) {
 	return texture;
 }
 
-void Render(sf::RenderWindow& window, sf::Sprite& square)
+void Render(sf::RenderWindow& window, sf::Sprite& sprite)
 {
-	window.clear(sf::Color(0x000000FF));
-	window.draw(square);
-	window.display();
+	window.draw(sprite);
 }
 
 void HandleEvent(const sf::Event& event, sf::RenderWindow& window) {
@@ -50,7 +48,7 @@ void HandleEvent(const sf::Event& event, sf::RenderWindow& window) {
 	if (const sf::Event::MouseButtonPressed* mousePressed = event.getIf<sf::Event::MouseButtonPressed>()) {
 		switch (mousePressed->button) {
 		case sf::Mouse::Button::Left:
-			std::cout << "Pressed at: " << mousePressed->position.x << " " << mousePressed->position.y << std::endl;
+			TABLE.GetTokens()[0]->Move(1);
 		}
 	}
 }
@@ -68,10 +66,11 @@ void main() {
 	sf::Vector2f newOrigin = sf::Vector2f(sprite.getTexture().getSize().x * 0.5, sprite.getTexture().getSize().y * 0.5);
 
 	sf::Vector2f newPosition = sf::Vector2f(WIDTH * 0.5f, HEIGHT * 0.5f);
+	
 
-	Render(*window, sprite);
 	TABLE.Init();
-	TABLE.Draw(*window);
+
+
 
 	while (window->isOpen()) 
 	{
@@ -81,6 +80,15 @@ void main() {
 			//aqui va lo que quiero que ocurra si hay un input/evento
 			HandleEvent(*event, *window);
 		}
+
+		TABLE.Update();
+
+		window->clear();
+
+		Render(*window, sprite);
+		TABLE.Draw(*window);
+
+		window->display();
 	}
 	delete window;
 }

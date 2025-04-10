@@ -7,6 +7,11 @@
 
 void Table::Init()
 {
+
+    Token* token = new Token(1);
+
+    _tokens.push_back(token);
+
     // Abrir el archivo JSON exportado desde Tiled
     std::ifstream file("../Assets/Tiled/ParchisMap.json");
     if (!file.is_open()) {
@@ -71,7 +76,7 @@ void Table::Init()
 
 void Table::Draw(sf::RenderWindow& window)
 {
-    for (const std::pair<int, Cell*> pair : _cells)
+    /*for (const std::pair<int, Cell*> pair : _cells)
     {
         Cell* cell = pair.second;
         if (cell)
@@ -82,6 +87,11 @@ void Table::Draw(sf::RenderWindow& window)
         {
             std::cout << "No TIENE cell" << std::endl;
         }
+    }*/
+
+    for (Token* token : _tokens)
+    {
+        token->Draw(window);
     }
 }
 
@@ -90,3 +100,13 @@ Cell* Table::GetCell(int id)
     Cell* value = _cells[id];
     return value;
 }
+
+void Table::Update()
+{
+    for (Token* token : _tokens)
+    {
+        token->SetPosition(GetCell(token->GetIdPosition())->GetPosition());
+    }
+}
+
+
