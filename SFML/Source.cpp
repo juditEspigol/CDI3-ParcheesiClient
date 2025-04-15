@@ -1,14 +1,14 @@
 // Client!!!!
 
 #include <SFML/Network.hpp>
-#include<iostream>
+#include <iostream>
 #include <string>
 
 #define SERVER_PORT 55000 // puertos abiertos del 55000 - 55050
 
-const sf::IpAddress SERVER_IP = sf::IpAddress(127, 0, 0, 1);//sf::IpAddress(10, 40, 2, 183); // Loopback
+const sf::IpAddress SERVER_IP = sf::IpAddress(79, 152, 211, 184);//sf::IpAddress(10, 40, 2, 183); // Loopback
 
-enum packetType { HANDSHAKE, LOGIN, MOVEMENT };
+enum packetType { LOGIN, RESGISTER };
 
 void HandShake(sf::Packet _data)
 {
@@ -26,6 +26,19 @@ sf::Packet& operator>>(sf::Packet& _packet, packetType& _type)
 
 	return _packet;
 };
+
+void SendData(sf::TcpSocket& _clientSocket, sf::Packet& _packet)
+{
+	if (_clientSocket.send(_packet) != sf::Socket::Status::Done)
+	{
+		std::cerr << "Error al enviar el paquete al servidor" << std::endl;
+	}
+	else
+	{
+		std::cout << "Mensaje enviado" << std::endl;
+	}
+	_packet.clear();
+}
 
 void main()
 {
@@ -45,9 +58,11 @@ void main()
 		while (gameLoop)
 		{
 			//sf::sleep(sf::seconds(1));
-			std::string message; 
+			std::string message, username, password; 
 			std::cout << "Inserta mensaje para el servidor, -1 para salir" << std::endl; 
 			std::cin >> message; 
+			username = "Judith"; 
+			password = "Espigol";
 
 			if (message == "-1")
 			{
@@ -57,15 +72,8 @@ void main()
 			else
 			{
 				sf::Packet packet; 
-				packet << message; 
-				if (socket.send(packet) != sf::Socket::Status::Done)
-				{
-					std::cerr << "Error al enviar el paquete al servidor" << std::endl; 
-				}
-				else
-				{
-					std::cout << "Mensaje enviado: " << message << std::endl; 
-				}
+				packet << packetType::LOGIN << username << password;
+				SendData(socket, packet);
 			}
 		}
 	}
