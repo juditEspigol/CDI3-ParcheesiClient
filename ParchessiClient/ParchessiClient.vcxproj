@@ -24,6 +24,7 @@
     <ProjectGuid>{72acb5e8-b033-49b5-8190-e7153815ff37}</ProjectGuid>
     <RootNamespace>SFML</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>ParchessiClient</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
