@@ -5,9 +5,12 @@
 // Asegúrate de que "nlohmann/json.hpp" está incluido en algún lugar de tu proyecto
 // En este ejemplo se asume que ya está incluido en Table.h o en otro header global
 
-Table::Table(sf::RenderWindow& window)
+void Table::Init()
 {
-    _window = &window;
+
+    Token* token = new Token(1);
+
+    _tokens.push_back(token);
 
     // Abrir el archivo JSON exportado desde Tiled
     std::ifstream file("../Assets/Tiled/ParchisMap.json");
@@ -18,6 +21,7 @@ Table::Table(sf::RenderWindow& window)
 
     // Parsear el JSON usando nlohmann::json
     nlohmann::json j;
+
     try {
         file >> j;
     }
@@ -58,26 +62,51 @@ Table::Table(sf::RenderWindow& window)
                 float y = obj["y"].get<float>();
 
                 // Crear una nueva Cell y agregarla al vector de _cells
-                _cells.push_back(new Cell(cellId, sf::Vector2f(x, y)));
+                if (_cells.find(cellId) != _cells.end()) {
+                    std::cout << "Repe" << std::endl;
+                    continue; // Salta esta celda si ya fue insertada
+                }
+
+                _cells.emplace(cellId, new Cell(cellId, sf::Vector2f(x, y)));
             }
         }
     }
     std::cout << "Total de celdas cargadas: " << _cells.size() << std::endl;
 }
 
-void Table::Draw()
+void Table::Draw(sf::RenderWindow& window)
 {
-    for (Cell* cell : _cells)
+    /*for (const std::pair<int, Cell*> pair : _cells)
     {
-        cell->Draw(*_window);
+        Cell* cell = pair.second;
+        if (cell)
+        {
+            cell->Draw(window);
+        }
+        else
+        {
+            std::cout << "No TIENE cell" << std::endl;
+        }
+    }*/
+
+    for (Token* token : _tokens)
+    {
+        token->Draw(window);
     }
 }
 
 Cell* Table::GetCell(int id)
 {
-    for (Cell* cell : _cells) {
-        if (cell->GetId() == id)
-            return cell;
-    }
-    return nullptr;
+    Cell* value = _cells[id];
+    return value;
 }
+
+void Table::Update()
+{
+    for (Token* token : _tokens)
+    {
+        token->SetPosition(GetCell(token->GetIdPosition())->GetPosition());
+    }
+}
+
+

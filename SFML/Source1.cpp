@@ -3,7 +3,6 @@
 #include "Table.h"
 
 
-
 #define FRAME_WIDTH 96
 #define FRAME_HEIGHT 101
 #define NUM_FRAMES 10
@@ -16,6 +15,7 @@ void UpdateSprite(sf::Sprite& animatedSprite, int& currentFrame, float& deltaTim
 		animatedSprite.setTextureRect(sf::IntRect({ currentFrame * FRAME_WIDTH,0 }, { FRAME_WIDTH,FRAME_HEIGHT }));
 	}
 }
+
 sf::Texture LoadSpriteSheet(const std::string& filePath) {
 	sf::Texture texture;
 	if (!texture.loadFromFile(filePath)) 
@@ -27,11 +27,9 @@ sf::Texture LoadSpriteSheet(const std::string& filePath) {
 	return texture;
 }
 
-void Render(sf::RenderWindow& window, sf::Sprite& square)
+void Render(sf::RenderWindow& window, sf::Sprite& sprite)
 {
-	window.clear(sf::Color(0x000000FF));
-	window.draw(square);
-	window.display();
+	window.draw(sprite);
 }
 
 void HandleEvent(const sf::Event& event, sf::RenderWindow& window) {
@@ -50,30 +48,28 @@ void HandleEvent(const sf::Event& event, sf::RenderWindow& window) {
 	if (const sf::Event::MouseButtonPressed* mousePressed = event.getIf<sf::Event::MouseButtonPressed>()) {
 		switch (mousePressed->button) {
 		case sf::Mouse::Button::Left:
-			std::cout << "Pressed at: " << mousePressed->position.x << " " << mousePressed->position.y << std::endl;
+			TABLE.GetTokens()[0]->Move(1);
 		}
 	}
 }
+
 void main() {
 	sf::RenderWindow* window = new sf::RenderWindow(sf::VideoMode({ WIDTH ,HEIGHT}), "TUTORIAL");
 	sf::Clock deltaTimeClock;
-	float deltaTimeAnimation = 0, f;
+	float deltaTimeAnimation = 0.0f;
 	int currentFrame = 0;
 
-
 	sf::Texture spriteSheet = LoadSpriteSheet("../Assets/Spritesheets/ParchisTable.png");
+
 	sf::Sprite sprite = sf::Sprite(spriteSheet);
 
 	sf::Vector2f newOrigin = sf::Vector2f(sprite.getTexture().getSize().x * 0.5, sprite.getTexture().getSize().y * 0.5);
-	//sprite.setOrigin(newOrigin);
-
 
 	sf::Vector2f newPosition = sf::Vector2f(WIDTH * 0.5f, HEIGHT * 0.5f);
-	//sprite.setPosition(newPosition);
-	Render(*window, sprite);
 	
-	Table* table = new Table(*window);
-	table->Draw();
+
+	TABLE.Init();
+
 
 
 	while (window->isOpen()) 
@@ -83,8 +79,16 @@ void main() {
 		while (const std::optional event = window->pollEvent()) {
 			//aqui va lo que quiero que ocurra si hay un input/evento
 			HandleEvent(*event, *window);
-
 		}
+
+		TABLE.Update();
+
+		window->clear();
+
+		Render(*window, sprite);
+		TABLE.Draw(*window);
+
+		window->display();
 	}
 	delete window;
 }
