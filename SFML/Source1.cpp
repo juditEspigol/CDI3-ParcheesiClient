@@ -1,7 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "Table.h"
-
+#include "GameDirector.h"
 
 #define FRAME_WIDTH 96
 #define FRAME_HEIGHT 101
@@ -32,7 +32,8 @@ void Render(sf::RenderWindow& window, sf::Sprite& sprite)
 	window.draw(sprite);
 }
 
-void HandleEvent(const sf::Event& event, sf::RenderWindow& window, Table* table) {
+void HandleEvent(const sf::Event& event, sf::RenderWindow& window, Table* table) 
+{
 	if (event.is < sf::Event::Closed>()) {
 		window.close();
 	}
@@ -59,6 +60,7 @@ void HandleEvent(const sf::Event& event, sf::RenderWindow& window, Table* table)
 				}
 			}
 		}
+		// A�adir el game director aqui
 	}
 }
 
