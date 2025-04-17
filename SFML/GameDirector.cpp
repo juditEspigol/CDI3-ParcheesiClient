@@ -20,6 +20,5 @@ void GameDirector::RollDice()
 
     if (_movableTokens.empty())
     {
-        EndTurn();
     }
 }

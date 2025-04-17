@@ -1,10 +1,8 @@
 #include "Token.h"
 
-Token::Token(int playerId)
+
+Token::Token(int playerId, int _idPos)
 {
-
-	_idPosition = 12;
-
 	switch (playerId)
 	{
 	case 1:
@@ -25,9 +23,11 @@ Token::Token(int playerId)
 	default:
 		break;
 	}
-	_shape.setOrigin({10,10});
-	_shape.setRadius(10);
-	
+	_idPosition = _idPos;
+	_shape.setOrigin(sf::Vector2f(TOKEN_RADIUS, TOKEN_RADIUS));
+	_shape.setRadius(TOKEN_RADIUS);	
+	_isMoving = false;
+
 }
 
 void Token::Draw(sf::RenderWindow& window)
@@ -37,10 +37,17 @@ void Token::Draw(sf::RenderWindow& window)
 
 void Token::Move(int value)
 {
+	_isMoving = true;
 	_idPosition += value;
 }
 
 void Token::SetPosition(sf::Vector2f newPositon)
 {
+	_position = newPositon;
 	_shape.setPosition(newPositon);
+}
+
+void Token::EndMove()
+{
+	_isMoving = false;
 }

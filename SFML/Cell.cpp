@@ -17,14 +17,27 @@ void Cell::Draw(sf::RenderWindow& window)
 	window.display();
 }
 
-void Cell::AddPlayer(Token* token)
+void Cell::AddToken(Token* token)
 {
-
+	for (Token* a : _tokens)
+	{
+		if (a == token)
+		{
+			return;
+		}
+	}
+	_tokens.push_back(token);
 }
 
-void Cell::RemovePlayer(Token* token)
+void Cell::RemoveToken(Token* token)
 {
-
+	for (size_t i = 0; i < _tokens.size(); ++i)
+	{
+		if (_tokens[i] == token)
+		{
+			_tokens.erase(_tokens.begin() + i);
+			break;
+		}
+	}
 }
-
 

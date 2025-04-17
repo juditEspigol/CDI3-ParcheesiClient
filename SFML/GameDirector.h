@@ -37,6 +37,7 @@ private:
     GameState _currentState;
     std::vector<int> _movableTokens;
     int _selectedTokenId;
+    std::mt19937 _rng;
 
     void CalculateMovableTokens();
     bool CanTokenMove(const Token& token) const;
