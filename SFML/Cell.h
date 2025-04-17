@@ -20,8 +20,8 @@ public:
 	Cell(int id, sf::Vector2f position);
 	void Draw(sf::RenderWindow& window);
 
-	void AddPlayer(Token* token);
-	void RemovePlayer(Token* token);
+	void AddToken(Token* token);
+	void RemoveToken(Token* token);
 
 	inline int GetId() { return _id; }
 	inline sf::Vector2f GetPosition() { return _position;}

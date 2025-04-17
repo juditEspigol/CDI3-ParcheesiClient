@@ -11,10 +11,7 @@
 
 Table::Table()
 {
-    Token* token = new Token(1);
 
-
-    _tokens.push_back(token);
 
     // Abrir el archivo JSON exportado desde Tiled
     std::ifstream file("../Assets/Tiled/ParchisMap.json");
@@ -76,6 +73,21 @@ Table::Table()
         }
     }
     std::cout << "Total de celdas cargadas: " << _cells.size() << std::endl;
+
+    Token* token = new Token(1, 2);
+    Token* token2 = new Token(2, 10);
+
+    _tokens.push_back(token);
+    _tokens.push_back(token2);
+
+    std::cout << token->GetIdPosition() << std::endl;
+
+    GetCell(token->GetIdPosition())->AddToken(token);
+    GetCell(token2->GetIdPosition())->AddToken(token);
+
+    token->SetPosition(GetCell(token->GetIdPosition())->GetPosition());
+    token2->SetPosition(GetCell(token2->GetIdPosition())->GetPosition());
+
 }
 
 void Table::Draw(sf::RenderWindow& window)
@@ -109,7 +121,17 @@ void Table::Update()
 {
     for (Token* token : _tokens)
     {
-        token->SetPosition(GetCell(token->GetIdPosition())->GetPosition());
+        if (token->GetIsMoving())
+        {
+            //Lo sacamos de la casilla anterior
+            GetCell(token->GetIdPosition())->RemoveToken(token);
+            //Actualizamos a la nueva casilla
+            token->SetPosition(GetCell(token->GetIdPosition())->GetPosition());
+            //Lo metemos en la misma casilla
+            GetCell(token->GetIdPosition())->AddToken(token);
+
+            token->EndMove();
+        }
     }
 }
 
