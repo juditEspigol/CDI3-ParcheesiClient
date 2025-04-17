@@ -25,7 +25,7 @@ Token::Token(int playerId)
 	default:
 		break;
 	}
-
+	_shape.setOrigin({10,10});
 	_shape.setRadius(10);
 	
 }
