@@ -5,10 +5,14 @@
 // Asegúrate de que "nlohmann/json.hpp" está incluido en algún lugar de tu proyecto
 // En este ejemplo se asume que ya está incluido en Table.h o en otro header global
 
-void Table::Init()
-{
 
+
+
+
+Table::Table()
+{
     Token* token = new Token(1);
+
 
     _tokens.push_back(token);
 
