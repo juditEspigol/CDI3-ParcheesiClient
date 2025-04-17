@@ -32,7 +32,7 @@ void Render(sf::RenderWindow& window, sf::Sprite& sprite)
 	window.draw(sprite);
 }
 
-void HandleEvent(const sf::Event& event, sf::RenderWindow& window) {
+void HandleEvent(const sf::Event& event, sf::RenderWindow& window, Table* table) {
 	if (event.is < sf::Event::Closed>()) {
 		window.close();
 	}
@@ -48,12 +48,22 @@ void HandleEvent(const sf::Event& event, sf::RenderWindow& window) {
 	if (const sf::Event::MouseButtonPressed* mousePressed = event.getIf<sf::Event::MouseButtonPressed>()) {
 		switch (mousePressed->button) {
 		case sf::Mouse::Button::Left:
-			TABLE.GetTokens()[0]->Move(1);
+			for (Token* a : table->GetTokens())
+			{
+				sf::Vector2f distance = static_cast<sf::Vector2f>(mousePressed->position) - a->GetPosition();
+				float length = std::sqrt(distance.x * distance.x + distance.y * distance.y);
+				std::cout << length << std::endl;
+				if (length <= TOKEN_RADIUS)
+				{
+					a->Move(1);
+				}
+			}
 		}
 	}
 }
 
 void main() {
+
 	sf::RenderWindow* window = new sf::RenderWindow(sf::VideoMode({ WIDTH ,HEIGHT}), "TUTORIAL");
 	sf::Clock deltaTimeClock;
 	float deltaTimeAnimation = 0.0f;
@@ -66,11 +76,8 @@ void main() {
 	sf::Vector2f newOrigin = sf::Vector2f(sprite.getTexture().getSize().x * 0.5, sprite.getTexture().getSize().y * 0.5);
 
 	sf::Vector2f newPosition = sf::Vector2f(WIDTH * 0.5f, HEIGHT * 0.5f);
-	
 
-	TABLE.Init();
-
-
+	Table* table = new Table();
 
 	while (window->isOpen()) 
 	{
@@ -78,15 +85,15 @@ void main() {
 		deltaTimeAnimation = deltaTime;
 		while (const std::optional event = window->pollEvent()) {
 			//aqui va lo que quiero que ocurra si hay un input/evento
-			HandleEvent(*event, *window);
+			HandleEvent(*event, *window, table);
 		}
-
-		TABLE.Update();
+		
+		table->Update();
 
 		window->clear();
 
 		Render(*window, sprite);
-		TABLE.Draw(*window);
+		table->Draw(*window);
 
 		window->display();
 	}
