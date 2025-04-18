@@ -60,3 +60,8 @@ void Token::EndMove()
 {
 	_isMoving = false;
 }
+
+void Token::UpdateIdPosition(int value)
+{
+	_idPosition = value;
+}

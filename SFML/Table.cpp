@@ -82,23 +82,18 @@ Table::Table()
 
     std::cout << "Total de celdas cargadas: " << _cells.size() << std::endl;
 
-    Token* token = new Token(1, 2);
-    Token* token2 = new Token(2, 10);
-    Token* token3 = new Token(2, 12);
-
-    _tokens.push_back(token);
-    _tokens.push_back(token2);
-    _tokens.push_back(token3);
-
-    std::cout << token->GetIdPosition() << std::endl;
-
-    GetCell(token->GetIdPosition())->AddToken(token);
-    GetCell(token2->GetIdPosition())->AddToken(token2);
-    GetCell(token3->GetIdPosition())->AddToken(token3);
-
-    token->SetPosition(GetCell(token->GetIdPosition())->GetPosition(), 2);
-    token2->SetPosition(GetCell(token2->GetIdPosition())->GetPosition(), 10);
-    token3->SetPosition(GetCell(token3->GetIdPosition())->GetPosition(), 12);
+    
+    for (int i = 1; i <= 4; i++)
+    {
+        for (int j = 0; j < 4; j++)
+        {
+            Token* token = new Token(i, 2);
+            token->UpdateIdPosition(1000 + token->GetPlayerId());
+            GetCell(token->GetIdPosition())->AddToken(token);
+            _tokens.push_back(token);
+        }
+    }
+    
 
 }
 
@@ -151,7 +146,6 @@ void Table::UpdatePositions(int newPos)
                 }
             }
 
-
             //Comprobamos si hay otra ficha
             if (GetCell(_newPosition)->GetTokens().size() != 0)
             {
@@ -166,28 +160,7 @@ void Table::UpdatePositions(int newPos)
                 }
             }
 
-            if (GetCell(_newPosition)->GetHoritzontal())
-            {
-                if (GetCell(_newPosition)->GetTokens().size() == 0)
-                {
-                    token->SetPosition(GetCell(_newPosition)->GetPosition() + sf::Vector2f(-20,0), _newPosition);
-                }
-                else
-                {
-                    token->SetPosition(GetCell(_newPosition)->GetPosition() + sf::Vector2f(20, 0), _newPosition);
-                }
-            }
-            
-            else
-            {
-                if (GetCell(_newPosition)->GetTokens().size() == 0)
-                {
-                    token->SetPosition(GetCell(_newPosition)->GetPosition() + sf::Vector2f(0, -20), _newPosition);
-                }
-                else
-                    token->SetPosition(GetCell(_newPosition)->GetPosition() + sf::Vector2f(0, 20), _newPosition);
-            }
-
+            token->UpdateIdPosition(_newPosition);
 
             //Lo metemos en la misma casilla
             GetCell(token->GetIdPosition())->AddToken(token);

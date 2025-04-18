@@ -21,6 +21,7 @@ public:
 	void Dead();
 	void SetPosition(sf::Vector2f newPositon, int idCell);
 	void EndMove();
+	void UpdateIdPosition(int value);
 	inline int GetIdPosition() { return _idPosition;}
 	inline bool GetIsMoving() { return _isMoving; }
 	inline int GetPlayerId() { return _playerId;  }
