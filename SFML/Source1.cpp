@@ -51,25 +51,21 @@ void HandleEvent(const sf::Event& event, sf::RenderWindow& window, Table* table,
 	if (const sf::Event::MouseButtonPressed* mousePressed = event.getIf<sf::Event::MouseButtonPressed>()) {
 		switch (mousePressed->button) {
 		case sf::Mouse::Button::Left:
-
 			if (gameDirector->GetCurrentState() == GameDirector::GameState::WAITING_TURN)
 			{
+				std::cout << "Current Game State: " << "Wating Turn" << std::endl;
+
 				gameDirector->RollDice();
 				return;
 			}
-
-			for (Token* a : table->GetTokens())
+			if (gameDirector->GetCurrentState() == GameDirector::GameState::DICE_ROLLED)
 			{
-				sf::Vector2f distance = static_cast<sf::Vector2f>(mousePressed->position) - a->GetPosition();
-				float length = std::sqrt(distance.x * distance.x + distance.y * distance.y);
-				std::cout << length << std::endl;
-				if (length <= TOKEN_RADIUS)
-				{
-					table->UpdatePositions(a->Move(1));					
-				}
+				std::cout << "Current Game State: " << "Dice Rolled" << std::endl;
+
+				gameDirector->SelectToken(mousePressed->position);
+				return;
 			}
 		}
-		// A�adir el game director aqui
 	}
 }
 

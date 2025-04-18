@@ -19,7 +19,7 @@ void GameDirector::StartPlayerTurn(int playerId)
     _currentPlayer = playerId;
     _currentState = GameState::WAITING_TURN;
     _movableTokens.clear();
-    _selectedTokenId = -1;
+    _selectedToken = new Token(-1, -1);
 }
 
 void GameDirector::RollDice()
@@ -31,7 +31,6 @@ void GameDirector::RollDice()
 
     std::cout << "Dice Value = " << _diceValue << std::endl;
 
-    CalculateMovableTokens();
     _currentState = GameState::DICE_ROLLED;
 
     if (_movableTokens.empty())
@@ -40,17 +39,39 @@ void GameDirector::RollDice()
     }
 }
 
-void GameDirector::SelectToken(int tokenId)
+void GameDirector::SelectToken(sf::Vector2i mousePos)
 {
+    if (_currentState != GameState::DICE_ROLLED) return;
+
+    for (Token* currentToken : _table.GetTokens())
+    {
+        sf::Vector2f distance = static_cast<sf::Vector2f>(mousePos) - currentToken->GetPosition();
+        float length = std::sqrt(distance.x * distance.x + distance.y * distance.y);
+        //std::cout << "Distance between mouse and token: " << length << std::endl;
+        if (length <= TOKEN_RADIUS)
+        {
+            _selectedToken = currentToken;
+            _currentState = GameState::PIECE_SELECTED;
+            MoveSelectedToken();
+        }
+    }
+
 }
 
 void GameDirector::MoveSelectedToken()
 {
+    if (_currentState != GameState::PIECE_SELECTED) return;
+
+    _table.UpdatePositions(_selectedToken->Move(_diceValue));
+
+    _currentState = GameState::TURN_COMPLETE;
+
+    EndTurn();
 }
 
 void GameDirector::CalculateMovableTokens()
 {
-    // Poner lo de MLG aqui
+    
 }
 
 bool GameDirector::CanTokenMove(Token& token)
@@ -70,6 +91,10 @@ bool GameDirector::IsTokenFromCurrentPlayer(Token& token)
 
 void GameDirector::EndTurn()
 {
+    if (_currentState != GameState::TURN_COMPLETE) return;
+
     _currentPlayer = _currentPlayer % 4 + 1;
     StartPlayerTurn(_currentPlayer);
+
+    _currentState = GameState::WAITING_TURN;
 }

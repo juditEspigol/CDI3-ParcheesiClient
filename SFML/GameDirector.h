@@ -25,8 +25,8 @@ private:
     int _currentPlayer;
     int _diceValue;
     GameState _currentState;
+    Token* _selectedToken;
     std::vector<int> _movableTokens;
-    int _selectedTokenId;
     std::mt19937 _rng;
 
     void CalculateMovableTokens();
@@ -40,7 +40,7 @@ public:
     void StartGame();
     void StartPlayerTurn(int playerId);
     void RollDice();
-    void SelectToken(int tokenId);
+    void SelectToken(sf::Vector2i mousePos);
     void MoveSelectedToken();
 
     inline int GetCurrentPlayer() { return _currentPlayer; };
