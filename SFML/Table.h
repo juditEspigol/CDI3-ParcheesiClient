@@ -17,10 +17,10 @@ private:
 public:
 	Table();
 	void Draw(sf::RenderWindow& window);
-	void Update();
+	void UpdatePositions(int newPos);
 	Cell* GetCell(int id);
 
-	inline std::vector<Token*> GetTokens() { return _tokens; }
+	std::vector<Token*> GetTokens() { return _tokens; }
 
 	inline static Table& Instance()
 	{

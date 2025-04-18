@@ -1,7 +1,7 @@
 #include "Cell.h"
 
 
-Cell::Cell(int id, sf::Vector2f position)
+Cell::Cell(int id, sf::Vector2f position, bool _isHoriz)
 {
 	_id = id;
 	_position = position;	
@@ -9,6 +9,7 @@ Cell::Cell(int id, sf::Vector2f position)
 	_shape.setFillColor(sf::Color::Magenta);
 	_shape.setSize(newSize);
 	_shape.setPosition(position);
+	_isHorizontal = _isHoriz;
 }
 
 void Cell::Draw(sf::RenderWindow& window)
@@ -39,5 +40,10 @@ void Cell::RemoveToken(Token* token)
 			break;
 		}
 	}
+}
+
+std::vector<Token*> Cell::GetTokens()
+{
+	return _tokens;
 }
 

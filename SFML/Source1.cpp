@@ -65,7 +65,7 @@ void HandleEvent(const sf::Event& event, sf::RenderWindow& window, Table* table,
 				std::cout << length << std::endl;
 				if (length <= TOKEN_RADIUS)
 				{
-					a->Move(1);
+					table->UpdatePositions(a->Move(1));					
 				}
 			}
 		}
@@ -98,7 +98,6 @@ void main() {
 			HandleEvent(*event, *window, table, gameDirector);
 		}
 		
-		table->Update();
 
 		window->clear();
 
