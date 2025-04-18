@@ -41,6 +41,22 @@ void GameDirector::RollDice()
     }
 }
 
+void GameDirector::ForceDiceValue(int value)
+{
+    _diceValue = value;
+
+    std::cout << "Forced Dice Value = " << _diceValue << std::endl;
+
+    _currentState = GameState::DICE_ROLLED;
+
+    CalculateMovableTokens();
+
+    if (_movableTokens.empty())
+    {
+        //EndTurn();
+    }
+}
+
 void GameDirector::SelectToken(sf::Vector2i mousePos)
 {
     if (_currentState != GameState::DICE_ROLLED) return;

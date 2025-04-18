@@ -40,6 +40,7 @@ public:
     void StartGame();
     void StartPlayerTurn(int playerId);
     void RollDice();
+    void ForceDiceValue(int value); // Cheats to force dice to be a specific value
     void SelectToken(sf::Vector2i mousePos);
     void MoveSelectedToken();
 
