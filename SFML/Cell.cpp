@@ -27,6 +27,54 @@ void Cell::AddToken(Token* token)
 			return;
 		}
 	}
+
+	if (_id >= 1000)
+	{
+		switch (_tokens.size())
+		{
+			case 0:
+				token->SetPosition(_position + sf::Vector2f(-60, -60), _id);
+			break;
+
+			case 1:
+				token->SetPosition(_position + sf::Vector2f(60, -60), _id);
+			break;
+
+			case 2:
+				token->SetPosition(_position + sf::Vector2f(60, 60), _id);
+			break;
+
+			case 3:
+				token->SetPosition(_position + sf::Vector2f(-60, 60), _id);
+			break;
+		}
+	}
+
+	else
+	{
+		if (_isHorizontal)
+		{
+			if (_tokens.size() == 0)
+			{
+				token->SetPosition(_position + sf::Vector2f(-20, 0), _id);
+			}
+			else
+			{
+				token->SetPosition(_position + sf::Vector2f(20, 0), _id);
+			}
+		}
+
+		else
+		{
+			if (_tokens.size() == 0)
+			{
+				token->SetPosition(_position + sf::Vector2f(0, -20), _id);
+			}
+			else
+				token->SetPosition(_position + sf::Vector2f(0, 20), _id);
+		}
+	}
+	
 	_tokens.push_back(token);
 }
 
