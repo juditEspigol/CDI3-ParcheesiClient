@@ -8,15 +8,12 @@ Token::Token(int playerId, int _idPos)
 	case 1:
 		_shape.setFillColor(sf::Color::Blue);
 		break;
-
 	case 2:
 		_shape.setFillColor(sf::Color::Red);
 		break;
-
 	case 3:
-		_shape.setFillColor(sf::Color::Black);
+		_shape.setFillColor(sf::Color::Green);
 		break;
-
 	case 4:
 		_shape.setFillColor(sf::Color::Yellow);
 		break;
@@ -25,18 +22,28 @@ Token::Token(int playerId, int _idPos)
 	}
 
 	_idPosition = _idPos;
+	_isMoving = false;
+	_playerId = playerId;
+	_selectable = false;
 
 	_shape.setOrigin(sf::Vector2f(TOKEN_RADIUS, TOKEN_RADIUS));
+	_shape.setRadius(TOKEN_RADIUS);
 
-	_shape.setRadius(TOKEN_RADIUS);	
+	std::cout << "Current Token Player: "  << _playerId << std::endl;
 
-	_isMoving = false;
-
-	_playerId = playerId;
+	_selectionIndicator.setOrigin(sf::Vector2f(SELECTION_RADIUS, SELECTION_RADIUS));
+	_selectionIndicator.setRadius(SELECTION_RADIUS);
+	_selectionIndicator.setFillColor(sf::Color(128, 0, 128));
 }
 
 void Token::Draw(sf::RenderWindow& window)
 {
+	if (_selectable)
+	{
+		_selectionIndicator.setPosition(_position);
+		window.draw(_selectionIndicator);
+	}
+
 	window.draw(_shape);
 }
 
@@ -46,8 +53,6 @@ int Token::Move(int value)
 
 	return _idPosition + value;
 }
-
-
 
 void Token::SetPosition(sf::Vector2f newPositon, int idCell)
 {

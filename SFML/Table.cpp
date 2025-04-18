@@ -131,7 +131,6 @@ Cell* Table::GetCell(int id)
 
 void Table::UpdatePositions(int newPos)
 {
-
     int _newPosition = newPos;
 
     for (Token* token : _tokens)
@@ -150,7 +149,6 @@ void Table::UpdatePositions(int newPos)
                     continue;
                 }
             }
-
 
             //Comprobamos si hay otra ficha
             if (GetCell(_newPosition)->GetTokens().size() != 0)
@@ -187,7 +185,6 @@ void Table::UpdatePositions(int newPos)
                 else
                     token->SetPosition(GetCell(_newPosition)->GetPosition() + sf::Vector2f(0, 20), _newPosition);
             }
-
 
             //Lo metemos en la misma casilla
             GetCell(token->GetIdPosition())->AddToken(token);
