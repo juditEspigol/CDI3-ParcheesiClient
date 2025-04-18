@@ -1,9 +1,11 @@
 #include <SFML/Network.hpp>
 #include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
-
 #include <iostream>
 #include <string>
+
+#include "Button.h"
+#include "ButtonText.h"
+#include "TextFill.h"
 
 #define SERVER_PORT 55000 // puertos abiertos del 55000 - 55050
 
@@ -15,9 +17,9 @@
 #define NUM_FRAMES 10
 #define ANIMATION_SPEED 0.014
 
-const sf::IpAddress SERVER_IP = sf::IpAddress(79, 152, 211, 184);//sf::IpAddress(10, 40, 2, 183); // Loopback
+const sf::IpAddress SERVER_IP = sf::IpAddress(127, 152, 211, 1);//sf::IpAddress(10, 40, 2, 183); // Loopback /// 79, 152, 211, 184
 
-enum packetType { LOGIN, RESGISTER };
+enum packetType { LOGIN, RESGISTER, ROOM };
 
 void UpdateSprite(sf::Sprite& animatedSprite, int& currentFrame, float& deltaTimeAnimation) 
 {
@@ -54,26 +56,55 @@ void Render(sf::RenderWindow& _window, sf::Sprite& _sprite)
 	_window.display();
 }
 
-void HandleEvent(const sf::Event& _event, sf::RenderWindow& _window) 
+void WriteText(const sf::Event& _event, sf::RenderWindow& _window, sf::Text& _text)
 {
-	if (_event.is < sf::Event::Closed>())
-	{
-		_window.close();
-	}
 	if (const sf::Event::TextEntered* textEntered = _event.getIf<sf::Event::TextEntered>())
 	{
 		if (textEntered->unicode < 128)
 		{
-			std::cout << (char)textEntered->unicode;
+			std::string tempText = _text.getString(); // Actual text
+			tempText += (char)textEntered->unicode; // Add new char
+			
+			_text.setString(tempText); // Update
+			_window.draw(_text);
+			_window.display();
 		}
+	}
+}
+
+void SendData(sf::TcpSocket& _clientSocket, sf::Packet& _packet);
+
+void HandleEvent(const sf::Event& _event, sf::RenderWindow& _window, sf::TcpSocket& _socket, sf::Text& _text)
+{
+	if (_event.is < sf::Event::Closed>())
+	{
+		_window.close();
 	}
 	if (const sf::Event::KeyPressed* keyPressed = _event.getIf<sf::Event::KeyPressed>())
 	{
 		switch (keyPressed->code) 
 		{
 		case sf::Keyboard::Key::Escape:
+			std::cout << "Disconected..." << std::endl;
 			_window.close();
 			break;
+		case sf::Keyboard::Key::Enter:
+			{
+				sf::Packet packet;
+				packet << packetType::LOGIN << _text.getString();
+				SendData(_socket, packet);
+			}
+			break;
+		case sf::Keyboard::Key::Backspace:
+		{
+			std::string tempText = _text.getString(); // Actual text
+			tempText = tempText.substr(0, tempText.length() -1);
+
+			_text.setString(tempText); // Update
+			_window.draw(_text);
+			_window.display();
+		}
+			break; 
 		default:
 			break;
 		}
@@ -121,76 +152,43 @@ void main()
 	float deltaTimeAnimation = 0.f;
 	int currentFrame = 0;
 
-	sf::Texture waitingTexture = LoadSpriteSheet("../Assets/Spritesheets/Waiting.png");
-	sf::Sprite waitingSprite = sf::Sprite(waitingTexture);
+	Button button;
+	ButtonText buttonText(new TextFill("Insert user..."));
+	ButtonText buttonText2(new TextFill("Insert password..."), sf::Vector2f(100, 350));
+	TextFill userText("Insert User...");
 
-	sf::Texture spriteSheetTexture = LoadSpriteSheet("../Assets/Spritesheets/S_link.png");
-	sf::Sprite animatedSprite = sf::Sprite(spriteSheetTexture);
-
-	sf::Font robotoFont;
-	robotoFont.openFromFile("../Assets/Fonts/Roboto-Medium.ttf");
-
-	sf::Text text(robotoFont);
-	text.setString("Waiting To Connect"); 
-	text.setCharacterSize(24); // in pixels, not points!
-
-	// set the color
-	text.setFillColor(sf::Color::Red);
-
-	// set the text style
-	text.setStyle(sf::Text::Bold | sf::Text::Underlined);
-
-	sf::SoundBuffer buffer("../Assets/FX_Click_Button_01.mp3");
-	sf::Sound sound(buffer);
-	sound.play();
-
-	Render(*window, waitingSprite);
-
-
-	window->draw(text);
-	window->display();
+	//sf::SoundBuffer buffer("../Assets/Sounds/FX_Click_Button_01.mp3");
+	//sf::Sound sound(buffer);
+	//sound.play();
 
 	if (socket.connect(SERVER_IP, SERVER_PORT) != sf::Socket::Status::Done)
 	{
-		std::cerr << "Error al connectar con el servidor." << std::endl; 
+		std::cerr << "Error connecting to server." << std::endl; 
 	}
 	else
 	{
+		std::cout << "Connected to server" << std::endl;
 		while (window->isOpen())
 		{
-			//std::cout << "Connectado con el servidor" << std::endl;
-
 			// TCP
-			sf::sleep(sf::seconds(1));
 			std::string message, username, password;
-			//std::cout << "Inserta mensaje para el servidor, -1 para salir" << std::endl;
 
 			// HANDLE INPUT EVENT
-			float deltaTime = deltaTimeClock.restart().asSeconds();
-			deltaTimeAnimation = deltaTime;
+			//float deltaTime = deltaTimeClock.restart().asSeconds();
+			//deltaTimeAnimation = deltaTime;
 			while (const std::optional event = window->pollEvent())
 			{
-				HandleEvent(*event, *window);
+				button.HandleEvent(*event, *window, socket);
+				buttonText.HandleEvent(*event, *window, socket);
+				buttonText2.HandleEvent(*event, *window, socket);
+				userText.HandleEvent(*event, *window, socket);
 			}
-			UpdateSprite(animatedSprite, currentFrame, deltaTimeAnimation);
-			Render(*window, animatedSprite);
-
-			std::cin >> message;
-			username = "Judith";
-			password = "Espigol";
-
-			if (message == "-1")
-			{
-				std::cout << "Desconectado..." << std::endl;
-				window->close();
-			}
-			else
-			{
-				sf::Packet packet;
-				packet << packetType::LOGIN << message;
-				SendData(socket, packet);
-			}
-
+			window->clear(sf::Color::Black);
+			buttonText.Render(*window);
+			buttonText2.Render(*window);
+			userText.Render(*window);
+			button.Render(*window);
+			window->display();
 		}
 	}
 

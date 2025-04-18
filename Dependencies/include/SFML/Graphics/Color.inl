@@ -144,6 +144,7 @@ constexpr Color& operator*=(Color& left, Color right)
 // Note: the 'inline' keyword here is technically not required, but VS2019 fails
 // to compile with a bogus "multiple definition" error if not explicitly used.
 inline constexpr Color Color::Black(0, 0, 0);
+inline constexpr Color Color::Gray(125, 125, 125);
 inline constexpr Color Color::White(255, 255, 255);
 inline constexpr Color Color::Red(255, 0, 0);
 inline constexpr Color Color::Green(0, 255, 0);
