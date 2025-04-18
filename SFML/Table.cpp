@@ -131,6 +131,9 @@ Cell* Table::GetCell(int id)
 
 void Table::UpdatePositions(int newPos)
 {
+
+    int _newPosition = newPos;
+
     for (Token* token : _tokens)
     {
         if (token->GetIsMoving())
@@ -139,40 +142,50 @@ void Table::UpdatePositions(int newPos)
             GetCell(token->GetIdPosition())->RemoveToken(token);
             //Actualizamos a la nueva casilla
 
-            //Comprobamos si hay otra ficha
-            if (GetCell(newPos)->GetTokens().size() != 0)
+            for (int i = token->GetIdPosition(); i <= newPos; i++)
             {
-                //Comprobamos si es ficha de otro jugador 
-                if (GetCell(newPos)->GetTokens()[0]->GetPlayerId() != token->GetPlayerId())
+                if (GetCell(i)->GetTokens().size() == 2)
                 {
-                    //Si es de otra jugador la eliminamos 
-                    GetCell(newPos)->GetTokens()[0]->SetPosition
-                    (GetCell(1000 + GetCell(newPos)->GetTokens()[0]->GetPlayerId())->GetPosition(), 1000 + GetCell(newPos)->GetTokens()[0]->GetPlayerId());
-
-                    GetCell(newPos)->RemoveToken(GetCell(newPos)->GetTokens()[0]);
+                    _newPosition = i - 1;
+                    continue;
                 }
             }
 
-            if (GetCell(newPos)->GetHoritzontal())
+
+            //Comprobamos si hay otra ficha
+            if (GetCell(_newPosition)->GetTokens().size() != 0)
             {
-                if (GetCell(newPos)->GetTokens().size() == 0)
+                //Comprobamos si es ficha de otro jugador 
+                if (GetCell(_newPosition)->GetTokens()[0]->GetPlayerId() != token->GetPlayerId())
                 {
-                    token->SetPosition(GetCell(newPos)->GetPosition() + sf::Vector2f(-20,0), newPos);
+                    //Si es de otra jugador la eliminamos 
+                    GetCell(_newPosition)->GetTokens()[0]->SetPosition
+                    (GetCell(1000 + GetCell(_newPosition)->GetTokens()[0]->GetPlayerId())->GetPosition(), 1000 + GetCell(newPos)->GetTokens()[0]->GetPlayerId());
+
+                    GetCell(_newPosition)->RemoveToken(GetCell(_newPosition)->GetTokens()[0]);
+                }
+            }
+
+            if (GetCell(_newPosition)->GetHoritzontal())
+            {
+                if (GetCell(_newPosition)->GetTokens().size() == 0)
+                {
+                    token->SetPosition(GetCell(_newPosition)->GetPosition() + sf::Vector2f(-20,0), _newPosition);
                 }
                 else
                 {
-                    token->SetPosition(GetCell(newPos)->GetPosition() + sf::Vector2f(20, 0), newPos);
+                    token->SetPosition(GetCell(_newPosition)->GetPosition() + sf::Vector2f(20, 0), _newPosition);
                 }
             }
             
             else
             {
-                if (GetCell(newPos)->GetTokens().size() == 0)
+                if (GetCell(_newPosition)->GetTokens().size() == 0)
                 {
-                    token->SetPosition(GetCell(newPos)->GetPosition() + sf::Vector2f(0, -20), newPos);
+                    token->SetPosition(GetCell(_newPosition)->GetPosition() + sf::Vector2f(0, -20), _newPosition);
                 }
                 else
-                    token->SetPosition(GetCell(newPos)->GetPosition() + sf::Vector2f(0, 20), newPos);
+                    token->SetPosition(GetCell(_newPosition)->GetPosition() + sf::Vector2f(0, 20), _newPosition);
             }
 
 
