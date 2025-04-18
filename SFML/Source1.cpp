@@ -8,6 +8,7 @@
 #define NUM_FRAMES 10
 #define ANIMATION_SPEED 0.014
 
+
 void UpdateSprite(sf::Sprite& animatedSprite, int& currentFrame, float& deltaTimeAnimation) {
 	if (deltaTimeAnimation >= ANIMATION_SPEED) 
 	{
@@ -32,8 +33,9 @@ void Render(sf::RenderWindow& window, sf::Sprite& sprite)
 	window.draw(sprite);
 }
 
-void HandleEvent(const sf::Event& event, sf::RenderWindow& window, Table* table) 
+void HandleEvent(const sf::Event& event, sf::RenderWindow& window, Table* table, GameDirector* gameDirector) 
 {
+
 	if (event.is < sf::Event::Closed>()) {
 		window.close();
 	}
@@ -49,6 +51,13 @@ void HandleEvent(const sf::Event& event, sf::RenderWindow& window, Table* table)
 	if (const sf::Event::MouseButtonPressed* mousePressed = event.getIf<sf::Event::MouseButtonPressed>()) {
 		switch (mousePressed->button) {
 		case sf::Mouse::Button::Left:
+
+			if (gameDirector->GetCurrentState() == GameDirector::GameState::WAITING_TURN)
+			{
+				gameDirector->RollDice();
+				return;
+			}
+
 			for (Token* a : table->GetTokens())
 			{
 				sf::Vector2f distance = static_cast<sf::Vector2f>(mousePressed->position) - a->GetPosition();
@@ -66,20 +75,19 @@ void HandleEvent(const sf::Event& event, sf::RenderWindow& window, Table* table)
 
 void main() {
 
-	sf::RenderWindow* window = new sf::RenderWindow(sf::VideoMode({ WIDTH ,HEIGHT}), "TUTORIAL");
+	sf::RenderWindow* window = new sf::RenderWindow(sf::VideoMode({ WIDTH ,HEIGHT}), "Parchis");
 	sf::Clock deltaTimeClock;
 	float deltaTimeAnimation = 0.0f;
 	int currentFrame = 0;
 
 	sf::Texture spriteSheet = LoadSpriteSheet("../Assets/Spritesheets/ParchisTable.png");
-
 	sf::Sprite sprite = sf::Sprite(spriteSheet);
-
 	sf::Vector2f newOrigin = sf::Vector2f(sprite.getTexture().getSize().x * 0.5, sprite.getTexture().getSize().y * 0.5);
-
 	sf::Vector2f newPosition = sf::Vector2f(WIDTH * 0.5f, HEIGHT * 0.5f);
 
 	Table* table = new Table();
+	GameDirector* gameDirector = new GameDirector(*table);
+	gameDirector->StartGame();
 
 	while (window->isOpen()) 
 	{
@@ -87,7 +95,7 @@ void main() {
 		deltaTimeAnimation = deltaTime;
 		while (const std::optional event = window->pollEvent()) {
 			//aqui va lo que quiero que ocurra si hay un input/evento
-			HandleEvent(*event, *window, table);
+			HandleEvent(*event, *window, table, gameDirector);
 		}
 		
 		table->Update();
@@ -99,5 +107,8 @@ void main() {
 
 		window->display();
 	}
+
+	delete gameDirector;
+	delete table;
 	delete window;
 }

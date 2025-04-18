@@ -23,5 +23,6 @@ public:
 	inline int GetIdPosition() { return _idPosition;}
 	inline bool GetIsMoving() { return _isMoving; }
 	inline sf::Vector2f GetPosition() { return _position; }
+	inline int GetPlayerId() { return _playerId; }
 
 };

@@ -19,16 +19,6 @@ public:
     };
     GameDirector(Table& table);
 
-    void StartGame();
-    void StartPlayerTurn(int playerId);
-    void RollDice();
-    void SelectToken(int tokenId);
-    void MoveSelectedToken();
-
-    int GetCurrentPlayer() const;
-    int GetDiceValue() const;
-    GameState GetCurrentState() const;
-    const std::vector<int>& GetMovableTokens() const;
 
 private:
     Table& _table;
@@ -40,7 +30,21 @@ private:
     std::mt19937 _rng;
 
     void CalculateMovableTokens();
-    bool CanTokenMove(const Token& token) const;
-    bool IsTokenFromCurrentPlayer(const Token& token) const;
+
+    bool CanTokenMove(Token& token);
+    bool IsTokenFromCurrentPlayer(Token& token);
+
     void EndTurn();
+
+public:
+    void StartGame();
+    void StartPlayerTurn(int playerId);
+    void RollDice();
+    void SelectToken(int tokenId);
+    void MoveSelectedToken();
+
+    inline int GetCurrentPlayer() { return _currentPlayer; };
+    inline int GetDiceValue() { return _diceValue; };
+    inline std::vector<int>& GetMovableTokens() { return _movableTokens; }
+    inline GameState GetCurrentState() { return _currentState; }
 };
