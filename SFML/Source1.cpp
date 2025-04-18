@@ -89,12 +89,12 @@ void main() {
 	{
 		float deltaTime = deltaTimeClock.restart().asSeconds();
 		deltaTimeAnimation = deltaTime;
-		while (const std::optional event = window->pollEvent()) {
+		while (const std::optional event = window->pollEvent()) 
+		{
 			//aqui va lo que quiero que ocurra si hay un input/evento
 			HandleEvent(*event, *window, table, gameDirector);
 		}
 		
-
 		window->clear();
 
 		Render(*window, sprite);

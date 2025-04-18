@@ -2,17 +2,11 @@
 #include <fstream>
 #include <iostream>
 
-// Asegúrate de que "nlohmann/json.hpp" está incluido en algún lugar de tu proyecto
-// En este ejemplo se asume que ya está incluido en Table.h o en otro header global
-
-
-
-
+// Asegï¿½rate de que "nlohmann/json.hpp" estï¿½ incluido en algï¿½n lugar de tu proyecto
+// En este ejemplo se asume que ya estï¿½ incluido en Table.h o en otro header global
 
 Table::Table()
 {
-
-
     // Abrir el archivo JSON exportado desde Tiled
     std::ifstream file("../Assets/Tiled/ParchisMap.json");
     if (!file.is_open()) {
@@ -33,7 +27,7 @@ Table::Table()
 
     // Verificar que el JSON contiene la clave "layers"
     if (!j.contains("layers") || !j["layers"].is_array()) {
-        std::cerr << "El archivo JSON no contiene una sección 'layers' válida." << std::endl;
+        std::cerr << "El archivo JSON no contiene una secciï¿½n 'layers' vï¿½lida." << std::endl;
         return;
     }
 
@@ -42,7 +36,7 @@ Table::Table()
         if (layer.contains("name") && layer["name"] == "Cells") {
             // Verificar que la capa tenga un array "objects"
             if (!layer.contains("objects") || !layer["objects"].is_array()) {
-                std::cerr << "La capa 'Cells' no contiene objetos válidos." << std::endl;
+                std::cerr << "La capa 'Cells' no contiene objetos vï¿½lidos." << std::endl;
                 continue;
             }
 
@@ -69,7 +63,7 @@ Table::Table()
                 float x = obj["x"].get<float>();
                 float y = obj["y"].get<float>();
 
-                // Crear una nueva Cell y agregarla al mapa _cells si no existe aún
+                // Crear una nueva Cell y agregarla al mapa _cells si no existe aï¿½n
                 if (_cells.find(cellId) != _cells.end()) {
                     std::cout << "Repe" << std::endl;
                     continue; // Salta esta celda si ya fue insertada
@@ -126,7 +120,6 @@ Cell* Table::GetCell(int id)
 
 void Table::UpdatePositions(int newPos)
 {
-
     int _newPosition = newPos;
 
     for (Token* token : _tokens)
