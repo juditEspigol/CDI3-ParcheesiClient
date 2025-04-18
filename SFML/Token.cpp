@@ -23,11 +23,16 @@ Token::Token(int playerId, int _idPos)
 	default:
 		break;
 	}
+
 	_idPosition = _idPos;
+
 	_shape.setOrigin(sf::Vector2f(TOKEN_RADIUS, TOKEN_RADIUS));
+
 	_shape.setRadius(TOKEN_RADIUS);	
+
 	_isMoving = false;
 
+	_playerId = playerId;
 }
 
 void Token::Draw(sf::RenderWindow& window)
@@ -35,14 +40,18 @@ void Token::Draw(sf::RenderWindow& window)
 	window.draw(_shape);
 }
 
-void Token::Move(int value)
+int Token::Move(int value)
 {
 	_isMoving = true;
-	_idPosition += value;
+
+	return _idPosition + value;
 }
 
-void Token::SetPosition(sf::Vector2f newPositon)
+
+
+void Token::SetPosition(sf::Vector2f newPositon, int idCell)
 {
+	_idPosition = idCell;
 	_position = newPositon;
 	_shape.setPosition(newPositon);
 }

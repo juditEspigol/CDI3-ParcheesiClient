@@ -8,11 +8,26 @@ GameDirector::GameDirector(Table& table) :
     _rng(std::random_device{}()) 
 {}
 
+void GameDirector::StartGame()
+{
+    _currentPlayer = 1;
+    StartPlayerTurn(_currentPlayer);
+}
+
+void GameDirector::StartPlayerTurn(int playerId)
+{
+    _currentPlayer = playerId;
+    _currentState = GameState::WAITING_TURN;
+    _movableTokens.clear();
+    _selectedToken = new Token(-1, -1);
+}
+
 void GameDirector::RollDice()
 {
     if (_currentState != GameState::WAITING_TURN) return;
 
-    _diceValue = rand() % 6 + 1;
+    std::uniform_int_distribution<int> dist(1, 6);
+    _diceValue = dist(_rng);
 
     std::cout << "Dice Value = " << _diceValue << std::endl;
 
@@ -20,5 +35,66 @@ void GameDirector::RollDice()
 
     if (_movableTokens.empty())
     {
+        EndTurn();
     }
+}
+
+void GameDirector::SelectToken(sf::Vector2i mousePos)
+{
+    if (_currentState != GameState::DICE_ROLLED) return;
+
+    for (Token* currentToken : _table.GetTokens())
+    {
+        sf::Vector2f distance = static_cast<sf::Vector2f>(mousePos) - currentToken->GetPosition();
+        float length = std::sqrt(distance.x * distance.x + distance.y * distance.y);
+        //std::cout << "Distance between mouse and token: " << length << std::endl;
+        if (length <= TOKEN_RADIUS)
+        {
+            _selectedToken = currentToken;
+            _currentState = GameState::PIECE_SELECTED;
+            MoveSelectedToken();
+        }
+    }
+
+}
+
+void GameDirector::MoveSelectedToken()
+{
+    if (_currentState != GameState::PIECE_SELECTED) return;
+
+    _table.UpdatePositions(_selectedToken->Move(_diceValue));
+
+    _currentState = GameState::TURN_COMPLETE;
+
+    EndTurn();
+}
+
+void GameDirector::CalculateMovableTokens()
+{
+    
+}
+
+bool GameDirector::CanTokenMove(Token& token)
+{
+    // Comrpobar si el token es movible
+    return true;
+}
+
+bool GameDirector::IsTokenFromCurrentPlayer(Token& token)
+{
+    if (_currentPlayer == token.GetPlayerId())
+    {
+        return true;
+    }
+    return false;
+}
+
+void GameDirector::EndTurn()
+{
+    if (_currentState != GameState::TURN_COMPLETE) return;
+
+    _currentPlayer = _currentPlayer % 4 + 1;
+    StartPlayerTurn(_currentPlayer);
+
+    _currentState = GameState::WAITING_TURN;
 }

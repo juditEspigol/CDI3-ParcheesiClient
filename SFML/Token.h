@@ -17,11 +17,13 @@ private:
 public:
 	Token(int playerId, int _idPosition);
 	void Draw(sf::RenderWindow& window);
-	void Move(int value);
-	void SetPosition(sf::Vector2f newPositon);
+	int Move(int value);
+	void Dead();
+	void SetPosition(sf::Vector2f newPositon, int idCell);
 	void EndMove();
 	inline int GetIdPosition() { return _idPosition;}
 	inline bool GetIsMoving() { return _isMoving; }
+	inline int GetPlayerId() { return _playerId;  }
 	inline sf::Vector2f GetPosition() { return _position; }
 
 };

@@ -12,12 +12,13 @@ class Cell
 private:
 	int _id;
 	bool _finalCell;
+	bool _isHorizontal;
 	std::vector<Token*> _tokens;
 	sf::RectangleShape _shape;
 	sf::Vector2f _position;
 
 public:
-	Cell(int id, sf::Vector2f position);
+	Cell(int id, sf::Vector2f position, bool _isHoriz);
 	void Draw(sf::RenderWindow& window);
 
 	void AddToken(Token* token);
@@ -25,6 +26,7 @@ public:
 
 	inline int GetId() { return _id; }
 	inline sf::Vector2f GetPosition() { return _position;}
+	inline bool GetHoritzontal() { return _isHorizontal; }
 	std::vector<Token*> GetTokens();
 
 };
