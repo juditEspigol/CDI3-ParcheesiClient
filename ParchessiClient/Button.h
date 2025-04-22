@@ -3,42 +3,37 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <iostream>
-#include "GlobalFunctions.h"
 
-const std::string TEXTURE = "../Assets/Spritesheets/button_blue.png";
+#include "TextFill.h"
+
+const std::string WHITE_BOX = "../Assets/Spritesheets/whiteBox.png";
+const std::string GRAY_BOX = "../Assets/Spritesheets/grayBox.png";
+
+sf::Texture* LoadTexture(const std::string& _filePath);
 
 class Button
 {
-private:
+protected:
+	
+	bool pressed;
+	bool selected;
+
+	sf::Texture* textureSelected;
+	sf::Texture* textureNotSelected;
+
 	sf::Sprite* sprite;
+	TextFill* text; 
+
+	void SelectButton();
+	void UnselectButton();
 
 public:
-	Button(sf::Vector2f _position = sf::Vector2f(100, 100), const sf::String& _textureFilePath = TEXTURE);
+	Button(sf::Vector2f _position = sf::Vector2f(100, 100));
 	~Button();
 
-	void Render(sf::RenderWindow& _window)
-	{
-		_window.draw(*sprite);
-	}
+	inline bool HasBeenPressed() const { return pressed; };
 
-	void HandleEvent(const sf::Event& _event, sf::RenderWindow& _window, sf::TcpSocket& _socket)
-	{
-		if (const sf::Event::MouseButtonPressed* mousePressed = _event.getIf<sf::Event::MouseButtonPressed>())
-		{
-			switch (mousePressed->button)
-			{
-			case sf::Mouse::Button::Left:
-				{
-					if(sprite->getGlobalBounds().contains(sf::Vector2f(mousePressed->position)))
-					{
-						std::cout << "Button pressed" << std::endl;
-					}
-				}
-				break; 
-			default:
-				break; 
-			}
-		}
-	}
+	virtual void Render(sf::RenderWindow& _window);
+	virtual void HandleEvent(const sf::Event& _event, sf::RenderWindow& _window, sf::TcpSocket& _socket);
 };
 
