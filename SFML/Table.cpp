@@ -86,9 +86,7 @@ Table::Table()
             GetCell(token->GetIdPosition())->AddToken(token);
             _tokens.push_back(token);
         }
-    }
-    
-
+    }   
 }
 
 void Table::Draw(sf::RenderWindow& window)
@@ -126,12 +124,62 @@ void Table::UpdatePositions(int newPos)
     {
         if (token->GetIsMoving())
         {
-            //Lo sacamos de la casilla anterior
+            // Lo sacamos de la casilla anterior
             GetCell(token->GetIdPosition())->RemoveToken(token);
-            //Actualizamos a la nueva casilla
 
+            bool exitLoop = false;
+
+            // Recorremos desde la posición actual hasta la nueva
             for (int i = token->GetIdPosition(); i <= newPos; i++)
             {
+                // Si llegamos a la última celda del recorrido principal
+                if (i == token->GetFinalCellId())
+                {
+                    token->ArriveLastZone();
+                    _newPosition = token->GetPlayerId() * 100;
+
+                    int newLoop = (newPos - i) + _newPosition;
+                    std::cout << "NewLoop = " << newLoop << std::endl;
+
+                    for (int j = _newPosition; j <= newLoop; j++)
+                    {
+                        newPos = j;
+                        _newPosition = j;                    
+                        
+                    }
+                    exitLoop = true;
+                    break;
+                }
+
+                if (exitLoop)
+                    break;
+
+                if (_newPosition > 68 && !token->GetIsLastZone())
+                {
+                    _newPosition = 1;
+
+                    int newLoop = newPos - 68;
+                    std::cout << "NewLoop = " << newLoop << std::endl;
+
+                    for (int j = _newPosition; j <= newLoop; j++)
+                    {
+                        if (GetCell(j)->GetTokens().size() == 2)
+                        {
+                            _newPosition = j - 1;
+                            continue;
+                        }
+                        else
+                        {
+                            newPos = j;
+                            _newPosition = j;
+                        }
+                    }
+                }
+                else if (_newPosition < 1)
+                {
+                    _newPosition = 68;
+                }
+
                 if (GetCell(i)->GetTokens().size() == 2)
                 {
                     _newPosition = i - 1;
@@ -139,25 +187,25 @@ void Table::UpdatePositions(int newPos)
                 }
             }
 
-            //Comprobamos si hay otra ficha
+            // Comprobamos si hay otra ficha en la nueva posición
             if (GetCell(_newPosition)->GetTokens().size() != 0)
             {
-                //Comprobamos si es ficha de otro jugador 
+                // Comprobamos si es ficha de otro jugador
                 if (GetCell(_newPosition)->GetTokens()[0]->GetPlayerId() != token->GetPlayerId())
                 {
-                    //Si es de otra jugador la eliminamos 
-                    GetCell(_newPosition)->GetTokens()[0]->SetPosition
-                    (GetCell(1000 + GetCell(_newPosition)->GetTokens()[0]->GetPlayerId())->GetPosition(), 1000 + GetCell(newPos)->GetTokens()[0]->GetPlayerId());
+                    Token* rivalToken = GetCell(_newPosition)->GetTokens()[0];
+                    rivalToken->SetPosition(
+                        GetCell(1000 + rivalToken->GetPlayerId())->GetPosition(),
+                        1000 + rivalToken->GetPlayerId()
+                    );
 
-                    GetCell(_newPosition)->RemoveToken(GetCell(_newPosition)->GetTokens()[0]);
+                    GetCell(_newPosition)->RemoveToken(rivalToken);
                 }
             }
 
+            // Actualizamos la posición del token y lo añadimos a la nueva celda
             token->UpdateIdPosition(_newPosition);
-
-            //Lo metemos en la misma casilla
             GetCell(token->GetIdPosition())->AddToken(token);
-
             token->EndMove();
         }
     }

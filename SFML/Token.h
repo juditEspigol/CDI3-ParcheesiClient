@@ -9,9 +9,12 @@ class Token
 {
 private:
 	int _playerId;
+	int _exitCell;
+	int _finalCell;
 	bool _inBase;
 	bool _isMoving;
 	bool _selectable;
+	bool _isLastZone;
 	int _idPosition;
 	sf::Vector2f _position;
 	sf::CircleShape _shape;
@@ -25,12 +28,16 @@ public:
 	void SetPosition(sf::Vector2f newPositon, int idCell);
 	void EndMove();
 	void UpdateIdPosition(int value);
+	void ArriveLastZone();
 	inline int GetIdPosition() { return _idPosition;}
 
 	inline void SetSelectable(bool selectable) { _selectable = selectable; }
 
 	inline bool GetIsSelectable() { return _selectable; }
+	inline bool GetIsLastZone() { return _isLastZone; }
 	inline bool GetIsMoving() { return _isMoving; }
+	inline bool GetIsInBase() { return _inBase; }
+	inline int GetFinalCellId() { return _finalCell; }
 	inline int GetPlayerId() { return _playerId;  }
 	inline sf::Vector2f GetPosition() { return _position; }
 
