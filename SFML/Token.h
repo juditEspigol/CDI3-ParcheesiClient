@@ -4,6 +4,8 @@
 
 #define TOKEN_RADIUS 15
 #define SELECTION_RADIUS (TOKEN_RADIUS + 5)
+#define TOKEN_OUTLINE_THICKNESS 2.0f
+#define TOKEN_OUTLINE_COLOR sf::Color::Black
 
 class Token
 {
@@ -24,15 +26,15 @@ public:
 	Token(int playerId, int _idPosition);
 	void Draw(sf::RenderWindow& window);
 	int Move(int value);
-	void Dead();
 	void SetPosition(sf::Vector2f newPositon, int idCell);
 	void EndMove();
 	void UpdateIdPosition(int value);
 	void ArriveLastZone();
-	inline int GetIdPosition() { return _idPosition;}
 
 	inline void SetSelectable(bool selectable) { _selectable = selectable; }
+	inline void SetIsInBase(bool inBase) { _inBase = inBase; }
 
+	inline int GetIdPosition() { return _idPosition; }
 	inline bool GetIsSelectable() { return _selectable; }
 	inline bool GetIsLastZone() { return _isLastZone; }
 	inline bool GetIsMoving() { return _isMoving; }

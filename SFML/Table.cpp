@@ -127,8 +127,6 @@ void Table::UpdatePositions(int newPos)
             // Lo sacamos de la casilla anterior
             GetCell(token->GetIdPosition())->RemoveToken(token);
 
-            bool exitLoop = false;
-
             // Recorremos desde la posición actual hasta la nueva
             for (int i = token->GetIdPosition(); i <= newPos; i++)
             {
@@ -147,12 +145,8 @@ void Table::UpdatePositions(int newPos)
                         _newPosition = j;                    
                         
                     }
-                    exitLoop = true;
                     break;
                 }
-
-                if (exitLoop)
-                    break;
 
                 if (_newPosition > 68 && !token->GetIsLastZone())
                 {
@@ -187,6 +181,11 @@ void Table::UpdatePositions(int newPos)
                 }
             }
 
+            // Actualizamos la posición del token y lo añadimos a la nueva celda
+            token->UpdateIdPosition(_newPosition);
+            GetCell(token->GetIdPosition())->AddToken(token);
+            token->EndMove();
+
             // Comprobamos si hay otra ficha en la nueva posición
             if (GetCell(_newPosition)->GetTokens().size() != 0)
             {
@@ -198,15 +197,17 @@ void Table::UpdatePositions(int newPos)
                         GetCell(1000 + rivalToken->GetPlayerId())->GetPosition(),
                         1000 + rivalToken->GetPlayerId()
                     );
+                    rivalToken->SetSelectable(false);
+                    rivalToken->SetIsInBase(true);
 
                     GetCell(_newPosition)->RemoveToken(rivalToken);
+
+                    // Si matamos la ficha movemos 20 posiciones mas 
+                    token->UpdateIdPosition(_newPosition + 20);
+                    GetCell(token->GetIdPosition())->AddToken(token);
+                    token->EndMove();
                 }
             }
-
-            // Actualizamos la posición del token y lo añadimos a la nueva celda
-            token->UpdateIdPosition(_newPosition);
-            GetCell(token->GetIdPosition())->AddToken(token);
-            token->EndMove();
         }
     }
 }

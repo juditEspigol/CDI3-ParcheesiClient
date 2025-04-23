@@ -3,7 +3,6 @@
 #include <SFML/Graphics.hpp>
 #include "Token.h"
 
-
 #define CELL_WIDTH 32
 #define CELL_HEIGTH 32
 

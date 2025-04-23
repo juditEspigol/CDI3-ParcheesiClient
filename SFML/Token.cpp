@@ -36,8 +36,8 @@ Token::Token(int playerId, int _idPos)
 
 	_shape.setOrigin(sf::Vector2f(TOKEN_RADIUS, TOKEN_RADIUS));
 	_shape.setRadius(TOKEN_RADIUS);
-
-	std::cout << "Current Token Player: "  << _playerId << std::endl;
+	_shape.setOutlineThickness(TOKEN_OUTLINE_THICKNESS);
+	_shape.setOutlineColor(TOKEN_OUTLINE_COLOR);
 
 	_selectionIndicator.setOrigin(sf::Vector2f(SELECTION_RADIUS, SELECTION_RADIUS));
 	_selectionIndicator.setRadius(SELECTION_RADIUS);
