@@ -28,9 +28,13 @@ sf::Texture LoadSpriteSheet(const std::string& filePath) {
 	return texture;
 }
 
-void Render(sf::RenderWindow& window, sf::Sprite& sprite)
+void Render(sf::RenderWindow& window, sf::Sprite& sprite, GameDirector* gameDirector)
 {
 	window.draw(sprite);
+
+	window.draw(gameDirector->GetTurnIndicator(WIDTH, HEIGHT));
+	window.draw(gameDirector->GetDiceText());
+
 }
 
 void HandleEvent(const sf::Event& event, sf::RenderWindow& window, Table* table, GameDirector* gameDirector) 
@@ -96,8 +100,6 @@ void main() {
 
 	sf::Texture spriteSheet = LoadSpriteSheet("../Assets/Spritesheets/ParchisTable.png");
 	sf::Sprite sprite = sf::Sprite(spriteSheet);
-	sf::Vector2f newOrigin = sf::Vector2f(sprite.getTexture().getSize().x * 0.5, sprite.getTexture().getSize().y * 0.5);
-	sf::Vector2f newPosition = sf::Vector2f(WIDTH * 0.5f, HEIGHT * 0.5f);
 
 	Table* table = new Table();
 	GameDirector* gameDirector = new GameDirector(*table);
@@ -115,7 +117,7 @@ void main() {
 		
 		window->clear();
 
-		Render(*window, sprite);
+		Render(*window, sprite, gameDirector);
 		table->Draw(*window);
 
 		window->display();

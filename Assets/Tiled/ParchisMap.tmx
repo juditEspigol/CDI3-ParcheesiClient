@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.0" orientation="orthogonal" renderorder="right-down" width="1" height="1" tilewidth="960" tileheight="960" infinite="0" nextlayerid="3" nextobjectid="327">
+<map version="1.10" tiledversion="1.11.1" orientation="orthogonal" renderorder="right-down" width="1" height="1" tilewidth="960" tileheight="960" infinite="0" nextlayerid="3" nextobjectid="327">
  <editorsettings>
   <export target="ParchisMap.json" format="json"/>
  </editorsettings>
@@ -77,49 +77,49 @@
   <object id="209" x="480" y="75">
    <properties>
     <property name="horizontal" type="bool" value="true"/>
-    <property name="id" type="int" value="300"/>
+    <property name="id" type="int" value="200"/>
    </properties>
    <point/>
   </object>
   <object id="210" x="480" y="120">
    <properties>
     <property name="horizontal" type="bool" value="true"/>
-    <property name="id" type="int" value="301"/>
+    <property name="id" type="int" value="201"/>
    </properties>
    <point/>
   </object>
   <object id="211" x="480" y="170">
    <properties>
     <property name="horizontal" type="bool" value="true"/>
-    <property name="id" type="int" value="302"/>
+    <property name="id" type="int" value="202"/>
    </properties>
    <point/>
   </object>
   <object id="212" x="480" y="205">
    <properties>
     <property name="horizontal" type="bool" value="true"/>
-    <property name="id" type="int" value="303"/>
+    <property name="id" type="int" value="203"/>
    </properties>
    <point/>
   </object>
   <object id="213" x="480" y="260">
    <properties>
     <property name="horizontal" type="bool" value="true"/>
-    <property name="id" type="int" value="304"/>
+    <property name="id" type="int" value="204"/>
    </properties>
    <point/>
   </object>
   <object id="214" x="480" y="305">
    <properties>
     <property name="horizontal" type="bool" value="true"/>
-    <property name="id" type="int" value="305"/>
+    <property name="id" type="int" value="205"/>
    </properties>
    <point/>
   </object>
   <object id="215" x="480" y="350">
    <properties>
     <property name="horizontal" type="bool" value="true"/>
-    <property name="id" type="int" value="306"/>
+    <property name="id" type="int" value="206"/>
    </properties>
    <point/>
   </object>
@@ -238,49 +238,49 @@
   <object id="240" x="480" y="620">
    <properties>
     <property name="horizontal" type="bool" value="true"/>
-    <property name="id" type="int" value="106"/>
+    <property name="id" type="int" value="406"/>
    </properties>
    <point/>
   </object>
   <object id="241" x="480" y="665">
    <properties>
     <property name="horizontal" type="bool" value="true"/>
-    <property name="id" type="int" value="105"/>
+    <property name="id" type="int" value="405"/>
    </properties>
    <point/>
   </object>
   <object id="242" x="480" y="710">
    <properties>
     <property name="horizontal" type="bool" value="true"/>
-    <property name="id" type="int" value="104"/>
+    <property name="id" type="int" value="404"/>
    </properties>
    <point/>
   </object>
   <object id="243" x="480" y="755">
    <properties>
     <property name="horizontal" type="bool" value="true"/>
-    <property name="id" type="int" value="103"/>
+    <property name="id" type="int" value="403"/>
    </properties>
    <point/>
   </object>
   <object id="244" x="480" y="805">
    <properties>
     <property name="horizontal" type="bool" value="true"/>
-    <property name="id" type="int" value="102"/>
+    <property name="id" type="int" value="402"/>
    </properties>
    <point/>
   </object>
   <object id="245" x="480" y="850">
    <properties>
     <property name="horizontal" type="bool" value="true"/>
-    <property name="id" type="int" value="101"/>
+    <property name="id" type="int" value="401"/>
    </properties>
    <point/>
   </object>
   <object id="246" x="480" y="895">
    <properties>
     <property name="horizontal" type="bool" value="true"/>
-    <property name="id" type="int" value="100"/>
+    <property name="id" type="int" value="400"/>
    </properties>
    <point/>
   </object>
@@ -413,42 +413,42 @@
   <object id="268" x="895" y="480">
    <properties>
     <property name="horizontal" type="bool" value="false"/>
-    <property name="id" type="int" value="200"/>
+    <property name="id" type="int" value="100"/>
    </properties>
    <point/>
   </object>
   <object id="269" x="850" y="480">
    <properties>
     <property name="horizontal" type="bool" value="false"/>
-    <property name="id" type="int" value="201"/>
+    <property name="id" type="int" value="101"/>
    </properties>
    <point/>
   </object>
   <object id="270" x="805" y="480">
    <properties>
     <property name="horizontal" type="bool" value="false"/>
-    <property name="id" type="int" value="202"/>
+    <property name="id" type="int" value="102"/>
    </properties>
    <point/>
   </object>
   <object id="271" x="755" y="480">
    <properties>
     <property name="horizontal" type="bool" value="false"/>
-    <property name="id" type="int" value="203"/>
+    <property name="id" type="int" value="103"/>
    </properties>
    <point/>
   </object>
   <object id="272" x="705" y="480">
    <properties>
     <property name="horizontal" type="bool" value="false"/>
-    <property name="id" type="int" value="204"/>
+    <property name="id" type="int" value="104"/>
    </properties>
    <point/>
   </object>
   <object id="273" x="665" y="480">
    <properties>
     <property name="horizontal" type="bool" value="false"/>
-    <property name="id" type="int" value="205"/>
+    <property name="id" type="int" value="105"/>
    </properties>
    <point/>
   </object>
@@ -574,49 +574,49 @@
   <object id="299" x="345" y="480">
    <properties>
     <property name="horizontal" type="bool" value="false"/>
-    <property name="id" type="int" value="406"/>
+    <property name="id" type="int" value="306"/>
    </properties>
    <point/>
   </object>
   <object id="300" x="300" y="480">
    <properties>
     <property name="horizontal" type="bool" value="false"/>
-    <property name="id" type="int" value="405"/>
+    <property name="id" type="int" value="305"/>
    </properties>
    <point/>
   </object>
   <object id="301" x="250" y="480">
    <properties>
     <property name="horizontal" type="bool" value="false"/>
-    <property name="id" type="int" value="404"/>
+    <property name="id" type="int" value="304"/>
    </properties>
    <point/>
   </object>
   <object id="302" x="205" y="480">
    <properties>
     <property name="horizontal" type="bool" value="false"/>
-    <property name="id" type="int" value="403"/>
+    <property name="id" type="int" value="303"/>
    </properties>
    <point/>
   </object>
   <object id="303" x="160" y="480">
    <properties>
     <property name="horizontal" type="bool" value="false"/>
-    <property name="id" type="int" value="402"/>
+    <property name="id" type="int" value="302"/>
    </properties>
    <point/>
   </object>
   <object id="304" x="110" y="480">
    <properties>
     <property name="horizontal" type="bool" value="false"/>
-    <property name="id" type="int" value="401"/>
+    <property name="id" type="int" value="301"/>
    </properties>
    <point/>
   </object>
   <object id="305" x="65" y="480">
    <properties>
     <property name="horizontal" type="bool" value="false"/>
-    <property name="id" type="int" value="400"/>
+    <property name="id" type="int" value="300"/>
    </properties>
    <point/>
   </object>
@@ -686,7 +686,7 @@
   <object id="315" x="415" y="480">
    <properties>
     <property name="horizontal" type="bool" value="false"/>
-    <property name="id" type="int" value="407"/>
+    <property name="id" type="int" value="307"/>
    </properties>
    <point/>
   </object>
@@ -700,14 +700,14 @@
   <object id="319" x="480" y="425">
    <properties>
     <property name="horizontal" type="bool" value="true"/>
-    <property name="id" type="int" value="307"/>
+    <property name="id" type="int" value="207"/>
    </properties>
    <point/>
   </object>
   <object id="320" x="480" y="550">
    <properties>
     <property name="horizontal" type="bool" value="true"/>
-    <property name="id" type="int" value="107"/>
+    <property name="id" type="int" value="407"/>
    </properties>
    <point/>
   </object>

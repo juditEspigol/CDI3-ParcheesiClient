@@ -28,25 +28,20 @@ void Cell::AddToken(Token* token)
 		}
 	}
 
+
 	if (_id >= 1000)
 	{
-		switch (_tokens.size())
+		std::vector<sf::Vector2f> baseOffsets = {
+			sf::Vector2f(-60, -60),
+			sf::Vector2f(60, -60),
+			sf::Vector2f(60, 60),
+			sf::Vector2f(-60, 60)
+		};
+
+		// Set position BEFORE pushing to _tokens
+		if (_tokens.size() < baseOffsets.size())
 		{
-			case 0:
-				token->SetPosition(_position + sf::Vector2f(-60, -60), _id);
-			break;
-
-			case 1:
-				token->SetPosition(_position + sf::Vector2f(60, -60), _id);
-			break;
-
-			case 2:
-				token->SetPosition(_position + sf::Vector2f(60, 60), _id);
-			break;
-
-			case 3:
-				token->SetPosition(_position + sf::Vector2f(-60, 60), _id);
-			break;
+			token->SetPosition(_position + baseOffsets[_tokens.size()], _id);
 		}
 	}
 
@@ -74,8 +69,8 @@ void Cell::AddToken(Token* token)
 				token->SetPosition(_position + sf::Vector2f(0, 20), _id);
 		}
 	}
-	
-	_tokens.push_back(token);
+
+	_tokens.push_back(token);	
 }
 
 void Cell::RemoveToken(Token* token)
