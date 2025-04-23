@@ -99,10 +99,33 @@ void GameDirector::CalculateMovableTokens()
     {
         if (IsTokenFromCurrentPlayer(*currentToken))
         {
-            currentToken->SetSelectable(CanTokenMove(*currentToken));
-            _movableTokens.push_back(currentToken);
+            if (_diceValue == 5)
+            {
+                if (currentToken->GetIsInBase())
+                {
+                    currentToken->SetSelectable(CanTokenMove(*currentToken));
+                    _movableTokens.push_back(currentToken);
+                }
+            }
+            else
+            {
+                if (!currentToken->GetIsInBase())
+                {
+                    currentToken->SetSelectable(CanTokenMove(*currentToken));
+                    _movableTokens.push_back(currentToken);
+                }               
+            }
+           
         }
     }
+
+    if (_movableTokens.empty())
+    {
+        std::cout << "No hay movimientos disponibles" << std::endl;
+        EndTurn();
+    }
+
+    
 }
 
 bool GameDirector::CanTokenMove(Token& token)
