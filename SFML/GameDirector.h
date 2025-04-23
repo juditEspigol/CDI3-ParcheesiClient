@@ -26,7 +26,7 @@ private:
     int _diceValue;
     GameState _currentState;
     Token* _selectedToken;
-    std::vector<int> _movableTokens;
+    std::vector<Token*> _movableTokens;
     std::mt19937 _rng;
 
     void CalculateMovableTokens();
@@ -40,11 +40,12 @@ public:
     void StartGame();
     void StartPlayerTurn(int playerId);
     void RollDice();
+    void ForceDiceValue(int value); // Cheats to force dice to be a specific value
     void SelectToken(sf::Vector2i mousePos);
     void MoveSelectedToken();
 
     inline int GetCurrentPlayer() { return _currentPlayer; };
     inline int GetDiceValue() { return _diceValue; };
-    inline std::vector<int>& GetMovableTokens() { return _movableTokens; }
+    inline std::vector<Token*>& GetMovableTokens() { return _movableTokens; }
     inline GameState GetCurrentState() { return _currentState; }
 };

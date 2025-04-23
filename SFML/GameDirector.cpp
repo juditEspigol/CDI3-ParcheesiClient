@@ -33,9 +33,27 @@ void GameDirector::RollDice()
 
     _currentState = GameState::DICE_ROLLED;
 
+    CalculateMovableTokens();
+
     if (_movableTokens.empty())
     {
-        EndTurn();
+        //EndTurn();
+    }
+}
+
+void GameDirector::ForceDiceValue(int value)
+{
+    _diceValue = value;
+
+    std::cout << "Forced Dice Value = " << _diceValue << std::endl;
+
+    _currentState = GameState::DICE_ROLLED;
+
+    CalculateMovableTokens();
+
+    if (_movableTokens.empty())
+    {
+        //EndTurn();
     }
 }
 
@@ -43,19 +61,18 @@ void GameDirector::SelectToken(sf::Vector2i mousePos)
 {
     if (_currentState != GameState::DICE_ROLLED) return;
 
-    for (Token* currentToken : _table.GetTokens())
+    for (Token* currentToken : _movableTokens)
     {
         sf::Vector2f distance = static_cast<sf::Vector2f>(mousePos) - currentToken->GetPosition();
         float length = std::sqrt(distance.x * distance.x + distance.y * distance.y);
         //std::cout << "Distance between mouse and token: " << length << std::endl;
-        if (length <= TOKEN_RADIUS)
+        if (length <= TOKEN_RADIUS && currentToken->GetIsSelectable())
         {
             _selectedToken = currentToken;
             _currentState = GameState::PIECE_SELECTED;
             MoveSelectedToken();
         }
     }
-
 }
 
 void GameDirector::MoveSelectedToken()
@@ -66,12 +83,26 @@ void GameDirector::MoveSelectedToken()
 
     _currentState = GameState::TURN_COMPLETE;
 
+    // Reset all selectable tokens
+    for (Token* currentToken : _table.GetTokens())
+    {
+        currentToken->SetSelectable(false);
+    }
+
     EndTurn();
 }
 
+
 void GameDirector::CalculateMovableTokens()
 {
-    
+    for (Token* currentToken : _table.GetTokens())
+    {
+        if (IsTokenFromCurrentPlayer(*currentToken))
+        {
+            currentToken->SetSelectable(CanTokenMove(*currentToken));
+            _movableTokens.push_back(currentToken);
+        }
+    }
 }
 
 bool GameDirector::CanTokenMove(Token& token)

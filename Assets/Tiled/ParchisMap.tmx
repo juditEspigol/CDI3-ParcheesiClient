@@ -714,28 +714,28 @@
   <object id="322" x="155" y="165">
    <properties>
     <property name="horizontal" type="bool" value="false"/>
-    <property name="id" type="int" value="1003"/>
+    <property name="id" type="int" value="1002"/>
    </properties>
    <point/>
   </object>
   <object id="323" x="800" y="165">
    <properties>
     <property name="horizontal" type="bool" value="false"/>
-    <property name="id" type="int" value="1004"/>
+    <property name="id" type="int" value="1001"/>
    </properties>
    <point/>
   </object>
   <object id="324" x="800" y="815">
    <properties>
     <property name="horizontal" type="bool" value="false"/>
-    <property name="id" type="int" value="1001"/>
+    <property name="id" type="int" value="1004"/>
    </properties>
    <point/>
   </object>
   <object id="325" x="155" y="815">
    <properties>
     <property name="horizontal" type="bool" value="false"/>
-    <property name="id" type="int" value="1002"/>
+    <property name="id" type="int" value="1003"/>
    </properties>
    <point/>
   </object>

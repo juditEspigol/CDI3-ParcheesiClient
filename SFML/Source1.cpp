@@ -41,16 +41,34 @@ void HandleEvent(const sf::Event& event, sf::RenderWindow& window, Table* table,
 	}
 	if (const sf::Event::KeyPressed* keyPressed = event.getIf<sf::Event::KeyPressed>()) {
 		switch (keyPressed->code) {
-		case sf::Keyboard::Key::Escape:
-			window.close();
-			break;
-		default:
-			break;
+			case sf::Keyboard::Key::Escape:
+				window.close();
+				break;
+			case sf::Keyboard::Key::Num1:
+				gameDirector->ForceDiceValue(1);
+				break;
+			case sf::Keyboard::Key::Num2:
+				gameDirector->ForceDiceValue(2);
+				break;
+			case sf::Keyboard::Key::Num3:
+				gameDirector->ForceDiceValue(3);
+				break;
+			case sf::Keyboard::Key::Num4:
+				gameDirector->ForceDiceValue(4);
+				break;
+			case sf::Keyboard::Key::Num5:
+				gameDirector->ForceDiceValue(5);
+				break;
+			case sf::Keyboard::Key::Num6:
+				gameDirector->ForceDiceValue(6);
+				break;
+			default:
+				break;
 		}
 	}
 	if (const sf::Event::MouseButtonPressed* mousePressed = event.getIf<sf::Event::MouseButtonPressed>()) {
-		switch (mousePressed->button) {
-		case sf::Mouse::Button::Left:
+		if (mousePressed->button == sf::Mouse::Button::Left)
+		{
 			if (gameDirector->GetCurrentState() == GameDirector::GameState::WAITING_TURN)
 			{
 				std::cout << "Current Game State: " << "Wating Turn" << std::endl;
@@ -89,12 +107,12 @@ void main() {
 	{
 		float deltaTime = deltaTimeClock.restart().asSeconds();
 		deltaTimeAnimation = deltaTime;
-		while (const std::optional event = window->pollEvent()) {
+		while (const std::optional event = window->pollEvent()) 
+		{
 			//aqui va lo que quiero que ocurra si hay un input/evento
 			HandleEvent(*event, *window, table, gameDirector);
 		}
 		
-
 		window->clear();
 
 		Render(*window, sprite);
