@@ -46,10 +46,6 @@ void Cell::AddToken(Token* token)
 				_tokens[i]->SetPosition(_position + baseOffsets[i], _id);
 			}
 		}
-
-		std::cout << token->GetPosition().x << " " << token->GetPosition().y << std::endl;
-		std::cout << _tokens.size() << std::endl;
-
 		return;
 	}
 
