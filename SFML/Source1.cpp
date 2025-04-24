@@ -31,10 +31,8 @@ sf::Texture LoadSpriteSheet(const std::string& filePath) {
 void Render(sf::RenderWindow& window, sf::Sprite& sprite, GameDirector* gameDirector)
 {
 	window.draw(sprite);
-
 	window.draw(gameDirector->GetTurnIndicator(WIDTH, HEIGHT));
 	window.draw(gameDirector->GetDiceText());
-
 }
 
 void HandleEvent(const sf::Event& event, sf::RenderWindow& window, Table* table, GameDirector* gameDirector) 

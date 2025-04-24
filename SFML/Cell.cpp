@@ -28,7 +28,6 @@ void Cell::AddToken(Token* token)
 		}
 	}
 
-
 	if (_id >= 1000)
 	{
 		std::vector<sf::Vector2f> baseOffsets = {
@@ -38,11 +37,20 @@ void Cell::AddToken(Token* token)
 			sf::Vector2f(-60, 60)
 		};
 
-		// Set position BEFORE pushing to _tokens
-		if (_tokens.size() < baseOffsets.size())
+		_tokens.push_back(token);
+
+		for (size_t i = 0; i < _tokens.size(); ++i)
 		{
-			token->SetPosition(_position + baseOffsets[_tokens.size()], _id);
+			if (i < baseOffsets.size())
+			{
+				_tokens[i]->SetPosition(_position + baseOffsets[i], _id);
+			}
 		}
+
+		std::cout << token->GetPosition().x << " " << token->GetPosition().y << std::endl;
+		std::cout << _tokens.size() << std::endl;
+
+		return;
 	}
 
 	else
