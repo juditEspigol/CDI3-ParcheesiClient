@@ -32,7 +32,8 @@ sf::Packet& operator>>(sf::Packet& _packet, PacketType& _type)
 void main()
 {
 	SCENE_MANAGER.AddScene(AUTHENTICATION, new AuthenticateScene()); 
-	SCENE_MANAGER.AddScene(CODE_ROOM, new RoomScene()); 
+	SCENE_MANAGER.AddScene(ROOM, new RoomScene()); 
+	SCENE_MANAGER.AddScene(WAITING, new WaitingScene());
 
 	SCENE_MANAGER.SetCurrentScene(AUTHENTICATION);
 	SCENE_MANAGER.GetCurrentScene()->OnEnter();

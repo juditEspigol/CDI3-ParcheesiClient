@@ -17,7 +17,7 @@ TextFill::TextFill(const sf::String& _textDefault, sf::Vector2f _position)
 
 TextFill::~TextFill()
 {
-	delete textBox;
+	//delete textBox;
 }
 
 void TextFill::InsertChar(const sf::Event::TextEntered* _textEntered)

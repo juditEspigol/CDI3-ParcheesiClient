@@ -3,7 +3,7 @@
 AuthenticateScene::AuthenticateScene()
 {
 	isFinished = false;
-	nextScene = CODE_ROOM;
+	nextScene = WAITING;
 
 	// Create buttons
 	ButtonTextUpdater* user = new ButtonTextUpdater("Insert User...", sf::Vector2f(1280 / 2 - 135, 720 / 2 - 100));

@@ -4,5 +4,6 @@ enum PacketType
 { 
 	LOGIN, 
 	REGISTER, 
-	ROOM 
+	CREATE_ROOM,
+	JOIN_ROOM
 };

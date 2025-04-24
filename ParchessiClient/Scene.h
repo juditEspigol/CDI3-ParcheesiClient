@@ -3,7 +3,8 @@
 #include "ButtonTextUpdater.h"
 
 #define AUTHENTICATION "AuthenticateScene"
-#define CODE_ROOM "RoomScene"
+#define ROOM "RoomScene"
+#define WAITING "WaitingScene"
 #define GAMEPLAY "Gameplay"
 
 class Scene

@@ -25,8 +25,11 @@ ButtonPacketSender::ButtonPacketSender(PacketType _packetType, std::vector<Butto
 	case REGISTER:
 		text = new TextFill("REGISTER", positionText);
 		break;
-	case ROOM:
+	case JOIN_ROOM:
 		text = new TextFill("CODE ROOM", positionText);
+		break;
+	case CREATE_ROOM:
+		text = new TextFill("CREATE ROOM", positionText);
 		break;
 	default:
 		break;

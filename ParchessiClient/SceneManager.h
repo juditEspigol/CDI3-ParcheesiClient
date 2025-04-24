@@ -1,6 +1,7 @@
 #pragma once
 #include "AuthenticateScene.h"
 #include "RoomScene.h"
+#include "WaitingScene.h"
 
 #define SCENE_MANAGER SceneManager::Instance()
 

@@ -145,6 +145,7 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="TextFill.cpp" />
+    <ClCompile Include="WaitingScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AuthenticateScene.h" />
@@ -156,6 +157,7 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="TextFill.h" />
+    <ClInclude Include="WaitingScene.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
