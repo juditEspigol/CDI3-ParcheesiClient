@@ -1,6 +1,12 @@
 #include "Scene.h"
 
-void Scene::GeneralEvents(const sf::Event& _event, sf::RenderWindow& _window, sf::TcpSocket& _socket)
+std::string Scene::OnExit()
+{
+	isFinished = false;
+	return nextScene;
+}
+
+void Scene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _window, sf::TcpSocket& _socket)
 {
 	if (_event.is < sf::Event::Closed>())
 	{
@@ -14,26 +20,53 @@ void Scene::GeneralEvents(const sf::Event& _event, sf::RenderWindow& _window, sf
 			std::cout << "Disconected..." << std::endl;
 			_window.close();
 			break;
+		case sf::Keyboard::Key::Enter:
+			for (Button* button : buttons)
+			{
+				button->OnEnter(keyPressed, _socket);
+			}
+			break;
+		case sf::Keyboard::Key::Backspace:
+			for (Button* button : buttons)
+			{
+				if (button->IsSelected())
+				{
+					button->GetText()->RemoveChar();
+				}
+			}
+			break;
 		default:
 			break;
 		}
 	}
-}
-
-std::string Scene::OnExit()
-{
-	isFinished = false;
-	return nextScene;
-}
-
-void Scene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _window, sf::TcpSocket& _socket)
-{
-	GeneralEvents(_event, _window, _socket);
-
-	for (Button* button : buttons)
+	if (const sf::Event::MouseButtonPressed* mousePressed = _event.getIf<sf::Event::MouseButtonPressed>())
 	{
-		button->HandleEvent(_event, _window, _socket);
+		switch (mousePressed->button)
+		{
+		case sf::Mouse::Button::Left:
+			for (Button* button : buttons)
+			{
+				button->OnLeftClick(mousePressed, _socket);
+			}
+			break;
+		default:
+			break;
+		}
 	}
+	if (const sf::Event::TextEntered* textEntered = _event.getIf<sf::Event::TextEntered>())
+	{
+		for (Button* button : buttons)
+		{
+			if (button->IsSelected())
+			{
+				button->GetText()->InsertChar(textEntered);
+			}
+		}
+	}
+}
+
+void Scene::Update(float _dt)
+{
 }
 
 void Scene::Render(sf::RenderWindow& _window)

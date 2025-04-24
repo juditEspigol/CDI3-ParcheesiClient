@@ -31,6 +31,8 @@ sf::Packet& operator>>(sf::Packet& _packet, PacketType& _type)
 
 void main()
 {
+	TEXTURE_MANAGER.LoadTextures();
+
 	SCENE_MANAGER.AddScene(AUTHENTICATION, new AuthenticateScene()); 
 	SCENE_MANAGER.AddScene(ROOM, new RoomScene()); 
 	SCENE_MANAGER.AddScene(WAITING, new WaitingScene());
@@ -60,9 +62,8 @@ void main()
 			{
 				SCENE_MANAGER.GetCurrentScene()->HandleEvent(*event, *window, socket);
 			}
-
 			// UPDATE
-
+			SCENE_MANAGER.GetCurrentScene()->Update(0.f);
 			// DRAW
 			SCENE_MANAGER.GetCurrentScene()->Render(*window);
 

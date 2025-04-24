@@ -5,8 +5,8 @@ RoomScene::RoomScene()
 	isFinished = false;
 	nextScene = WAITING;
 
-	ButtonTextUpdater* code = new ButtonTextUpdater("Insert Code...", sf::Vector2f(1280 / 2 - 135, 720 / 2 - 100));
-	ButtonPacketSender* btSendCode = new ButtonPacketSender(PacketType::JOIN_ROOM, std::vector<ButtonTextUpdater*>{code}, sf::Vector2f(1280 / 2 - 90, 720 / 2));
+	ButtonTextUpdater* code = new ButtonTextUpdater("Insert Code...", sf::Vector2f(1280 / 2 - 220, 720 / 2 - 20));
+	ButtonPacketSender* btSendCode = new ButtonPacketSender(PacketType::JOIN_ROOM, std::vector<ButtonTextUpdater*>{code}, sf::Vector2f(1280 / 2 + 40, 720 / 2 - 20));
 	ButtonPacketSender* btCreateCode = new ButtonPacketSender(PacketType::CREATE_ROOM, std::vector<ButtonTextUpdater*>{}, sf::Vector2f(1280 / 2 - 90, 720 / 2 + 100));
 
 	buttons = { code, btSendCode, btCreateCode };

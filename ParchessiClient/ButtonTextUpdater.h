@@ -11,6 +11,6 @@ public:
 
 	inline std::string GetTextContent() const { return text->GetContent(); }
 
-	void HandleEvent(const sf::Event& _event, sf::RenderWindow& _window, sf::TcpSocket& _socket) override; 
+	void OnLeftClick(const sf::Event::MouseButtonPressed* _mousePressed, sf::TcpSocket& _socket) override;
 };
 

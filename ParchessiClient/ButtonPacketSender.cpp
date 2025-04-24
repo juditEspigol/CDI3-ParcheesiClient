@@ -26,7 +26,7 @@ ButtonPacketSender::ButtonPacketSender(PacketType _packetType, std::vector<Butto
 		text = new TextFill("REGISTER", positionText);
 		break;
 	case JOIN_ROOM:
-		text = new TextFill("CODE ROOM", positionText);
+		text = new TextFill("SEND CODE", positionText);
 		break;
 	case CREATE_ROOM:
 		text = new TextFill("CREATE ROOM", positionText);
@@ -34,7 +34,7 @@ ButtonPacketSender::ButtonPacketSender(PacketType _packetType, std::vector<Butto
 	default:
 		break;
 	}
-	sprite->setTexture(*textureSelected);
+	sprite->setTexture(*TEXTURE_MANAGER.GetSelected());
 	text->SetBoldFont();
 	text->SetColor(sf::Color::Black);
 }
@@ -43,39 +43,27 @@ ButtonPacketSender::~ButtonPacketSender()
 {
 }
 
-void ButtonPacketSender::HandleEvent(const sf::Event& _event, sf::RenderWindow& /*_window*/, sf::TcpSocket& _socket)
+void ButtonPacketSender::OnLeftClick(const sf::Event::MouseButtonPressed* _mousePressed, sf::TcpSocket& _socket)
 {
-	if (const sf::Event::MouseButtonPressed* mousePressed = _event.getIf<sf::Event::MouseButtonPressed>())
+	if (sprite->getGlobalBounds().contains(sf::Vector2f(_mousePressed->position)))
 	{
-		switch (mousePressed->button)
+		std::cout << "Button pressed with Left Click" << std::endl;
+
+		sf::Packet tempPacket;
+		tempPacket << packetType;
+
+		for (ButtonTextUpdater* button : buttonTexts)
 		{
-		case sf::Mouse::Button::Left:
-		{
-			if (sprite->getGlobalBounds().contains(sf::Vector2f(mousePressed->position)))
+			if (button->GetTextContent() == "")
 			{
-				std::cout << "Button pressed" << std::endl;
-
-				sf::Packet tempPacket;
-				tempPacket << packetType;
-
-				for (ButtonTextUpdater* button : buttonTexts)
-				{
-					if (button->GetTextContent() == "") 
-					{
-						std::cerr << "Invalid message!" << std::endl;
-						return;
-					}
-					std::cout << button->GetTextContent() << std::endl;
-					tempPacket << button->GetTextContent();
-				}
-				pressed = true;
-				
-				SendData(_socket, tempPacket);
+				std::cerr << "Invalid message!" << std::endl;
+				return;
 			}
+			std::cout << button->GetTextContent() << std::endl;
+			tempPacket << button->GetTextContent();
 		}
-		break;
-		default:
-			break;
-		}
+		pressed = true;
+
+		SendData(_socket, tempPacket);
 	}
 }

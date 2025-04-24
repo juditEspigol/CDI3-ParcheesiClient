@@ -1,35 +1,21 @@
 #include "Button.h"
 
-sf::Texture* LoadTexture(const std::string& _filePath)
-{
-	sf::Texture* tempTexture = new sf::Texture();
-	if (!tempTexture->loadFromFile(_filePath))
-	{
-		std::cerr << "ERROR LOADING TEXTURE: " << _filePath << std::endl;
-		return nullptr;
-	}
-
-	return tempTexture;
-}
-
 void Button::SelectButton()
 {
-	sprite->setTexture(*textureSelected);
+	sprite->setTexture(*TEXTURE_MANAGER.GetSelected());
 	selected = true;
 }
 
 void Button::UnselectButton()
 {
-	sprite->setTexture(*textureNotSelected);
+	sprite->setTexture(*TEXTURE_MANAGER.GetNotSelected());
 	selected = false;
 }
 
 Button::Button(sf::Vector2f _position)
 	: pressed(false), selected(false)
 {
-	textureSelected = LoadTexture(WHITE_BOX);
-	textureNotSelected = LoadTexture(GRAY_BOX);
-	sprite = new sf::Sprite(*textureNotSelected);
+	sprite = new sf::Sprite(*TEXTURE_MANAGER.GetNotSelected());
 	
 	sprite->setScale(sf::Vector2f(0.2, 0.05)); 
 	sprite->setPosition(_position);
@@ -45,22 +31,19 @@ void Button::Render(sf::RenderWindow& _window)
 	text->Render(_window);
 }
 
-void Button::HandleEvent(const sf::Event& _event, sf::RenderWindow& /*_window*/, sf::TcpSocket& /*_socket*/)
+void Button::OnLeftClick(const sf::Event::MouseButtonPressed* _mousePressed, sf::TcpSocket& /*_socket*/)
 {
-	if (const sf::Event::MouseButtonPressed* mousePressed = _event.getIf<sf::Event::MouseButtonPressed>())
+	if (sprite->getGlobalBounds().contains(sf::Vector2f(_mousePressed->position)))
 	{
-		switch (mousePressed->button)
-		{
-		case sf::Mouse::Button::Left:
-		{
-			if (sprite->getGlobalBounds().contains(sf::Vector2f(mousePressed->position)))
-			{
-				std::cout << "Button pressed" << std::endl;
-			}
-		}
-		break;
-		default:
-			break;
-		}
+		std::cout << "Button pressed with Left Click" << std::endl;
+	}
+}
+
+void Button::OnEnter(const sf::Event::KeyPressed* /*_keyPressed*/, sf::TcpSocket& /*_socket*/)
+{
+	if (selected)
+	{
+		std::cout << "Pressed Enter while selected" << std::endl;
+		UnselectButton();
 	}
 }

@@ -13,44 +13,14 @@ ButtonTextUpdater::~ButtonTextUpdater()
 {
 }
 
-void ButtonTextUpdater::HandleEvent(const sf::Event& _event, sf::RenderWindow& _window, sf::TcpSocket& _socket)
+void ButtonTextUpdater::OnLeftClick(const sf::Event::MouseButtonPressed* _mousePressed, sf::TcpSocket& _socket)
 {
-	if (const sf::Event::MouseButtonPressed* mousePressed = _event.getIf<sf::Event::MouseButtonPressed>())
+	if (!selected && sprite->getGlobalBounds().contains(sf::Vector2f(_mousePressed->position)))
 	{
-		switch (mousePressed->button)
-		{
-		case sf::Mouse::Button::Left:
-		{
-			if (sprite->getGlobalBounds().contains(sf::Vector2f(mousePressed->position)))
-			{
-				SelectButton();
-			}
-			else
-			{
-				UnselectButton();
-			}
-		}
-		break;
-		default:
-			break;
-		}
+		SelectButton();
 	}
-	if (const sf::Event::KeyPressed* keyPressed = _event.getIf<sf::Event::KeyPressed>())
+	else if (selected)
 	{
-		switch (keyPressed->code)
-		{
-		case sf::Keyboard::Key::Enter:
-		{
-			UnselectButton();
-		}
-		break;
-		default:
-			break;
-		}
-	}
-
-	if (selected)
-	{
-		text->HandleEvent(_event, _window, _socket);
+		UnselectButton();
 	}
 }

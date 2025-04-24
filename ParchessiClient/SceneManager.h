@@ -28,5 +28,4 @@ public:
     Scene* GetScene(std::string _name); 
     inline Scene* GetCurrentScene() const { return currentScene; }
     bool SetCurrentScene(std::string _name);
-
 };

@@ -5,8 +5,8 @@ WaitingScene::WaitingScene()
 	isFinished = false;
 	nextScene = GAMEPLAY;
 
-	TextFill* waitingText = new TextFill("WAITING PLAYERS TO JOIN...", sf::Vector2f(1280 / 2 - 250, 720 / 2));
-	TextFill* codeText = new TextFill("CODE", sf::Vector2f(1280 / 2 - 150, 720 / 2 - 100));
+	TextFill* waitingText = new TextFill("WAITING PLAYERS TO JOIN...", sf::Vector2f(1280 / 2 - 120, 720 / 2));
+	TextFill* codeText = new TextFill("CODE", sf::Vector2f(1280 / 2 - 25, 720 / 2 - 100));
 
 	texts.push_back(waitingText);
 	texts.push_back(codeText);

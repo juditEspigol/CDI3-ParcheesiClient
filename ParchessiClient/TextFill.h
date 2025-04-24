@@ -2,7 +2,6 @@
 #include <SFML/Network.hpp>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
-
 #include <iostream>
 
 const std::string ROBOTO_MEDIUM = "../Assets/Fonts/Roboto-Condensed.ttf";
@@ -20,9 +19,6 @@ private:
 
 	inline bool HasContent() const { return content != defaultText; }
 
-	void InsertChar(const sf::Event::TextEntered* _textEntered);
-	void RemoveChar();
-
 public:
 	TextFill(const sf::String& _textDefault, sf::Vector2f _position = sf::Vector2f(200, 200));
 	~TextFill();
@@ -30,11 +26,13 @@ public:
 	inline std::string GetContent() const { return HasContent() ? content : ""; }
 	inline void SetPosition(const sf::Vector2f _position) { textBox->setPosition(_position); }
 	inline void SetColor(const sf::Color _color) { textBox->setFillColor(_color); }
-	inline void SetBoldFont()
+	inline void SetBoldFont(const bool _activate = true)
 	{
-		font.openFromFile(ROBOTO_BOLD);
+		_activate? font.openFromFile(ROBOTO_BOLD) : font.openFromFile(ROBOTO_MEDIUM);
 	}
 
 	void Render(sf::RenderWindow& _window); 
-	void HandleEvent(const sf::Event& _event, sf::RenderWindow& _window, sf::TcpSocket& _socket);
+
+	void InsertChar(const sf::Event::TextEntered* _textEntered);
+	void RemoveChar();
 };

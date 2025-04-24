@@ -59,23 +59,3 @@ void TextFill::Render(sf::RenderWindow& _window)
 {
 	_window.draw(*textBox);
 }
-
-void TextFill::HandleEvent(const sf::Event& _event, sf::RenderWindow& /*_window*/, sf::TcpSocket& /*_socket*/)
-{
-	if (const sf::Event::TextEntered* textEntered = _event.getIf<sf::Event::TextEntered>())
-	{
-		InsertChar(textEntered);
-	}
-
-	if (const sf::Event::KeyPressed* keyPressed = _event.getIf<sf::Event::KeyPressed>())
-	{
-		switch (keyPressed->code)
-		{
-		case sf::Keyboard::Key::Backspace:
-			RemoveChar();
-		break;
-		default:
-			break;
-		}
-	}
-}
