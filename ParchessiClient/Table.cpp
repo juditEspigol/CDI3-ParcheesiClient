@@ -117,6 +117,13 @@
                 // Recorremos desde la posición actual hasta la nueva
                 for (int i = token->GetIdPosition(); i <= newPos; i++)
                 {
+
+                    if (i >= (token->GetPlayerId() * 100) + 7)
+                    {
+                        _newPosition = (token->GetPlayerId() * 100) + 7;
+                        break;
+                    }
+
                     // Si llegamos a la última celda del recorrido principal
                     if (i == token->GetFinalCellId())
                     {
@@ -134,6 +141,7 @@
                         }
                         break;
                     }
+
 
                     if (_newPosition > 68 && !token->GetIsLastZone())
                     {

@@ -455,7 +455,7 @@
   <object id="274" x="615" y="480">
    <properties>
     <property name="horizontal" type="bool" value="false"/>
-    <property name="id" type="int" value="206"/>
+    <property name="id" type="int" value="106"/>
    </properties>
    <point/>
   </object>
@@ -693,7 +693,7 @@
   <object id="318" x="540" y="480">
    <properties>
     <property name="horizontal" type="bool" value="false"/>
-    <property name="id" type="int" value="207"/>
+    <property name="id" type="int" value="107"/>
    </properties>
    <point/>
   </object>

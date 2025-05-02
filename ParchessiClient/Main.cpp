@@ -41,7 +41,7 @@ void main()
 	SCENE_MANAGER.AddScene(WAITING, new WaitingScene());
 	SCENE_MANAGER.AddScene(GAMEPLAY, new GameplayScene());
 
-	SCENE_MANAGER.SetCurrentScene(AUTHENTICATION);
+	SCENE_MANAGER.SetCurrentScene(GAMEPLAY);
 	SCENE_MANAGER.GetCurrentScene()->OnEnter();
 
 	// TCP
