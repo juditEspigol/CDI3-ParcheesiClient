@@ -4,7 +4,9 @@
 #include "ButtonTextUpdater.h"
 #include "PacketType.h"
 
+
 void SendData(sf::TcpSocket& _clientSocket, sf::Packet& _packet);
+void OnRecievePacket(sf::TcpSocket& _clientSocket);
 
 class ButtonPacketSender : public Button
 {

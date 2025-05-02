@@ -5,15 +5,10 @@
 #define WIDTH 960
 #define HEIGHT 960
 
-#define FRAME_WIDTH 96
-#define FRAME_HEIGHT 101
-#define NUM_FRAMES 10
-#define ANIMATION_SPEED 0.014
-
 // FOR TESTING
-bool testingGameplay = true;
+bool testingGameplay = false;
 
-const sf::IpAddress SERVER_IP = sf::IpAddress(127, 152, 211, 1);//sf::IpAddress(10, 40, 2, 183); // Loopback /// 79, 152, 211, 184
+const sf::IpAddress SERVER_IP = sf::IpAddress(79, 152, 140, 103);//sf::IpAddress(10, 40, 2, 183); // Loopback /// 79, 152, 211, 184
 
 void HandShake(sf::Packet _data)
 {
@@ -22,15 +17,6 @@ void HandShake(sf::Packet _data)
 
 	std::cout << "Mensaje recivido del servidor: `" << receivedMessage << "`" << std::endl;
 }
-
-sf::Packet& operator>>(sf::Packet& _packet, PacketType& _type) 
-{
-	int temp;
-	_packet >> temp;
-	_type = static_cast<PacketType>(temp);
-
-	return _packet;
-};
 
 void main()
 {
@@ -67,6 +53,7 @@ void main()
 			}
 			// UPDATE
 			SCENE_MANAGER.GetCurrentScene()->Update(0.f);
+
 			// DRAW
 			SCENE_MANAGER.GetCurrentScene()->Render(*window);
 

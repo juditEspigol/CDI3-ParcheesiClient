@@ -3,6 +3,7 @@
 AuthenticateScene::AuthenticateScene()
 {
 	isFinished = false;
+	waitingPacket = false;
 	nextScene = ROOM;
 
 	// Create buttons
@@ -20,13 +21,56 @@ void AuthenticateScene::OnEnter()
 
 void AuthenticateScene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _window, sf::TcpSocket& _socket)
 {
+	if (waitingPacket && !isFinished)
+	{
+		//OnRecievePacket(_socket);
+		sf::Packet tempPacket;
+
+		if (_socket.receive(tempPacket) == sf::Socket::Status::Done)
+		{
+			PacketType type;
+			tempPacket >> type;
+			switch (type)
+			{
+			case SV_AUTH:
+			{
+				int validateAuthentication;
+				tempPacket >> validateAuthentication;
+				std::cout << "Mensaje recibido del servidor: " << validateAuthentication << std::endl;
+
+				if (validateAuthentication >= 0)
+				{
+					isFinished = true;
+				}
+				else
+				{
+					waitingPacket = false;
+					std::cout << "Waiting: " << waitingPacket << std::endl;
+				}
+				return;
+			}
+			break;
+			default:
+				break;
+			}
+		}
+		else
+		{
+			std::cerr << "Error al recibir el mensaje del servidor" << std::endl;
+		}
+		tempPacket.clear();
+		return;
+	}
+
 	Scene::HandleEvent(_event, _window, _socket);
 
 	for (Button* button : buttons)
 	{
-		if (button->HasBeenPressed())
+		// I havce pressed a LOG IN / REGISTER button with correct information
+		if (button->HasBeenPressed()) // has send packet
 		{
-			isFinished = true;
+			waitingPacket = true;
+			button->SetBeenPressed(false);
 		}
 	}
 }

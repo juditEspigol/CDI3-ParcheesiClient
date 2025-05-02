@@ -1,4 +1,5 @@
 #include "ButtonPacketSender.h"
+#include "SceneManager.h"
 
 void SendData(sf::TcpSocket& _clientSocket, sf::Packet& _packet)
 {
@@ -11,6 +12,44 @@ void SendData(sf::TcpSocket& _clientSocket, sf::Packet& _packet)
 		std::cout << "Mensaje enviado" << std::endl;
 	}
 	_packet.clear();
+}
+
+void OnRecievePacket(sf::TcpSocket& _clientSocket)
+{
+	sf::Packet packet;
+
+	if (_clientSocket.receive(packet) != sf::Socket::Status::Done)
+	{
+		PacketType type;
+		packet >> type;
+		switch (type)
+		{
+		case SV_AUTH:
+		{
+			int validateAuthentication; 
+			packet >> validateAuthentication;
+			std::cout << "Mensaje recibido del servidor: " << validateAuthentication << std::endl;
+
+			if (validateAuthentication >= 0)
+			{
+				SCENE_MANAGER.GetCurrentScene()->SetIsFinished(true);
+			}
+			return;
+		}
+			break;
+		case SV_ROOM_CODE:
+			break;
+		case SV_SOCKET:
+			break;
+		default:
+			break;
+		}
+	}
+	else
+	{
+		std::cout << "Mensaje enviado" << std::endl;
+	}
+	packet.clear();
 }
 
 ButtonPacketSender::ButtonPacketSender(PacketType _packetType, std::vector<ButtonTextUpdater*> _buttonTexts, sf::Vector2f _position)

@@ -12,6 +12,7 @@ class Scene
 protected:
 
 	bool isFinished;
+	bool waitingPacket;
 	std::string nextScene;
 
 	std::vector<Button*> buttons; 
@@ -22,6 +23,7 @@ public:
 	virtual std::string OnExit(); 
 
 	inline bool GetIsFinished() const { return isFinished; }
+	inline void SetIsFinished(const bool _isFinished) { isFinished = _isFinished; }
 	inline std::vector<Button*> GetButtons() const { return buttons; }
 
 	virtual void HandleEvent(const sf::Event& _event, sf::RenderWindow& _window, sf::TcpSocket& _socket);
