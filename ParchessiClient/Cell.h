@@ -12,12 +12,13 @@ private:
 	int _id;
 	bool _finalCell;
 	bool _isHorizontal;
+	bool isFinalCell;
 	std::vector<Token*> _tokens;
 	sf::RectangleShape _shape;
 	sf::Vector2f _position;
 
 public:
-	Cell(int id, sf::Vector2f position, bool _isHoriz);
+	Cell(int id, sf::Vector2f position, bool _isHoriz, bool _isFinal);
 
 	void AddToken(Token* token);
 	void RemoveToken(Token* token);

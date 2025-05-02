@@ -44,6 +44,7 @@
                 for (auto& obj : layer["objects"]) {
                     int cellId = 0;
                     bool isHorizontal = false;
+                    bool isFinalCell = false;
 
                     // Buscar las propiedades "id" y "horizontal" dentro de "properties"
                     if (obj.contains("properties") && obj["properties"].is_array()) {
@@ -54,6 +55,9 @@
                                 }
                                 else if (prop["name"] == "horizontal") {
                                     isHorizontal = prop["value"].get<bool>();
+                                }
+                                 if (prop["name"] == "finalCell") {
+                                    isFinalCell = prop["value"].get<bool>();
                                 }
                             }
                         }
@@ -69,7 +73,7 @@
                         continue; // Salta esta celda si ya fue insertada
                     }
 
-                    _cells.emplace(cellId, new Cell(cellId, sf::Vector2f(x, y), isHorizontal));
+                    _cells.emplace(cellId, new Cell(cellId, sf::Vector2f(x, y), isHorizontal, isFinalCell));
                 }
             }
         }

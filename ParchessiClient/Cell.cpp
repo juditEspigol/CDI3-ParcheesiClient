@@ -1,7 +1,7 @@
 #include "Cell.h"
 
 
-Cell::Cell(int id, sf::Vector2f position, bool _isHoriz)
+Cell::Cell(int id, sf::Vector2f position, bool _isHoriz, bool _isFinal)
 {
 	_id = id;
 	_position = position;	
@@ -10,6 +10,7 @@ Cell::Cell(int id, sf::Vector2f position, bool _isHoriz)
 	_shape.setSize(newSize);
 	_shape.setPosition(position);
 	_isHorizontal = _isHoriz;
+	isFinalCell = _isFinal;	
 }
 
 
@@ -45,6 +46,48 @@ void Cell::AddToken(Token* token)
 			}
 		}
 		return;
+	}
+
+	else if (isFinalCell)
+	{
+		
+		std::vector<sf::Vector2f> baseOffsets = {};
+
+		if (_isHorizontal)
+		{
+			baseOffsets = {
+			sf::Vector2f(0,0),
+			sf::Vector2f(-25, 0),
+			sf::Vector2f(25, 0),
+			sf::Vector2f(0, 25)
+			};
+		}
+		else
+		{
+			baseOffsets = {
+			sf::Vector2f(0, 0),
+			sf::Vector2f(-25, 0),
+			sf::Vector2f(0, 25),
+			sf::Vector2f(0, -25)
+			};
+		}
+
+		_tokens.push_back(token);
+
+		for (size_t i = 0; i < _tokens.size(); ++i)
+		{
+			if (i < baseOffsets.size())
+			{
+				_tokens[i]->SetPosition(_position + baseOffsets[i], _id);
+			}
+		}
+
+		if (_tokens.size() == 4)
+		{
+			std::cout << "Victoria Magistral OLE ole" << std::endl;
+		}
+		return;
+		
 	}
 
 	else
