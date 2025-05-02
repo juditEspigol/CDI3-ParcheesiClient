@@ -136,22 +136,44 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AuthenticateScene.cpp" />
+    <ClCompile Include="Button.cpp" />
+    <ClCompile Include="ButtonPacketSender.cpp" />
+    <ClCompile Include="ButtonTextUpdater.cpp" />
     <ClCompile Include="Cell.cpp" />
     <ClCompile Include="GameConfig.cpp" />
     <ClCompile Include="GameDirector.cpp" />
+    <ClCompile Include="GameplayScene.cpp" />
+    <ClCompile Include="Main.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="Source.cpp" />
-    <ClCompile Include="Source1.cpp" />
+    <ClCompile Include="RoomScene.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Table.cpp" />
+    <ClCompile Include="TextFill.cpp" />
+    <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="Token.cpp" />
+    <ClCompile Include="WaitingScene.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AuthenticateScene.h" />
+    <ClInclude Include="Button.h" />
+    <ClInclude Include="ButtonPacketSender.h" />
+    <ClInclude Include="ButtonTextUpdater.h" />
     <ClInclude Include="Cell.h" />
     <ClInclude Include="GameConfig.h" />
     <ClInclude Include="GameDirector.h" />
+    <ClInclude Include="GameplayScene.h" />
+    <ClInclude Include="PacketType.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="RoomScene.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Table.h" />
+    <ClInclude Include="TextFill.h" />
+    <ClInclude Include="TextureManager.h" />
     <ClInclude Include="Token.h" />
+    <ClInclude Include="WaitingScene.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

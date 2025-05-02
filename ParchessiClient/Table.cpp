@@ -91,19 +91,6 @@
 
     void Table::Draw(sf::RenderWindow& window)
     {
-        /*for (const std::pair<int, Cell*> pair : _cells)
-        {
-            Cell* cell = pair.second;
-            if (cell)
-            {
-                cell->Draw(window);
-            }
-            else
-            {
-                std::cout << "No TIENE cell" << std::endl;
-            }
-        }*/
-
         for (Token* token : _tokens)
         {
             token->Draw(window);

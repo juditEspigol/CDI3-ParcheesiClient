@@ -1,127 +1,88 @@
-#include <SFML/Graphics.hpp>
-#include <iostream>
-#include "Table.h"
-#include "GameDirector.h"
+#include "SceneManager.h"
+
+#define SERVER_PORT 55000 // puertos abiertos del 55000 - 55050
+
+#define WIDTH 960
+#define HEIGHT 960
 
 #define FRAME_WIDTH 96
 #define FRAME_HEIGHT 101
 #define NUM_FRAMES 10
 #define ANIMATION_SPEED 0.014
 
+// FOR TESTING
+bool testingGameplay = true;
 
-void UpdateSprite(sf::Sprite& animatedSprite, int& currentFrame, float& deltaTimeAnimation) {
-	if (deltaTimeAnimation >= ANIMATION_SPEED) 
-	{
-		currentFrame = (currentFrame + 1) % NUM_FRAMES;
-		animatedSprite.setTextureRect(sf::IntRect({ currentFrame * FRAME_WIDTH,0 }, { FRAME_WIDTH,FRAME_HEIGHT }));
-	}
-}
+const sf::IpAddress SERVER_IP = sf::IpAddress(127, 152, 211, 1);//sf::IpAddress(10, 40, 2, 183); // Loopback /// 79, 152, 211, 184
 
-sf::Texture LoadSpriteSheet(const std::string& filePath) {
-	sf::Texture texture;
-	if (!texture.loadFromFile(filePath)) 
-	{
-		std::cerr << "ERROR LOADING SPRITE SHIT" << std::endl;
-		return texture;
-	}
-
-	return texture;
-}
-
-void Render(sf::RenderWindow& window, sf::Sprite& sprite, GameDirector* gameDirector)
+void HandShake(sf::Packet _data)
 {
-	window.draw(sprite);
-	window.draw(gameDirector->GetTurnIndicator(WIDTH, HEIGHT));
-	window.draw(gameDirector->GetDiceText());
+	std::string receivedMessage; 
+	_data >> receivedMessage; // Sacar el mensaje del packet
+
+	std::cout << "Mensaje recivido del servidor: `" << receivedMessage << "`" << std::endl;
 }
 
-void HandleEvent(const sf::Event& event, sf::RenderWindow& window, Table* table, GameDirector* gameDirector) 
+sf::Packet& operator>>(sf::Packet& _packet, PacketType& _type) 
 {
+	int temp;
+	_packet >> temp;
+	_type = static_cast<PacketType>(temp);
 
-	if (event.is < sf::Event::Closed>()) {
-		window.close();
+	return _packet;
+};
+
+void main()
+{
+	TEXTURE_MANAGER.LoadTextures();
+
+	SCENE_MANAGER.AddScene(AUTHENTICATION, new AuthenticateScene()); 
+	SCENE_MANAGER.AddScene(ROOM, new RoomScene()); 
+	SCENE_MANAGER.AddScene(WAITING, new WaitingScene());
+	SCENE_MANAGER.AddScene(GAMEPLAY, new GameplayScene());
+
+	SCENE_MANAGER.SetCurrentScene(AUTHENTICATION);
+	SCENE_MANAGER.GetCurrentScene()->OnEnter();
+
+	// TCP
+	sf::TcpSocket socket; 
+
+	// Render SFML
+	sf::RenderWindow* window = new sf::RenderWindow(sf::VideoMode({ WIDTH, HEIGHT }), "Client");
+
+	if (socket.connect(SERVER_IP, SERVER_PORT) != sf::Socket::Status::Done && !testingGameplay)
+	{
+		std::cerr << "Error connecting to server." << std::endl; 
 	}
-	if (const sf::Event::KeyPressed* keyPressed = event.getIf<sf::Event::KeyPressed>()) {
-		switch (keyPressed->code) {
-			case sf::Keyboard::Key::Escape:
-				window.close();
-				break;
-			case sf::Keyboard::Key::Num1:
-				gameDirector->ForceDiceValue(1);
-				break;
-			case sf::Keyboard::Key::Num2:
-				gameDirector->ForceDiceValue(2);
-				break;
-			case sf::Keyboard::Key::Num3:
-				gameDirector->ForceDiceValue(3);
-				break;
-			case sf::Keyboard::Key::Num4:
-				gameDirector->ForceDiceValue(4);
-				break;
-			case sf::Keyboard::Key::Num5:
-				gameDirector->ForceDiceValue(5);
-				break;
-			case sf::Keyboard::Key::Num6:
-				gameDirector->ForceDiceValue(6);
-				break;
-			default:
-				break;
-		}
-	}
-	if (const sf::Event::MouseButtonPressed* mousePressed = event.getIf<sf::Event::MouseButtonPressed>()) {
-		if (mousePressed->button == sf::Mouse::Button::Left)
+	else
+	{
+		std::cout << "Connected to server" << std::endl;
+
+		while (window->isOpen())
 		{
-			if (gameDirector->GetCurrentState() == GameDirector::GameState::WAITING_TURN)
+			// LISTENER
+			while (const std::optional event = window->pollEvent())
 			{
-				std::cout << "Current Game State: " << "Wating Turn" << std::endl;
-
-				gameDirector->RollDice();
-				return;
+				SCENE_MANAGER.GetCurrentScene()->HandleEvent(*event, *window, socket);
 			}
-			if (gameDirector->GetCurrentState() == GameDirector::GameState::DICE_ROLLED)
-			{
-				std::cout << "Current Game State: " << "Dice Rolled" << std::endl;
+			// UPDATE
+			SCENE_MANAGER.GetCurrentScene()->Update(0.f);
+			// DRAW
+			SCENE_MANAGER.GetCurrentScene()->Render(*window);
 
-				gameDirector->SelectToken(mousePressed->position);
-				return;
+			// CHANGE SCENE
+			if (SCENE_MANAGER.GetCurrentScene()->GetIsFinished())
+			{
+				std::cout << "Change scene!" << std::endl;
+				std::string nextScene = SCENE_MANAGER.GetCurrentScene()->OnExit();
+				SCENE_MANAGER.SetCurrentScene(nextScene);
+				SCENE_MANAGER.GetCurrentScene()->OnEnter();
 			}
 		}
 	}
-}
 
-void main() {
+	socket.disconnect();
+	std::cout << "Desconectado del servidor" << std::endl;
 
-	sf::RenderWindow* window = new sf::RenderWindow(sf::VideoMode({ WIDTH ,HEIGHT}), "Parchis");
-	sf::Clock deltaTimeClock;
-	float deltaTimeAnimation = 0.0f;
-	int currentFrame = 0;
-
-	sf::Texture spriteSheet = LoadSpriteSheet("../Assets/Spritesheets/ParchisTable.png");
-	sf::Sprite sprite = sf::Sprite(spriteSheet);
-
-	Table* table = new Table();
-	GameDirector* gameDirector = new GameDirector(*table);
-	gameDirector->StartGame();
-
-	while (window->isOpen()) 
-	{
-		float deltaTime = deltaTimeClock.restart().asSeconds();
-		deltaTimeAnimation = deltaTime;
-		while (const std::optional event = window->pollEvent()) 
-		{
-			//aqui va lo que quiero que ocurra si hay un input/evento
-			HandleEvent(*event, *window, table, gameDirector);
-		}
-		
-		window->clear();
-
-		Render(*window, sprite, gameDirector);
-		table->Draw(*window);
-
-		window->display();
-	}
-
-	delete gameDirector;
-	delete table;
 	delete window;
 }

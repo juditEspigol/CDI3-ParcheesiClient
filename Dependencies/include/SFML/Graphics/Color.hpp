@@ -80,6 +80,7 @@ public:
     ////////////////////////////////////////////////////////////
     // NOLINTBEGIN(readability-identifier-naming)
     static const Color Black;       //!< Black predefined color
+    static const Color Gray;       //!< Black predefined color
     static const Color White;       //!< White predefined color
     static const Color Red;         //!< Red predefined color
     static const Color Green;       //!< Green predefined color
