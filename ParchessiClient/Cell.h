@@ -18,7 +18,6 @@ private:
 
 public:
 	Cell(int id, sf::Vector2f position, bool _isHoriz);
-	void Draw(sf::RenderWindow& window);
 
 	void AddToken(Token* token);
 	void RemoveToken(Token* token);

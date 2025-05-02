@@ -12,11 +12,7 @@ Cell::Cell(int id, sf::Vector2f position, bool _isHoriz)
 	_isHorizontal = _isHoriz;
 }
 
-void Cell::Draw(sf::RenderWindow& window)
-{
-	window.draw(_shape);
-	window.display();
-}
+
 
 void Cell::AddToken(Token* token)
 {
@@ -30,6 +26,7 @@ void Cell::AddToken(Token* token)
 
 	if (_id >= 1000)
 	{
+		//Si es una base tiene 4 posiciones distintas en funcion de la cantidad de fichas que hay
 		std::vector<sf::Vector2f> baseOffsets = {
 			sf::Vector2f(-60, -60),
 			sf::Vector2f(60, -60),
@@ -39,6 +36,7 @@ void Cell::AddToken(Token* token)
 
 		_tokens.push_back(token);
 
+		//Recolocamos las fichas de la celda en función del size
 		for (size_t i = 0; i < _tokens.size(); ++i)
 		{
 			if (i < baseOffsets.size())
@@ -51,6 +49,7 @@ void Cell::AddToken(Token* token)
 
 	else
 	{
+		//Si son horizontales las dibujamos a la izquierda o derecha
 		if (_isHorizontal)
 		{
 			if (_tokens.size() == 0)
@@ -63,6 +62,7 @@ void Cell::AddToken(Token* token)
 			}
 		}
 
+		//Si son verticales las dibujamos abajo o arriba
 		else
 		{
 			if (_tokens.size() == 0)
@@ -74,11 +74,13 @@ void Cell::AddToken(Token* token)
 		}
 	}
 
+	//Lo metemos en el vector de tokens de la celda
 	_tokens.push_back(token);	
 }
 
 void Cell::RemoveToken(Token* token)
 {
+	//Buscamos y sacamos el token del vector
 	for (size_t i = 0; i < _tokens.size(); ++i)
 	{
 		if (_tokens[i] == token)
