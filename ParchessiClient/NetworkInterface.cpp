@@ -6,10 +6,6 @@ void NetworkInterface::SendData(sf::TcpSocket& _clientSocket, sf::Packet& _packe
 	{
 		std::cerr << "Error al enviar el paquete al servidor" << std::endl;
 	}
-	else
-	{
-		std::cout << "Mensaje enviado" << std::endl;
-	}
 	_packet.clear();
 }
 
@@ -45,10 +41,6 @@ int NetworkInterface::OnRecieveAuthentication(sf::TcpSocket& _clientSocket)
 			break;
 		}
 	}
-	else
-	{
-		std::cout << "Mensaje enviado" << std::endl;
-	}
 	tempPacket.clear();
 	return -10;
 }
@@ -75,10 +67,6 @@ std::string NetworkInterface::OnRecieveRoomCode(sf::TcpSocket& _clientSocket)
 		default:
 			break;
 		}
-	}
-	else
-	{
-		std::cout << "Mensaje enviado" << std::endl;
 	}
 	tempPacket.clear();
 	return "";

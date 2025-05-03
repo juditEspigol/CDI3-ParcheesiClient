@@ -9,7 +9,6 @@ enum PacketType
     JOIN_ROOM,
     SV_AUTH,
     SV_ROOM_CODE,
-    SV_CODE_VERIFIED,
     SV_SOCKET
 };
 

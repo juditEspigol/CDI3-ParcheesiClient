@@ -25,6 +25,12 @@
     <Filter Include="Source Files\Scenes">
       <UniqueIdentifier>{b1750866-4e35-4eaa-bc15-68ffea7bb995}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Clients">
+      <UniqueIdentifier>{7aca320c-b161-414c-8560-e54b7a697090}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Clients">
+      <UniqueIdentifier>{2fa517ff-42c9-419d-b4a1-57680b97a571}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Cell.cpp">
@@ -90,6 +96,12 @@
     <ClCompile Include="WaitingScene.cpp">
       <Filter>Source Files\Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="ClientManager.cpp">
+      <Filter>Source Files\Clients</Filter>
+    </ClCompile>
+    <ClCompile Include="Client.cpp">
+      <Filter>Source Files\Clients</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cell.h">
@@ -151,6 +163,12 @@
     </ClInclude>
     <ClInclude Include="ButtonTextUpdater.h">
       <Filter>Header Files\Buttons</Filter>
+    </ClInclude>
+    <ClInclude Include="Client.h">
+      <Filter>Header Files\Clients</Filter>
+    </ClInclude>
+    <ClInclude Include="ClientManager.h">
+      <Filter>Header Files\Clients</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

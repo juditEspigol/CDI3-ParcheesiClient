@@ -141,6 +141,8 @@
     <ClCompile Include="ButtonPacketSender.cpp" />
     <ClCompile Include="ButtonTextUpdater.cpp" />
     <ClCompile Include="Cell.cpp" />
+    <ClCompile Include="Client.cpp" />
+    <ClCompile Include="ClientManager.cpp" />
     <ClCompile Include="GameConfig.cpp" />
     <ClCompile Include="GameDirector.cpp" />
     <ClCompile Include="GameplayScene.cpp" />
@@ -164,6 +166,8 @@
     <ClInclude Include="ButtonPacketSender.h" />
     <ClInclude Include="ButtonTextUpdater.h" />
     <ClInclude Include="Cell.h" />
+    <ClInclude Include="Client.h" />
+    <ClInclude Include="ClientManager.h" />
     <ClInclude Include="GameConfig.h" />
     <ClInclude Include="GameDirector.h" />
     <ClInclude Include="GameplayScene.h" />

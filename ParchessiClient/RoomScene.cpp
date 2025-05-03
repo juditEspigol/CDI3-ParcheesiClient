@@ -22,7 +22,6 @@ void RoomScene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _window, 
 {
 	if (waitingPacket && !isFinished)
 	{
-		// 1. Pressed create code room
 		std::string roomCodeRecieved = NetworkInterface::OnRecieveRoomCode(_socket);
 		if (roomCodeRecieved != "")
 		{
@@ -35,20 +34,6 @@ void RoomScene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _window, 
 			isFinished = true;
 			return;
 		}
-
-		// 2. Pressed join room
-		int validateAuthentication = NetworkInterface::OnRecieveAuthentication(_socket);
-		if (validateAuthentication >= 0)
-		{
-			isFinished = true;
-			return;
-		}
-		else if (validateAuthentication == -1) // No es valido
-		{
-			waitingPacket = false;
-			return;
-		}
-		return;
 	}
 
 	Scene::HandleEvent(_event, _window, _socket);
