@@ -1,13 +1,9 @@
 #include "SceneManager.h"
 
-#define SERVER_PORT 55000 // puertos abiertos del 55000 - 55050
-
-#define WIDTH 960
-#define HEIGHT 960
+const sf::IpAddress SERVER_IP = sf::IpAddress(79, 152, 140, 103); //sf::IpAddress(10, 40, 2, 183); // Loopback /// 79, 152, 211, 184
 
 // FOR TESTING
 bool testingGameplay = false;
-const sf::IpAddress SERVER_IP = sf::IpAddress(79, 152, 140, 103);//sf::IpAddress(10, 40, 2, 183); // Loopback /// 79, 152, 211, 184
 
 void main()
 {
@@ -25,7 +21,7 @@ void main()
 	sf::TcpSocket socket; 
 
 	// Render SFML
-	sf::RenderWindow* window = new sf::RenderWindow(sf::VideoMode({ WIDTH, HEIGHT }), "Client");
+	sf::RenderWindow* window = new sf::RenderWindow(sf::VideoMode({ WIDTH, HEIGHT }), "ParchessiClient");
 
 	if (socket.connect(SERVER_IP, SERVER_PORT) != sf::Socket::Status::Done && !testingGameplay)
 	{
@@ -58,9 +54,8 @@ void main()
 			}
 		}
 	}
-
 	socket.disconnect();
-	std::cout << "Desconectado del servidor" << std::endl;
+	std::cout << "Disconected from server" << std::endl;
 
 	delete window;
 }

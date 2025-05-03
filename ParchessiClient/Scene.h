@@ -1,6 +1,7 @@
 #pragma once
 #include "ButtonPacketSender.h"
 #include "ButtonTextUpdater.h"
+#include "GlobalValues.h"
 
 #define AUTHENTICATION "AuthenticateScene"
 #define ROOM "RoomScene"

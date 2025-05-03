@@ -1,5 +1,4 @@
 #include "RoomScene.h"
-#include "GlobalValues.h"
 
 RoomScene::RoomScene()
 {
@@ -7,9 +6,9 @@ RoomScene::RoomScene()
 	waitingPacket = false;
 	nextScene = WAITING;
 
-	ButtonTextUpdater* code = new ButtonTextUpdater("Insert Code...", sf::Vector2f(1280 / 2 - 220, 720 / 2 - 20));
-	ButtonPacketSender* btSendCode = new ButtonPacketSender(PacketType::JOIN_ROOM, std::vector<ButtonTextUpdater*>{code}, sf::Vector2f(1280 / 2 + 40, 720 / 2 - 20));
-	ButtonPacketSender* btCreateCode = new ButtonPacketSender(PacketType::CREATE_ROOM, std::vector<ButtonTextUpdater*>{}, sf::Vector2f(1280 / 2 - 90, 720 / 2 + 100));
+	ButtonTextUpdater* code = new ButtonTextUpdater("Insert Code...", sf::Vector2f(WIDTH / 2 - 220, HEIGHT / 2 - 20));
+	ButtonPacketSender* btSendCode = new ButtonPacketSender(PacketType::JOIN_ROOM, std::vector<ButtonTextUpdater*>{code}, sf::Vector2f(WIDTH / 2 + 40, HEIGHT / 2 - 20));
+	ButtonPacketSender* btCreateCode = new ButtonPacketSender(PacketType::CREATE_ROOM, std::vector<ButtonTextUpdater*>{}, sf::Vector2f(WIDTH / 2 - 90, HEIGHT / 2 + 100));
 
 	buttons = { code, btSendCode, btCreateCode };
 }
@@ -18,7 +17,6 @@ void RoomScene::OnEnter()
 {
 	
 }
-
 
 void RoomScene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _window, sf::TcpSocket& _socket)
 {
@@ -35,6 +33,7 @@ void RoomScene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _window, 
 			}
 			CODE = roomCodeRecieved;
 			isFinished = true;
+			return;
 		}
 
 		// 2. Pressed join room
@@ -42,10 +41,12 @@ void RoomScene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _window, 
 		if (validateAuthentication >= 0)
 		{
 			isFinished = true;
+			return;
 		}
 		else if (validateAuthentication == -1) // No es valido
 		{
 			waitingPacket = false;
+			return;
 		}
 		return;
 	}
