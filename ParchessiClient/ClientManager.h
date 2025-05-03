@@ -2,7 +2,7 @@
 #include "Client.h"
 
 #define CLIENT_MANAGER ClientManager::Instance()
-#define MAX_CLIENTS 2
+#define MAX_CLIENTS 1
 
 class ClientManager
 {
