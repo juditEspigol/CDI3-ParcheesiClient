@@ -144,7 +144,9 @@
     <ClCompile Include="GameConfig.cpp" />
     <ClCompile Include="GameDirector.cpp" />
     <ClCompile Include="GameplayScene.cpp" />
+    <ClCompile Include="GlobalValues.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="NetworkInterface.cpp" />
     <ClCompile Include="PacketType.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="RoomScene.cpp" />
@@ -165,6 +167,8 @@
     <ClInclude Include="GameConfig.h" />
     <ClInclude Include="GameDirector.h" />
     <ClInclude Include="GameplayScene.h" />
+    <ClInclude Include="GlobalValues.h" />
+    <ClInclude Include="NetworkInterface.h" />
     <ClInclude Include="PacketType.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="RoomScene.h" />

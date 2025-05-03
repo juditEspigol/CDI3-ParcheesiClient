@@ -1,4 +1,5 @@
 #include "WaitingScene.h"
+#include "GlobalValues.h"
 
 WaitingScene::WaitingScene()
 {
@@ -6,19 +7,21 @@ WaitingScene::WaitingScene()
 	nextScene = GAMEPLAY;
 
 	TextFill* waitingText = new TextFill("WAITING PLAYERS TO JOIN...", sf::Vector2f(1280 / 2 - 120, 720 / 2));
-	TextFill* codeText = new TextFill("CODE", sf::Vector2f(1280 / 2 - 25, 720 / 2 - 100));
 
 	texts.push_back(waitingText);
-	texts.push_back(codeText);
 }
 
 void WaitingScene::OnEnter()
 {
+	code = CODE;
+	TextFill* codeText = new TextFill(CODE, sf::Vector2f(1280 / 2 - 25, 720 / 2 - 100));
+	codeText->SetColor(sf::Color::White);
+	texts.push_back(codeText);
 }
 
 void WaitingScene::Render(sf::RenderWindow& _window)
 {
-	_window.clear(sf::Color::Black);
+	_window.clear(sf::Color::Yellow);
 
 	for (TextFill* text : texts)
 	{

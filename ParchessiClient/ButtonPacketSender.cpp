@@ -1,56 +1,6 @@
 #include "ButtonPacketSender.h"
 #include "SceneManager.h"
-
-void SendData(sf::TcpSocket& _clientSocket, sf::Packet& _packet)
-{
-	if (_clientSocket.send(_packet) != sf::Socket::Status::Done)
-	{
-		std::cerr << "Error al enviar el paquete al servidor" << std::endl;
-	}
-	else
-	{
-		std::cout << "Mensaje enviado" << std::endl;
-	}
-	_packet.clear();
-}
-
-void OnRecievePacket(sf::TcpSocket& _clientSocket)
-{
-	sf::Packet packet;
-
-	if (_clientSocket.receive(packet) != sf::Socket::Status::Done)
-	{
-		PacketType type;
-		packet >> type;
-		switch (type)
-		{
-		case SV_AUTH:
-		{
-			int validateAuthentication; 
-			packet >> validateAuthentication;
-			std::cout << "Mensaje recibido del servidor: " << validateAuthentication << std::endl;
-
-			if (validateAuthentication >= 0)
-			{
-				SCENE_MANAGER.GetCurrentScene()->SetIsFinished(true);
-			}
-			return;
-		}
-			break;
-		case SV_ROOM_CODE:
-			break;
-		case SV_SOCKET:
-			break;
-		default:
-			break;
-		}
-	}
-	else
-	{
-		std::cout << "Mensaje enviado" << std::endl;
-	}
-	packet.clear();
-}
+#include "NetworkInterface.h"
 
 ButtonPacketSender::ButtonPacketSender(PacketType _packetType, std::vector<ButtonTextUpdater*> _buttonTexts, sf::Vector2f _position)
  : Button(_position), packetType(_packetType), buttonTexts(_buttonTexts)
@@ -103,6 +53,6 @@ void ButtonPacketSender::OnLeftClick(const sf::Event::MouseButtonPressed* _mouse
 		}
 		pressed = true;
 
-		SendData(_socket, tempPacket);
+		NetworkInterface::SendData(_socket, tempPacket);
 	}
 }

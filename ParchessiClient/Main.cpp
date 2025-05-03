@@ -7,16 +7,7 @@
 
 // FOR TESTING
 bool testingGameplay = false;
-
 const sf::IpAddress SERVER_IP = sf::IpAddress(79, 152, 140, 103);//sf::IpAddress(10, 40, 2, 183); // Loopback /// 79, 152, 211, 184
-
-void HandShake(sf::Packet _data)
-{
-	std::string receivedMessage; 
-	_data >> receivedMessage; // Sacar el mensaje del packet
-
-	std::cout << "Mensaje recivido del servidor: `" << receivedMessage << "`" << std::endl;
-}
 
 void main()
 {

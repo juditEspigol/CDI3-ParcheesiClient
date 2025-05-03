@@ -1,4 +1,5 @@
 #include "AuthenticateScene.h"
+#include "NetworkInterface.h"
 
 AuthenticateScene::AuthenticateScene()
 {
@@ -23,42 +24,15 @@ void AuthenticateScene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _
 {
 	if (waitingPacket && !isFinished)
 	{
-		//OnRecievePacket(_socket);
-		sf::Packet tempPacket;
-
-		if (_socket.receive(tempPacket) == sf::Socket::Status::Done)
+		int validateAuthentication = NetworkInterface::OnRecieveAuthentication(_socket);
+		if (validateAuthentication >= 0)
 		{
-			PacketType type;
-			tempPacket >> type;
-			switch (type)
-			{
-			case SV_AUTH:
-			{
-				int validateAuthentication;
-				tempPacket >> validateAuthentication;
-				std::cout << "Mensaje recibido del servidor: " << validateAuthentication << std::endl;
-
-				if (validateAuthentication >= 0)
-				{
-					isFinished = true;
-				}
-				else
-				{
-					waitingPacket = false;
-					std::cout << "Waiting: " << waitingPacket << std::endl;
-				}
-				return;
-			}
-			break;
-			default:
-				break;
-			}
+			isFinished = true;
 		}
-		else
+		else if(validateAuthentication == -1) // No valid
 		{
-			std::cerr << "Error al recibir el mensaje del servidor" << std::endl;
+			waitingPacket = false;
 		}
-		tempPacket.clear();
 		return;
 	}
 

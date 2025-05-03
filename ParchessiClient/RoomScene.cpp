@@ -1,4 +1,5 @@
 #include "RoomScene.h"
+#include "GlobalValues.h"
 
 RoomScene::RoomScene()
 {
@@ -23,35 +24,29 @@ void RoomScene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _window, 
 {
 	if (waitingPacket && !isFinished)
 	{
-		//OnRecievePacket(_socket);
-		sf::Packet tempPacket;
-
-		if (_socket.receive(tempPacket) == sf::Socket::Status::Done)
+		// 1. Pressed create code room
+		std::string roomCodeRecieved = NetworkInterface::OnRecieveRoomCode(_socket);
+		if (roomCodeRecieved != "")
 		{
-			PacketType type;
-			tempPacket >> type;
-			switch (type)
+			if (roomCodeRecieved == "-1")
 			{
-			case SV_ROOM_CODE:
-			{
-				std::string roomCode;
-				tempPacket >> roomCode;
-				std::cout << "Mensaje recibido del servidor: " << roomCode << std::endl;
-
-				isFinished = true;
 				waitingPacket = false;
 				return;
 			}
-			break;
-			default:
-				break;
-			}
+			CODE = roomCodeRecieved;
+			isFinished = true;
 		}
-		else
+
+		// 2. Pressed join room
+		int validateAuthentication = NetworkInterface::OnRecieveAuthentication(_socket);
+		if (validateAuthentication >= 0)
 		{
-			std::cerr << "Error al recibir el mensaje del servidor" << std::endl;
+			isFinished = true;
 		}
-		tempPacket.clear();
+		else if (validateAuthentication == -1) // No es valido
+		{
+			waitingPacket = false;
+		}
 		return;
 	}
 
