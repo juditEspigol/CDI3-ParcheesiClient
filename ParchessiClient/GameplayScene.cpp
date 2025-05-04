@@ -31,8 +31,6 @@ void GameplayScene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _wind
 	{
 		_window.close();
 	}
-	sf::Packet packet;
-	std::string content;
 
 	if (const sf::Event::KeyPressed* keyPressed = _event.getIf<sf::Event::KeyPressed>())
 	{
@@ -43,14 +41,18 @@ void GameplayScene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _wind
 			_window.close();
 			break;
 		case sf::Keyboard::Key::Enter:
+		{
 			std::cout << "Enter" << std::endl;
-			packet << "Hola que tal";
+
+			sf::Packet packet;
+			std::string content = "Hola que tal";
+			packet << content;
 			for (auto client : CLIENT_MANAGER.GetClients())
 			{
 				NetworkInterface::SendData(*client->GetSocket(), packet);
-				packet >> content;
 				std::cout << "Sent this content: " << content << std::endl;
 			}
+		}
 			break;
 		case sf::Keyboard::Key::Backspace:
 			for (Button* button : buttons)
@@ -67,37 +69,20 @@ void GameplayScene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _wind
 	}
 
 
+	sf::Packet tempPacket;
 
-	/*sf::Socket* socket = nullptr;
-
-	if (_event.is < sf::Event::Closed>()) {
-		_window.close();
-	}
-	if (const sf::Event::KeyPressed* keyPressed = _event.getIf<sf::Event::KeyPressed>())
-	{
-		switch (keyPressed->code) {
-		case sf::Keyboard::Key::Num1:
-			sf::Packet packet;
-			packet << "Hola que tal";
-			for (auto client : CLIENT_MANAGER.GetClients())
-			{
-				NetworkInterface::SendData(*client->GetSocket(), packet);
-			}
-			break;
-		}
-	}
-
-	sf::Packet packet;
 	for (auto client : CLIENT_MANAGER.GetClients())
 	{
-		if (client->GetSocket()->receive(packet) == sf::Socket::Status::Done)
+		if (client->GetSocket()->receive(tempPacket) == sf::Socket::Status::Done)
 		{
 			std::cout << "PARA BAILAR LA BAMBA" << std::endl;
+			
 			std::string string;
-			packet >> string;
+			tempPacket >> string;
 			std::cout << "INFO: " << string << std::endl;
+			tempPacket.clear();
 		}
-	}*/
+	}
 
 
 
