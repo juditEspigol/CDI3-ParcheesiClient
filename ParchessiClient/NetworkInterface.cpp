@@ -14,33 +14,42 @@ void NetworkManager::Init()
 
 void NetworkManager::CheckConnections()
 {
-	if (selector.isReady(listener))
-	{
-		// RegisterNewUserConnection();
-	}
-	else
-	{
-		for (Client* client : CLIENT_MANAGER.GetClients())
-		{
-			if (selector.isReady(*client->GetSocket()))
-			{
-				sf::Packet packet;
-				if (client->GetSocket()->receive(packet) == sf::Socket::Status::Done)
-				{
-					std::cout << "PARA BAILAR LA BAMBA" << std::endl;
 
-					std::string string;
-					packet >> string;
-					std::cout << "INFO: " << string << std::endl;
-					packet.clear();
-				}
-				if (client->GetSocket()->receive(packet) == sf::Socket::Status::Disconnected)
-				{
-					// close window
-				}
+	if (selector.wait())
+	{
+		if (selector.isReady(listener))
+		{
+			// RegisterNewUserConnection();
+			std::cout << "HEMOS LLEGADO" << std::endl;
+		}
+		else
+		{
+
+			for (Client* client : CLIENT_MANAGER.GetClients())
+			{
+				std::cout << "HEMOS SALIDO" << std::endl;
+
+				
+					std::cout << "HEMOS SALIDO 2 VECES -- DE -- PARI -- " << std::endl;
+
+					sf::Packet packet;
+					if (client->GetSocket()->receive(packet) == sf::Socket::Status::Done)
+					{
+						std::cout << "PARA BAILAR LA BAMBA" << std::endl;
+
+						std::string string;
+						packet >> string;
+						std::cout << "INFO: " << string << std::endl;
+						packet.clear();
+					}
+					else if (client->GetSocket()->receive(packet) == sf::Socket::Status::Disconnected)
+					{
+						// close window
+					}
+			
 			}
 		}
-	}
+	}	
 }
 
 void NetworkManager::RegisterNewUserConnection(Client* _newClient)

@@ -117,6 +117,8 @@ void GameplayScene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _wind
 	}*/
 }
 
+
+
 void GameplayScene::Render(sf::RenderWindow& _window)
 {
 	_window.clear();
@@ -127,4 +129,9 @@ void GameplayScene::Render(sf::RenderWindow& _window)
 	table->Draw(_window);
 
 	_window.display();
+}
+
+void GameplayScene::Update(float _dt)
+{
+	NETWORK_MANAGER.CheckConnections();
 }

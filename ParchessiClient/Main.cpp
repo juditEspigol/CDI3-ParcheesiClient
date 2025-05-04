@@ -39,15 +39,14 @@ void main()
 
 		while (window->isOpen())
 		{
+			// UPDATE
+			SCENE_MANAGER.GetCurrentScene()->Update(0.f);
+
 			// LISTENER
-			NETWORK_MANAGER.CheckConnections();
 			while (const std::optional event = window->pollEvent())
 			{
 				SCENE_MANAGER.GetCurrentScene()->HandleEvent(*event, *window, socket);
 			}
-
-			// UPDATE
-			SCENE_MANAGER.GetCurrentScene()->Update(0.f);
 
 			// DRAW
 			SCENE_MANAGER.GetCurrentScene()->Render(*window);
