@@ -26,9 +26,49 @@ void GameplayScene::OnEnter()
 
 void GameplayScene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _window, sf::TcpSocket& _socket)
 {
-	Scene::HandleEvent(_event, _window, _socket);
+	//Scene::HandleEvent(_event, _window, _socket);
+	if (_event.is < sf::Event::Closed>())
+	{
+		_window.close();
+	}
+	sf::Packet packet;
+	std::string content;
 
-	sf::Socket* socket = nullptr;
+	if (const sf::Event::KeyPressed* keyPressed = _event.getIf<sf::Event::KeyPressed>())
+	{
+		switch (keyPressed->code)
+		{
+		case sf::Keyboard::Key::Escape:
+			std::cout << "Disconected..." << std::endl;
+			_window.close();
+			break;
+		case sf::Keyboard::Key::Enter:
+			std::cout << "Enter" << std::endl;
+			packet << "Hola que tal";
+			for (auto client : CLIENT_MANAGER.GetClients())
+			{
+				NetworkInterface::SendData(*client->GetSocket(), packet);
+				packet >> content;
+				std::cout << "Sent this content: " << content << std::endl;
+			}
+			break;
+		case sf::Keyboard::Key::Backspace:
+			for (Button* button : buttons)
+			{
+				if (button->IsSelected())
+				{
+					button->GetText()->RemoveChar();
+				}
+			}
+			break;
+		default:
+			break;
+		}
+	}
+
+
+
+	/*sf::Socket* socket = nullptr;
 
 	if (_event.is < sf::Event::Closed>()) {
 		_window.close();
@@ -57,7 +97,19 @@ void GameplayScene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _wind
 			packet >> string;
 			std::cout << "INFO: " << string << std::endl;
 		}
-	}
+	}*/
+
+
+
+
+
+
+
+
+
+
+
+
 
 	/*if (const sf::Event::KeyPressed* keyPressed = _event.getIf<sf::Event::KeyPressed>()) {
 		switch (keyPressed->code) {
