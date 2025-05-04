@@ -29,28 +29,28 @@ void ServerUpdate(sf::SocketSelector* selector, sf::TcpListener* listener, sf::R
 
 					std::cout << "Nueva conexion establecida: " << id << " --> " << newClient->GetIP() << ":" << newClient->GetSocket()->getRemotePort() << std::endl;
 					CLIENT_MANAGER.AddClient(newClient);
-					workServer = false;
+					// workServer = false;
 				}
 			}
-			//else
-			//{
-			//	for (Client* client : CLIENT_MANAGER.GetClients())
-			//	{
-			//		if (selector->isReady(*client->GetSocket()))
-			//		{
-			//			sf::Packet packet;
-			//			if (client->GetSocket()->receive(packet) == sf::Socket::Status::Done)
-			//			{
-			//				// Recieve packet
-			//			}
-			//			if (client->GetSocket()->receive(packet) == sf::Socket::Status::Disconnected)
-			//			{
-			//				// Remove client, pero en este caso si se pira uno todos se piran
-			//				window->close();
-			//			}
-			//		}
-			//	}
-			//}
+			else
+			{
+				for (Client* client : CLIENT_MANAGER.GetClients())
+				{
+					if (selector->isReady(*client->GetSocket()))
+					{
+						sf::Packet packet;
+						if (client->GetSocket()->receive(packet) == sf::Socket::Status::Done)
+						{
+							// Recieve packet
+						}
+						if (client->GetSocket()->receive(packet) == sf::Socket::Status::Disconnected)
+						{
+							// Remove client, pero en este caso si se pira uno todos se piran
+							window->close();
+						}
+					}
+				}
+			}
 		}
 	}
 	serverMutex.unlock();

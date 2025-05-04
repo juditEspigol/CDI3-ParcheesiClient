@@ -59,8 +59,11 @@ void WaitingScene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _windo
 			}
 			else
 			{
-				std::cout << "Connect to other client" << std::endl;
 				isFinished = true;
+				std::string print = isFinished ? "TRUE" : "FALSE";
+				std::cout << "Connect to other client --> change scene: " << print << std::endl;
+				
+				tempPacket.clear();
 				return;
 			}
 		}

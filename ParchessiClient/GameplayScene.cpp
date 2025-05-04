@@ -3,6 +3,7 @@
 GameplayScene::GameplayScene()
 {
 	isFinished = false;
+	waitingPacket = false;
 	nextScene = WAITING;
 
 	table = new Table();
@@ -24,7 +25,7 @@ void GameplayScene::OnEnter()
 
 void GameplayScene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _window, sf::TcpSocket& _socket)
 {
-	Scene::HandleEvent(_event, _window, _socket);
+	/*Scene::HandleEvent(_event, _window, _socket);
 
 	if (_event.is < sf::Event::Closed>()) {
 		_window.close();
@@ -74,7 +75,7 @@ void GameplayScene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _wind
 				return;
 			}
 		}
-	}
+	}*/
 }
 
 void GameplayScene::Render(sf::RenderWindow& _window)

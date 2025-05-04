@@ -6,7 +6,7 @@
 #define AUTHENTICATION "AuthenticateScene"
 #define ROOM "RoomScene"
 #define WAITING "WaitingScene"
-#define GAMEPLAY "Gameplay"
+#define GAMEPLAY "GameplayScene"
 
 class Scene
 {
