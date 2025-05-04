@@ -14,5 +14,5 @@ public:
     {
         static GameConfig INSTANCE;
         return INSTANCE;
-    }    
+    }
 };

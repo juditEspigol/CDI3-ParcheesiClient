@@ -3,6 +3,8 @@
 
 Token::Token(int playerId, int _idPos)
 {
+
+	//Seteamos color y celdas especiales en funcion del id del player
 	switch (playerId)
 	{
 	case 1:
@@ -34,6 +36,7 @@ Token::Token(int playerId, int _idPos)
 	_playerId = playerId;
 	_selectable = false;
 
+	//Seteamos valores del ciruculo que dibujamos como ficha
 	_shape.setOrigin(sf::Vector2f(TOKEN_RADIUS, TOKEN_RADIUS));
 	_shape.setRadius(TOKEN_RADIUS);
 	_shape.setOutlineThickness(TOKEN_OUTLINE_THICKNESS);
@@ -42,12 +45,14 @@ Token::Token(int playerId, int _idPos)
 	_selectionIndicator.setOrigin(sf::Vector2f(SELECTION_RADIUS, SELECTION_RADIUS));
 	_selectionIndicator.setRadius(SELECTION_RADIUS);
 	_selectionIndicator.setFillColor(sf::Color(128, 0, 128));
+
 	_inBase = true;
 	_isLastZone = false;
 }
 
 void Token::Draw(sf::RenderWindow& window)
 {
+	//Si es seleccionable dibujamos el outline
 	if (_selectable)
 	{
 		_selectionIndicator.setPosition(_position);
@@ -60,7 +65,8 @@ void Token::Draw(sf::RenderWindow& window)
 int Token::Move(int value)
 {
 	_isMoving = true;
-	
+
+	//Si esta en base se coloca en la casilla de salida sin importar el value
 	if (_inBase)
 	{
 		_inBase = false;

@@ -44,6 +44,7 @@
                 for (auto& obj : layer["objects"]) {
                     int cellId = 0;
                     bool isHorizontal = false;
+                    bool isFinalCell = false;
 
                     // Buscar las propiedades "id" y "horizontal" dentro de "properties"
                     if (obj.contains("properties") && obj["properties"].is_array()) {
@@ -54,6 +55,9 @@
                                 }
                                 else if (prop["name"] == "horizontal") {
                                     isHorizontal = prop["value"].get<bool>();
+                                }
+                                 if (prop["name"] == "finalCell") {
+                                    isFinalCell = prop["value"].get<bool>();
                                 }
                             }
                         }
@@ -69,7 +73,7 @@
                         continue; // Salta esta celda si ya fue insertada
                     }
 
-                    _cells.emplace(cellId, new Cell(cellId, sf::Vector2f(x, y), isHorizontal));
+                    _cells.emplace(cellId, new Cell(cellId, sf::Vector2f(x, y), isHorizontal, isFinalCell));
                 }
             }
         }
@@ -77,6 +81,7 @@
         std::cout << "Total de celdas cargadas: " << _cells.size() << std::endl;
 
     
+        //Creamos 4 tokens por cada jugador
         for (int i = 1; i <= 4; i++)
         {
             for (int j = 0; j < 4; j++)
@@ -91,6 +96,7 @@
 
     void Table::Draw(sf::RenderWindow& window)
     {
+        //Llamamos al draw de cada token
         for (Token* token : _tokens)
         {
             token->Draw(window);
@@ -105,8 +111,10 @@
 
     void Table::UpdatePositions(int newPos)
     {
+        //Creamos variable que será la posicion nueva al final
         int _newPosition = newPos;
 
+        //Recorremos todos los tokens para ver cual se mueve
         for (Token* token : _tokens)
         {
             if (token->GetIsMoving())
@@ -117,7 +125,13 @@
                 // Recorremos desde la posición actual hasta la nueva
                 for (int i = token->GetIdPosition(); i <= newPos; i++)
                 {
-                    // Si llegamos a la última celda del recorrido principal
+                    if (i >= (token->GetPlayerId() * 100) + 7)
+                    {
+                        _newPosition = (token->GetPlayerId() * 100) + 7;
+                        break;
+                    }
+
+                    // Si llegamos a la última celda del recorrido principal hacemos que suba por el color
                     if (i == token->GetFinalCellId())
                     {
                         token->ArriveLastZone();
@@ -135,7 +149,8 @@
                         break;
                     }
 
-                    if (_newPosition > 68 && !token->GetIsLastZone())
+                    //Si llegan a la celda final del tablero -68- Volvemos a contar desde el 1 
+                    if (_newPosition > 68 && !token->GetIsLastZone() && token->GetPlayerId() !=4)
                     {
                         _newPosition = 1;
 
@@ -161,6 +176,7 @@
                         _newPosition = 68;
                     }
 
+                    //Si hay una barrera nos colocamos en la posicion de antes y acabamos
                     if (GetCell(i)->GetTokens().size() == 2)
                     {
                         _newPosition = i - 1;
@@ -171,6 +187,8 @@
                 // Comprobamos si hay otra ficha en la nueva posición
                 if (GetCell(_newPosition)->GetTokens().size() != 0)
                 {
+                    std::cout << GetCell(_newPosition)->GetTokens().size() << std::endl;
+
                     // Comprobamos si es ficha de otro jugador
                     if (GetCell(_newPosition)->GetTokens()[0]->GetPlayerId() != token->GetPlayerId())
                     {
@@ -185,6 +203,7 @@
                         rivalToken->SetSelectable(false);
                         rivalToken->SetIsInBase(true);
                         GetCell(_newPosition)->RemoveToken(rivalToken);
+
                         // Moverlo 20 posiciones más
                         token->UpdateIdPosition(_newPosition);
 
