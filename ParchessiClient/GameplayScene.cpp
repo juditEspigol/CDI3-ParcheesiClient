@@ -69,20 +69,6 @@ void GameplayScene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _wind
 	}
 
 
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
 	/*if (const sf::Event::KeyPressed* keyPressed = _event.getIf<sf::Event::KeyPressed>()) {
 		switch (keyPressed->code) {
 		case sf::Keyboard::Key::Escape:

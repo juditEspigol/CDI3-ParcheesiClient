@@ -1,61 +1,10 @@
 #include "SceneManager.h"
 #include "ClientManager.h"
-#include <thread>
-#include <mutex>
 
 const sf::IpAddress SERVER_IP = sf::IpAddress(81, 202, 70, 32); //sf::IpAddress(10, 40, 2, 183); // Loopback /// 79, 152, 211, 184
 
 // FOR TESTING
 bool testingGameplay = false;
-
-void ServerUpdate(sf::SocketSelector* selector, sf::TcpListener* listener, sf::RenderWindow* window)
-{
-	std::string content = "";
-	bool workServer = true;
-	while (workServer)
-	{
-		if (selector->wait())
-		{
-			if (selector->isReady(*listener))
-			{
-				//unsigned int id = CLIENT_MANAGER.GetSizeClients();
-				//Client* newClient = new Client(id, new sf::TcpSocket());
-
-				//if (listener->accept(*newClient->GetSocket()) == sf::Socket::Status::Done) // Añadir nuevo cliente HANDSHAKE
-				//{
-				//	newClient->GetSocket()->setBlocking(false);
-				//	selector->add(*newClient->GetSocket());
-
-				//	std::cout << "Nueva conexion establecida: " << id << " --> " << newClient->GetIP() << ":" << newClient->GetSocket()->getRemotePort() << std::endl;
-				//	CLIENT_MANAGER.AddClient(newClient);
-				//	// workServer = false;
-				//}
-
-			}
-			else
-			{
-				for (Client* client : CLIENT_MANAGER.GetClients())
-				{
-					if (selector->isReady(*client->GetSocket()))
-					{
-						sf::Packet packet;
-						if (client->GetSocket()->receive(packet) == sf::Socket::Status::Done)
-						{
-							packet >> content;
-							// Recieve packet
-							std::cout << "Content" << content << std::endl;
-						}
-						if (client->GetSocket()->receive(packet) == sf::Socket::Status::Disconnected)
-						{
-							// Remove client, pero en este caso si se pira uno todos se piran
-							window->close();
-						}
-					}
-				}
-			}
-		}
-	}
-}
 
 void main()
 {
@@ -75,13 +24,8 @@ void main()
 
 	// TCP
 	sf::TcpSocket socket; 
-	
 	sf::SocketSelector selector;
 	sf::TcpListener listener;
-
-	std::thread threadServer(ServerUpdate, &selector, &listener, window);
-	threadServer.detach();
-
 	if (listener.listen(LISTENER_PORT) != sf::Socket::Status::Done) // Comprbar puerto valido
 	{
 		std::cerr << "Cannot Listen the port.\nExiting execution with code -1." << std::endl;
@@ -115,18 +59,31 @@ void main()
 			// DRAW
 			SCENE_MANAGER.GetCurrentScene()->Render(*window);
 
-			sf::Packet tempPacket;
-
-			for (auto client : CLIENT_MANAGER.GetClients())
+			if (selector.isReady(listener))
 			{
-				if (client->GetSocket()->receive(tempPacket) == sf::Socket::Status::Done)
+			}
+			else
+			{
+				for (Client* client : CLIENT_MANAGER.GetClients())
 				{
-					std::cout << "PARA BAILAR LA BAMBA" << std::endl;
+					if (selector.isReady(*client->GetSocket()))
+					{
+						sf::Packet tempPacket;
+						if (client->GetSocket()->receive(tempPacket) == sf::Socket::Status::Done)
+						{
+							std::cout << "PARA BAILAR LA BAMBA" << std::endl;
 
-					std::string string;
-					tempPacket >> string;
-					std::cout << "INFO: " << string << std::endl;
-					tempPacket.clear();
+							std::string string;
+							tempPacket >> string;
+							std::cout << "INFO: " << string << std::endl;
+							tempPacket.clear();
+						}
+						if (client->GetSocket()->receive(tempPacket) == sf::Socket::Status::Disconnected)
+						{
+							// Remove client, pero en este caso si se pira uno todos se piran
+							window->close();
+						}
+					}
 				}
 			}
 
