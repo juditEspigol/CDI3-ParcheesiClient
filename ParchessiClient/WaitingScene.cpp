@@ -35,47 +35,39 @@ void WaitingScene::Render(sf::RenderWindow& _window)
 
 void WaitingScene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _window, sf::TcpSocket& _socket)
 {
-	Scene::HandleEvent(_event, _window, _socket);
-
-	if (CLIENT_MANAGER.GetSizeClients() <= MAX_CLIENTS)
+	sf::Packet tempPacket;
+	if (_socket.receive(tempPacket) == sf::Socket::Status::Done)
 	{
-		sf::Packet tempPacket;
-		if (_socket.receive(tempPacket) == sf::Socket::Status::Done)
+		PacketType type;
+		tempPacket >> type;
+		int validateAuthentication;
+
+		switch (type)
 		{
-			PacketType type;
-			tempPacket >> type;
-			int validateAuthentication;
+		case SV_SOCKET:
+		{
+			// Read packet
+			std::pair<sf::IpAddress, unsigned short> address(sf::IpAddress::Any, 0);
+			tempPacket >> address;
 
-			switch (type)
+			sf::TcpSocket* socket = new sf::TcpSocket();
+			std::cout << "Trying to connect with... " << address.first.toString() << " : " << address.second << "..." << std::endl;
+
+			if (socket->connect(address.first, LISTENER_PORT) != sf::Socket::Status::Done)
 			{
-			case SV_SOCKET:
+				std::cerr << "Error connecting to client: " << address.first.toString() << std::endl;
+			}
+			else
 			{
-				// Read packet
-				std::pair<sf::IpAddress, unsigned short> address(sf::IpAddress::Any, 0);
-				tempPacket >> address;
-
-				sf::TcpSocket* socket = new sf::TcpSocket();
-				std::cout << "Trying to connect with... " << address.first.toString() << " : " << address.second << "..." << std::endl;
-
-				if (socket->connect(address.first, LISTENER_PORT) != sf::Socket::Status::Done)
-				{
-					std::cerr << "Error connecting to client: " << address.first.toString() << std::endl;
-				}
-				else
-				{
-					std::cout << "Connect to other client" << std::endl;
-				}
+				std::cout << "Connect to other client" << std::endl;
+				isFinished = true;
 				return;
 			}
-			break;
-			default:
-				break;
-			}
 		}
-		tempPacket.clear();
+		break;
+		default:
+			break;
+		}
 	}
-	else
-	{
-		isFinished = true;	
-	}
+	tempPacket.clear();
 }

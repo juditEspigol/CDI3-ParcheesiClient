@@ -3,7 +3,7 @@
 #include <thread>
 #include <mutex>
 
-const sf::IpAddress SERVER_IP = sf::IpAddress(81, 13, 202, 207); //sf::IpAddress(10, 40, 2, 183); // Loopback /// 79, 152, 211, 184
+const sf::IpAddress SERVER_IP = sf::IpAddress(81, 202, 70, 32); //sf::IpAddress(10, 40, 2, 183); // Loopback /// 79, 152, 211, 184
 
 // FOR TESTING
 bool testingGameplay = false;
@@ -11,8 +11,9 @@ std::mutex serverMutex;
 
 void ServerUpdate(sf::SocketSelector* selector, sf::TcpListener* listener, sf::RenderWindow* window)
 {
+	bool workServer = true;
 	serverMutex.lock(); 
-	while (window->isOpen())
+	while (workServer)
 	{
 		if (selector->wait())
 		{
@@ -28,27 +29,28 @@ void ServerUpdate(sf::SocketSelector* selector, sf::TcpListener* listener, sf::R
 
 					std::cout << "Nueva conexion establecida: " << id << " --> " << newClient->GetIP() << ":" << newClient->GetSocket()->getRemotePort() << std::endl;
 					CLIENT_MANAGER.AddClient(newClient);
+					workServer = false;
 				}
 			}
-			else
-			{
-				for (Client* client : CLIENT_MANAGER.GetClients())
-				{
-					if (selector->isReady(*client->GetSocket()))
-					{
-						sf::Packet packet;
-						if (client->GetSocket()->receive(packet) == sf::Socket::Status::Done)
-						{
-							// Recieve packet
-						}
-						if (client->GetSocket()->receive(packet) == sf::Socket::Status::Disconnected)
-						{
-							// Remove client, pero en este caso si se pira uno todos se piran
-							window->close();
-						}
-					}
-				}
-			}
+			//else
+			//{
+			//	for (Client* client : CLIENT_MANAGER.GetClients())
+			//	{
+			//		if (selector->isReady(*client->GetSocket()))
+			//		{
+			//			sf::Packet packet;
+			//			if (client->GetSocket()->receive(packet) == sf::Socket::Status::Done)
+			//			{
+			//				// Recieve packet
+			//			}
+			//			if (client->GetSocket()->receive(packet) == sf::Socket::Status::Disconnected)
+			//			{
+			//				// Remove client, pero en este caso si se pira uno todos se piran
+			//				window->close();
+			//			}
+			//		}
+			//	}
+			//}
 		}
 	}
 	serverMutex.unlock();
@@ -102,8 +104,6 @@ void main()
 				SCENE_MANAGER.GetCurrentScene()->HandleEvent(*event, *window, socket);
 			}
 
-			// ESTEM TOTA LA ESTONA ESCOLTANT SI ALGU ES CONECTA
-			
 			// UPDATE
 			SCENE_MANAGER.GetCurrentScene()->Update(0.f);
 
