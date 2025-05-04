@@ -7,12 +7,10 @@ const sf::IpAddress SERVER_IP = sf::IpAddress(81, 202, 70, 32); //sf::IpAddress(
 
 // FOR TESTING
 bool testingGameplay = false;
-std::mutex serverMutex;
 
 void ServerUpdate(sf::SocketSelector* selector, sf::TcpListener* listener, sf::RenderWindow* window)
 {
 	bool workServer = true;
-	serverMutex.lock(); 
 	while (workServer)
 	{
 		if (selector->wait())
@@ -53,7 +51,6 @@ void ServerUpdate(sf::SocketSelector* selector, sf::TcpListener* listener, sf::R
 			}
 		}
 	}
-	serverMutex.unlock();
 }
 
 void main()
@@ -77,8 +74,7 @@ void main()
 	
 	sf::SocketSelector selector;
 	sf::TcpListener listener;
-	std::thread threadServer(ServerUpdate, &selector, &listener, window);
-	threadServer.detach();
+
 	if (listener.listen(LISTENER_PORT) != sf::Socket::Status::Done) // Comprbar puerto valido
 	{
 		std::cerr << "Cannot Listen the port.\nExiting execution with code -1." << std::endl;

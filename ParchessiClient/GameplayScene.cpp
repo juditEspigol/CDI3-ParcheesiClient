@@ -1,4 +1,5 @@
 #include "GameplayScene.h"
+#include "ClientManager.h"
 
 GameplayScene::GameplayScene()
 {
@@ -25,12 +26,40 @@ void GameplayScene::OnEnter()
 
 void GameplayScene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _window, sf::TcpSocket& _socket)
 {
-	/*Scene::HandleEvent(_event, _window, _socket);
+	Scene::HandleEvent(_event, _window, _socket);
+
+	sf::Socket* socket = nullptr;
 
 	if (_event.is < sf::Event::Closed>()) {
 		_window.close();
 	}
-	if (const sf::Event::KeyPressed* keyPressed = _event.getIf<sf::Event::KeyPressed>()) {
+	if (const sf::Event::KeyPressed* keyPressed = _event.getIf<sf::Event::KeyPressed>())
+	{
+		switch (keyPressed->code) {
+		case sf::Keyboard::Key::Num1:
+			sf::Packet packet;
+			packet << "Hola que tal";
+			for (auto client : CLIENT_MANAGER.GetClients())
+			{
+				NetworkInterface::SendData(*client->GetSocket(), packet);
+			}
+			break;
+		}
+	}
+
+	sf::Packet packet;
+	for (auto client : CLIENT_MANAGER.GetClients())
+	{
+		if (client->GetSocket()->receive(packet) == sf::Socket::Status::Done)
+		{
+			std::cout << "PARA BAILAR LA BAMBA" << std::endl;
+			std::string string;
+			packet >> string;
+			std::cout << "INFO: " << string << std::endl;
+		}
+	}
+
+	/*if (const sf::Event::KeyPressed* keyPressed = _event.getIf<sf::Event::KeyPressed>()) {
 		switch (keyPressed->code) {
 		case sf::Keyboard::Key::Escape:
 			_window.close();
