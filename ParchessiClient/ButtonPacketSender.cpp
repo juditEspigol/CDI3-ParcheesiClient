@@ -31,6 +31,9 @@ ButtonPacketSender::ButtonPacketSender(PacketType _packetType, std::vector<Butto
 	case CREATE_ROOM:
 		text = new TextFill("CREATE ROOM", positionText);
 		break;
+	case DICE_ROLL:
+		text = new TextFill("DICE ROLL", positionText);
+		break;
 	default:
 		break;
 	}

@@ -8,7 +8,7 @@ void SendData(sf::TcpSocket& _clientSocket, sf::Packet& _packet);
 
 class ButtonPacketSender : public Button
 {
-private:
+protected:
 
 	PacketType packetType;
 	std::vector<ButtonTextUpdater*> buttonTexts;

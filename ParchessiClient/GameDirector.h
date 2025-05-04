@@ -6,9 +6,7 @@
 
 #include "Table.h"
 #include "Token.h"
-
-#define PLAYER_INDICATOR_SIZE 50
-#define DICE_INDICATOR_SIZE 45
+#include "Dice.h"
 
 class GameDirector
 {
@@ -20,23 +18,17 @@ public:
         PIECE_SELECTED,
         TURN_COMPLETE
     };
-    GameDirector(Table& table);
-
+    GameDirector(Table& table, Dice* dice);
 
 private:
     int _currentPlayer;
-    int _diceValue;
     Table& _table;
+    Dice* _dice;
+
     GameState _currentState;
     Token* _selectedToken;
 
     std::vector<Token*> _movableTokens;
-    std::mt19937 _rng;
-
-    sf::RectangleShape _turnIndicator;
-    sf::Font _font;
-
-    void CalculateMovableTokens();
 
     bool CanTokenMove(Token& token);
     bool IsTokenFromCurrentPlayer(Token& token);
@@ -46,15 +38,11 @@ private:
 public:
     void StartGame();
     void StartPlayerTurn(int playerId);
-    void RollDice();
-    void ForceDiceValue(int value); // Cheats to force dice to be a specific value
     void SelectToken(sf::Vector2i mousePos);
     void MoveSelectedToken();
+    void CalculateMovableTokens();
 
-    sf::Text GetDiceText();
-    sf::RectangleShape GetTurnIndicator(float width, float height);
     inline int GetCurrentPlayer() { return _currentPlayer; };
-    inline int GetDiceValue() { return _diceValue; };
     inline std::vector<Token*>& GetMovableTokens() { return _movableTokens; }
     inline GameState GetCurrentState() { return _currentState; }
 };

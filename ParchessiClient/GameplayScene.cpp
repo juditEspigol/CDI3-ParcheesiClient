@@ -6,7 +6,10 @@ GameplayScene::GameplayScene()
 	nextScene = WAITING;
 
 	table = new Table();
-	gameDirector = new GameDirector(*table);
+	dice = new Dice();
+	buttons.push_back(dice);
+
+	gameDirector = new GameDirector(*table, dice);
 
 	tableSprite = new sf::Sprite(*TEXTURE_MANAGER.LoadTexture(TABLE_TEXTURE));
 
@@ -35,22 +38,22 @@ void GameplayScene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _wind
 			_window.close();
 			break;
 		case sf::Keyboard::Key::Num1:
-			gameDirector->ForceDiceValue(1);
+			dice->ForceDiceValue(1);
 			break;
 		case sf::Keyboard::Key::Num2:
-			gameDirector->ForceDiceValue(2);
+			dice->ForceDiceValue(2);
 			break;
 		case sf::Keyboard::Key::Num3:
-			gameDirector->ForceDiceValue(3);
+			dice->ForceDiceValue(3);
 			break;
 		case sf::Keyboard::Key::Num4:
-			gameDirector->ForceDiceValue(4);
+			dice->ForceDiceValue(4);
 			break;
 		case sf::Keyboard::Key::Num5:
-			gameDirector->ForceDiceValue(5);
+			dice->ForceDiceValue(5);
 			break;
 		case sf::Keyboard::Key::Num6:
-			gameDirector->ForceDiceValue(6);
+			dice->ForceDiceValue(6);
 			break;
 		default:
 			break;
@@ -59,11 +62,17 @@ void GameplayScene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _wind
 	if (const sf::Event::MouseButtonPressed* mousePressed = _event.getIf<sf::Event::MouseButtonPressed>()) {
 		if (mousePressed->button == sf::Mouse::Button::Left)
 		{
+
 			if (gameDirector->GetCurrentState() == GameDirector::GameState::WAITING_TURN)
 			{
+				dice->OnLeftClick(mousePressed, _socket);
+
 				std::cout << "Current Game State: " << "Wating Turn" << std::endl;
 
-				gameDirector->RollDice();
+				if (dice->HasBeenPressed())
+				{
+					gameDirector->CalculateMovableTokens();
+				}
 				return;
 			}
 			if (gameDirector->GetCurrentState() == GameDirector::GameState::DICE_ROLLED)
@@ -81,10 +90,15 @@ void GameplayScene::Render(sf::RenderWindow& _window)
 {
 	_window.clear();
 
+	// Dibujar mesa
 	_window.draw(*tableSprite);
-	_window.draw(gameDirector->GetTurnIndicator(WIDTH, HEIGHT));
-	_window.draw(gameDirector->GetDiceText());
-	table->Draw(_window);
+	
+	dice->Render(_window);
 
+	// Dibujar dado
+	_window.draw(dice->GetTurnIndicator(gameDirector->GetCurrentPlayer(), WIDTH, HEIGHT));
+	_window.draw(dice->GetDiceText());
+
+	table->Draw(_window);
 	_window.display();
 }
