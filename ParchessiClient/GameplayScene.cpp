@@ -4,27 +4,45 @@ void GameplayScene::HandleKeyPress(const sf::Event::KeyPressed* keyPressed, sf::
 {
 	switch (keyPressed->code)
 	{
-	case sf::Keyboard::Key::Escape:
-		window.close();
-		break;
-	case sf::Keyboard::Key::Num1:
-		dice->ForceDiceValue(1);
-		break;
-	case sf::Keyboard::Key::Num2:
-		dice->ForceDiceValue(2);
-		break;
-	case sf::Keyboard::Key::Num3:
-		dice->ForceDiceValue(3);
-		break;
-	case sf::Keyboard::Key::Num4:
-		dice->ForceDiceValue(4);
-		break;
-	case sf::Keyboard::Key::Num5:
-		dice->ForceDiceValue(5);
-		break;
-	case sf::Keyboard::Key::Num6:	
-		dice->ForceDiceValue(6);
-		break;
+		case sf::Keyboard::Key::Escape:
+			window.close();
+			break;
+		case sf::Keyboard::Key::Num1:
+			dice->ForceDiceValue(1);
+			gameDirector->SetState(GameDirector::GameState::WAITING_TURN);
+			gameDirector->CalculateMovableTokens();
+
+			break;
+		case sf::Keyboard::Key::Num2:
+			dice->ForceDiceValue(2);
+			gameDirector->SetState(GameDirector::GameState::WAITING_TURN);
+			gameDirector->CalculateMovableTokens();
+
+			break;
+		case sf::Keyboard::Key::Num3:
+			dice->ForceDiceValue(3);
+			gameDirector->SetState(GameDirector::GameState::WAITING_TURN);
+			gameDirector->CalculateMovableTokens();
+
+			break;
+		case sf::Keyboard::Key::Num4:
+			dice->ForceDiceValue(4);
+			gameDirector->SetState(GameDirector::GameState::WAITING_TURN);
+			gameDirector->CalculateMovableTokens();
+
+			break;
+		case sf::Keyboard::Key::Num5:
+			dice->ForceDiceValue(5);
+			gameDirector->SetState(GameDirector::GameState::WAITING_TURN);
+			gameDirector->CalculateMovableTokens();
+
+			break;
+		case sf::Keyboard::Key::Num6:	
+			dice->ForceDiceValue(6);
+			gameDirector->SetState(GameDirector::GameState::WAITING_TURN);
+			gameDirector->CalculateMovableTokens();
+
+			break;
 	}
 }
 

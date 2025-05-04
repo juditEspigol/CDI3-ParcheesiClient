@@ -47,7 +47,7 @@ void Dice::RollDice()
 void Dice::ForceDiceValue(int value)
 {
     _diceValue = value;
-
+    
     std::cout << "Forced Dice Value = " << _diceValue << std::endl;
 }
 

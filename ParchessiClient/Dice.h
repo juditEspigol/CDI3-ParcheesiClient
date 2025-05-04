@@ -17,7 +17,7 @@ public:
 	void UnselectButton() override;
 
 	void RollDice();
-	void ForceDiceValue(int value); // Cheats to force dice to be a specific value
+	void ForceDiceValue(int value);
 	sf::Text GetDiceText();
 	sf::RectangleShape GetTurnIndicator(int currentPlayer, float width, float height);
 
