@@ -4,27 +4,39 @@ void GameplayScene::HandleKeyPress(const sf::Event::KeyPressed* keyPressed, sf::
 {
 	switch (keyPressed->code)
 	{
-	case sf::Keyboard::Key::Escape:
-		window.close();
-		break;
-	case sf::Keyboard::Key::Num1:
-		dice->ForceDiceValue(1);
-		break;
-	case sf::Keyboard::Key::Num2:
-		dice->ForceDiceValue(2);
-		break;
-	case sf::Keyboard::Key::Num3:
-		dice->ForceDiceValue(3);
-		break;
-	case sf::Keyboard::Key::Num4:
-		dice->ForceDiceValue(4);
-		break;
-	case sf::Keyboard::Key::Num5:
-		dice->ForceDiceValue(5);
-		break;
-	case sf::Keyboard::Key::Num6:	
-		dice->ForceDiceValue(6);
-		break;
+		case sf::Keyboard::Key::Escape:
+			window.close();
+			break;
+		case sf::Keyboard::Key::Num1:
+			dice->ForceDiceValue(1);
+			gameDirector->SetState(GameDirector::GameState::WAITING_TURN);
+			gameDirector->CalculateMovableTokens();
+			break;
+		case sf::Keyboard::Key::Num2:
+			dice->ForceDiceValue(2);
+			gameDirector->SetState(GameDirector::GameState::WAITING_TURN);
+			gameDirector->CalculateMovableTokens();
+			break;
+		case sf::Keyboard::Key::Num3:
+			dice->ForceDiceValue(3);
+			gameDirector->SetState(GameDirector::GameState::WAITING_TURN);
+			gameDirector->CalculateMovableTokens();
+			break;
+		case sf::Keyboard::Key::Num4:
+			dice->ForceDiceValue(4);
+			gameDirector->SetState(GameDirector::GameState::WAITING_TURN);
+			gameDirector->CalculateMovableTokens();
+			break;
+		case sf::Keyboard::Key::Num5:
+			dice->ForceDiceValue(5);
+			gameDirector->SetState(GameDirector::GameState::WAITING_TURN);
+			gameDirector->CalculateMovableTokens();
+			break;
+		case sf::Keyboard::Key::Num6:	
+			dice->ForceDiceValue(6);
+			gameDirector->SetState(GameDirector::GameState::WAITING_TURN);
+			gameDirector->CalculateMovableTokens();
+			break;
 	}
 }
 
@@ -129,6 +141,7 @@ void GameplayScene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _wind
 		_window.close();
 		return;
 	}
+
 	// Manejar eventos de teclado
 	if (const sf::Event::KeyPressed* keyPressed = _event.getIf<sf::Event::KeyPressed>())
 	{
@@ -158,9 +171,9 @@ void GameplayScene::Render(sf::RenderWindow& _window)
 
 	// Draw End Turn
 	_window.draw(endTurnButton->GetEndButton(WIDTH, HEIGHT));
+	_window.draw(endTurnButton->GetText());
 
 	table->Draw(_window);
-
 
 	_window.display();
 }
