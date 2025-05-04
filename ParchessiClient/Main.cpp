@@ -10,6 +10,7 @@ bool testingGameplay = false;
 
 void ServerUpdate(sf::SocketSelector* selector, sf::TcpListener* listener, sf::RenderWindow* window)
 {
+	std::string content = "";
 	bool workServer = true;
 	while (workServer)
 	{
@@ -17,18 +18,19 @@ void ServerUpdate(sf::SocketSelector* selector, sf::TcpListener* listener, sf::R
 		{
 			if (selector->isReady(*listener))
 			{
-				unsigned int id = CLIENT_MANAGER.GetSizeClients();
-				Client* newClient = new Client(id, new sf::TcpSocket());
+				//unsigned int id = CLIENT_MANAGER.GetSizeClients();
+				//Client* newClient = new Client(id, new sf::TcpSocket());
 
-				if (listener->accept(*newClient->GetSocket()) == sf::Socket::Status::Done) // Añadir nuevo cliente HANDSHAKE
-				{
-					newClient->GetSocket()->setBlocking(false);
-					selector->add(*newClient->GetSocket());
+				//if (listener->accept(*newClient->GetSocket()) == sf::Socket::Status::Done) // Añadir nuevo cliente HANDSHAKE
+				//{
+				//	newClient->GetSocket()->setBlocking(false);
+				//	selector->add(*newClient->GetSocket());
 
-					std::cout << "Nueva conexion establecida: " << id << " --> " << newClient->GetIP() << ":" << newClient->GetSocket()->getRemotePort() << std::endl;
-					CLIENT_MANAGER.AddClient(newClient);
-					// workServer = false;
-				}
+				//	std::cout << "Nueva conexion establecida: " << id << " --> " << newClient->GetIP() << ":" << newClient->GetSocket()->getRemotePort() << std::endl;
+				//	CLIENT_MANAGER.AddClient(newClient);
+				//	// workServer = false;
+				//}
+
 			}
 			else
 			{
@@ -39,7 +41,9 @@ void ServerUpdate(sf::SocketSelector* selector, sf::TcpListener* listener, sf::R
 						sf::Packet packet;
 						if (client->GetSocket()->receive(packet) == sf::Socket::Status::Done)
 						{
+							packet >> content;
 							// Recieve packet
+							std::cout << "Content" << content << std::endl;
 						}
 						if (client->GetSocket()->receive(packet) == sf::Socket::Status::Disconnected)
 						{
@@ -75,6 +79,9 @@ void main()
 	sf::SocketSelector selector;
 	sf::TcpListener listener;
 
+	std::thread threadServer(ServerUpdate, &selector, &listener, window);
+	threadServer.detach();
+
 	if (listener.listen(LISTENER_PORT) != sf::Socket::Status::Done) // Comprbar puerto valido
 	{
 		std::cerr << "Cannot Listen the port.\nExiting execution with code -1." << std::endl;
@@ -92,6 +99,8 @@ void main()
 
 		std::cout << "My IPadress: " << sf::IpAddress::getPublicAddress().value() << ": " << socket.getLocalPort() << std::endl; 
 
+
+
 		while (window->isOpen())
 		{
 			// LISTENER
@@ -105,6 +114,21 @@ void main()
 
 			// DRAW
 			SCENE_MANAGER.GetCurrentScene()->Render(*window);
+
+			sf::Packet tempPacket;
+
+			for (auto client : CLIENT_MANAGER.GetClients())
+			{
+				if (client->GetSocket()->receive(tempPacket) == sf::Socket::Status::Done)
+				{
+					std::cout << "PARA BAILAR LA BAMBA" << std::endl;
+
+					std::string string;
+					tempPacket >> string;
+					std::cout << "INFO: " << string << std::endl;
+					tempPacket.clear();
+				}
+			}
 
 			// CHANGE SCENE
 			if (SCENE_MANAGER.GetCurrentScene()->GetIsFinished())

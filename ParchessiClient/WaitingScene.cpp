@@ -50,10 +50,11 @@ void WaitingScene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _windo
 			std::pair<sf::IpAddress, unsigned short> address(sf::IpAddress::Any, 0);
 			tempPacket >> address;
 
-			sf::TcpSocket* socket = new sf::TcpSocket();
+			//sf::TcpSocket* socket = new sf::TcpSocket();
+			Client* newClient = new Client(0, new sf::TcpSocket());
 			std::cout << "Trying to connect with... " << address.first.toString() << " : " << address.second << "..." << std::endl;
 
-			if (socket->connect(address.first, LISTENER_PORT) != sf::Socket::Status::Done)
+			if (newClient->GetSocket()->connect(address.first, LISTENER_PORT) != sf::Socket::Status::Done)
 			{
 				std::cerr << "Error connecting to client: " << address.first.toString() << std::endl;
 			}
@@ -61,10 +62,9 @@ void WaitingScene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _windo
 			{
 				isFinished = true;
 				std::string print = isFinished ? "TRUE" : "FALSE";
-				std::cout << "Connect to other client --> " << socket->getRemoteAddress().value() << std::endl;
-				
-				unsigned int id = CLIENT_MANAGER.GetSizeClients();
-				Client* newClient = new Client(id, new sf::TcpSocket());
+				std::cout << "Connect to other client --> " << newClient->GetSocket()->getRemoteAddress().value() << std::endl;
+
+				newClient->SetID(CLIENT_MANAGER.GetSizeClients());
 				newClient->GetSocket()->setBlocking(false);
 				CLIENT_MANAGER.AddClient(newClient);
 				std::cout << "Num clients: " << CLIENT_MANAGER.GetSizeClients() << std::endl;

@@ -69,20 +69,7 @@ void GameplayScene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _wind
 	}
 
 
-	sf::Packet tempPacket;
-
-	for (auto client : CLIENT_MANAGER.GetClients())
-	{
-		if (client->GetSocket()->receive(tempPacket) == sf::Socket::Status::Done)
-		{
-			std::cout << "PARA BAILAR LA BAMBA" << std::endl;
-			
-			std::string string;
-			tempPacket >> string;
-			std::cout << "INFO: " << string << std::endl;
-			tempPacket.clear();
-		}
-	}
+	
 
 
 
