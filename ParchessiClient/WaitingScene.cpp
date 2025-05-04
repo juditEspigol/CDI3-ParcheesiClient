@@ -63,7 +63,7 @@ void WaitingScene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _windo
 				isFinished = true;
 				std::string print = isFinished ? "TRUE" : "FALSE";
 				std::cout << "Connect to other client --> " << newClient->GetSocket()->getRemoteAddress().value() << std::endl;
-
+				SELECTOR.add(*newClient->GetSocket());
 				newClient->SetID(CLIENT_MANAGER.GetSizeClients());
 				newClient->GetSocket()->setBlocking(false);
 				CLIENT_MANAGER.AddClient(newClient);

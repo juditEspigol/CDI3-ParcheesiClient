@@ -23,15 +23,13 @@ void main()
 	sf::RenderWindow* window = new sf::RenderWindow(sf::VideoMode({ WIDTH, HEIGHT }), "ParchessiClient");
 
 	// TCP
-	sf::TcpSocket socket; 
-	sf::SocketSelector selector;
-	sf::TcpListener listener;
-	if (listener.listen(LISTENER_PORT) != sf::Socket::Status::Done) // Comprbar puerto valido
+	sf::TcpSocket socket;
+	if (LISTENER.listen(LISTENER_PORT) != sf::Socket::Status::Done) // Comprbar puerto valido
 	{
 		std::cerr << "Cannot Listen the port.\nExiting execution with code -1." << std::endl;
 		return;
 	}
-	selector.add(listener);
+	SELECTOR.add(LISTENER);
 
 	if (socket.connect(SERVER_IP, SERVER_PORT) != sf::Socket::Status::Done && !testingGameplay)
 	{
@@ -59,14 +57,14 @@ void main()
 			// DRAW
 			SCENE_MANAGER.GetCurrentScene()->Render(*window);
 
-			if (selector.isReady(listener))
+			if (SELECTOR.isReady(LISTENER))
 			{
 			}
 			else
 			{
 				for (Client* client : CLIENT_MANAGER.GetClients())
 				{
-					if (selector.isReady(*client->GetSocket()))
+					if (SELECTOR.isReady(*client->GetSocket()))
 					{
 						sf::Packet tempPacket;
 						if (client->GetSocket()->receive(tempPacket) == sf::Socket::Status::Done)
