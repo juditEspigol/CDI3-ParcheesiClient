@@ -20,7 +20,22 @@ void NetworkManager::CheckConnections()
 		if (selector.isReady(listener))
 		{
 			// RegisterNewUserConnection();
-			std::cout << "HEMOS LLEGADO" << std::endl;
+
+			// Aceptamos la nueva conexión
+			Client* newClient = new Client(1, new sf::TcpSocket());
+			int id;
+
+			if (listener.accept(*newClient->GetSocket()) == sf::Socket::Status::Done)
+			{
+				newClient->GetSocket()->setBlocking(false); // Desbloqueamos el socket
+				selector.add(*newClient->GetSocket());
+			}
+			else
+			{
+				std::cout << "Intento de connexion no valido" << std::endl;
+				delete newClient;
+			}
+
 		}
 		else
 		{
@@ -29,7 +44,8 @@ void NetworkManager::CheckConnections()
 			{
 				std::cout << "HEMOS SALIDO" << std::endl;
 
-				
+				if (selector.isReady(*client->GetSocket()))
+				{
 					std::cout << "HEMOS SALIDO 2 VECES -- DE -- PARI -- " << std::endl;
 
 					sf::Packet packet;
@@ -46,10 +62,12 @@ void NetworkManager::CheckConnections()
 					{
 						// close window
 					}
-			
+				}
 			}
 		}
-	}	
+	}
+
+	
 }
 
 void NetworkManager::RegisterNewUserConnection(Client* _newClient)

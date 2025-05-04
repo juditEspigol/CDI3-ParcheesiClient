@@ -12,6 +12,7 @@ void Scene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _window, sf::
 	{
 		_window.close();
 	}
+
 	if (const sf::Event::KeyPressed* keyPressed = _event.getIf<sf::Event::KeyPressed>())
 	{
 		switch (keyPressed->code)
