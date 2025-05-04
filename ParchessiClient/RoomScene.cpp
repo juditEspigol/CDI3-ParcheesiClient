@@ -22,7 +22,7 @@ void RoomScene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _window, 
 {
 	if (waitingPacket && !isFinished)
 	{
-		std::string roomCodeRecieved = NetworkInterface::OnRecieveRoomCode(_socket);
+		std::string roomCodeRecieved = NetworkManager::OnRecieveRoomCode(_socket);
 		if (roomCodeRecieved != "")
 		{
 			if (roomCodeRecieved == "-1")

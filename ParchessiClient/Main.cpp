@@ -1,5 +1,6 @@
 #include "SceneManager.h"
 #include "ClientManager.h"
+#include "NetworkInterface.h"
 
 const sf::IpAddress SERVER_IP = sf::IpAddress(85, 251, 52, 92); //sf::IpAddress(10, 40, 2, 183); // Loopback /// 79, 152, 211, 184
 
@@ -24,12 +25,7 @@ void main()
 
 	// TCP
 	sf::TcpSocket socket;
-	if (LISTENER.listen(LISTENER_PORT) != sf::Socket::Status::Done) // Comprbar puerto valido
-	{
-		std::cerr << "Cannot Listen the port.\nExiting execution with code -1." << std::endl;
-		return;
-	}
-	SELECTOR.add(LISTENER);
+	NETWORK_MANAGER.Init();
 
 	if (socket.connect(SERVER_IP, SERVER_PORT) != sf::Socket::Status::Done && !testingGameplay)
 	{
@@ -44,6 +40,7 @@ void main()
 		while (window->isOpen())
 		{
 			// LISTENER
+			NETWORK_MANAGER.CheckConnections();
 			while (const std::optional event = window->pollEvent())
 			{
 				SCENE_MANAGER.GetCurrentScene()->HandleEvent(*event, *window, socket);
@@ -54,44 +51,6 @@ void main()
 
 			// DRAW
 			SCENE_MANAGER.GetCurrentScene()->Render(*window);
-
-			if (SELECTOR.isReady(LISTENER))
-			{
-				// New client
-				Client* newClient = new Client(0, new sf::TcpSocket());
-				if (LISTENER.accept(*newClient->GetSocket()) == sf::Socket::Status::Done)
-				{
-					newClient->GetSocket()->setBlocking(false);
-					SELECTOR.add(*newClient->GetSocket());
-					newClient->SetID(CLIENT_MANAGER.GetSizeClients());
-					std::cout << "Nueva conexion establecida: " << " --> " << newClient->GetIP() << ":" << newClient->GetSocket()->getRemotePort() << std::endl;
-					CLIENT_MANAGER.AddClient(newClient);
-				}
-			}
-			else
-			{
-				for (Client* client : CLIENT_MANAGER.GetClients())
-				{
-					if (SELECTOR.isReady(*client->GetSocket()))
-					{
-						sf::Packet tempPacket;
-						if (client->GetSocket()->receive(tempPacket) == sf::Socket::Status::Done)
-						{
-							std::cout << "PARA BAILAR LA BAMBA" << std::endl;
-
-							std::string string;
-							tempPacket >> string;
-							std::cout << "INFO: " << string << std::endl;
-							tempPacket.clear();
-						}
-						if (client->GetSocket()->receive(tempPacket) == sf::Socket::Status::Disconnected)
-						{
-							// Remove client, pero en este caso si se pira uno todos se piran
-							window->close();
-						}
-					}
-				}
-			}
 
 			// CHANGE SCENE
 			if (SCENE_MANAGER.GetCurrentScene()->GetIsFinished())

@@ -24,7 +24,7 @@ void AuthenticateScene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _
 {
 	if (waitingPacket && !isFinished)
 	{
-		int validateAuthentication = NetworkInterface::OnRecieveAuthentication(_socket);
+		int validateAuthentication = NetworkManager::OnRecieveAuthentication(_socket);
 		if (validateAuthentication >= 0)
 		{
 			isFinished = true;

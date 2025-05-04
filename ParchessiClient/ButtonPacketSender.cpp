@@ -53,6 +53,6 @@ void ButtonPacketSender::OnLeftClick(const sf::Event::MouseButtonPressed* _mouse
 		}
 		pressed = true;
 
-		NetworkInterface::SendData(_socket, tempPacket);
+		NETWORK_MANAGER.SendData(_socket, tempPacket);
 	}
 }

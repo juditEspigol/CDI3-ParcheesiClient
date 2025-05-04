@@ -1,6 +1,62 @@
 #include "NetworkInterface.h"
+#include "ClientManager.h"
+#include "GlobalValues.h"
 
-void NetworkInterface::SendData(sf::TcpSocket& _clientSocket, sf::Packet& _packet)
+void NetworkManager::Init()
+{
+	if (listener.listen(LISTENER_PORT) != sf::Socket::Status::Done) // Comprbar puerto valido
+	{
+		std::cerr << "Cannot Listen the port.\nExiting execution with code -1." << std::endl;
+		return;
+	}
+	selector.add(listener);
+}
+
+void NetworkManager::CheckConnections()
+{
+	if (selector.isReady(listener))
+	{
+		// RegisterNewUserConnection();
+	}
+	else
+	{
+		for (Client* client : CLIENT_MANAGER.GetClients())
+		{
+			if (selector.isReady(*client->GetSocket()))
+			{
+				sf::Packet packet;
+				if (client->GetSocket()->receive(packet) == sf::Socket::Status::Done)
+				{
+					std::cout << "PARA BAILAR LA BAMBA" << std::endl;
+
+					std::string string;
+					packet >> string;
+					std::cout << "INFO: " << string << std::endl;
+					packet.clear();
+				}
+				if (client->GetSocket()->receive(packet) == sf::Socket::Status::Disconnected)
+				{
+					// close window
+				}
+			}
+		}
+	}
+}
+
+void NetworkManager::RegisterNewUserConnection(Client* _newClient)
+{
+	// Client* newClient = new Client(0, new sf::TcpSocket());
+	//if (listener.accept(*_newClient->GetSocket()) == sf::Socket::Status::Done) // Añadir nuevo cliente HANDSHAKE
+	//{
+		_newClient->GetSocket()->setBlocking(false); // Desbloqueamos el socket
+		selector.add(*_newClient->GetSocket());
+
+		std::cout << "Nueva conexion establecida --> " << _newClient->GetIP() << ":" << _newClient->GetSocket()->getRemotePort() << std::endl;
+		CLIENT_MANAGER.AddClient(_newClient);
+	//}
+}
+
+void NetworkManager::SendData(sf::TcpSocket& _clientSocket, sf::Packet& _packet)
 {
 	if (_clientSocket.send(_packet) != sf::Socket::Status::Done)
 	{
@@ -9,7 +65,7 @@ void NetworkInterface::SendData(sf::TcpSocket& _clientSocket, sf::Packet& _packe
 	_packet.clear();
 }
 
-int NetworkInterface::OnRecieveAuthentication(sf::TcpSocket& _clientSocket)
+int NetworkManager::OnRecieveAuthentication(sf::TcpSocket& _clientSocket)
 {
 	sf::Packet tempPacket;
 
@@ -45,7 +101,7 @@ int NetworkInterface::OnRecieveAuthentication(sf::TcpSocket& _clientSocket)
 	return -10;
 }
 
-std::string NetworkInterface::OnRecieveRoomCode(sf::TcpSocket& _clientSocket)
+std::string NetworkManager::OnRecieveRoomCode(sf::TcpSocket& _clientSocket)
 {
 	sf::Packet tempPacket;
 

@@ -49,7 +49,7 @@ void GameplayScene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _wind
 			packet << content;
 			for (auto client : CLIENT_MANAGER.GetClients())
 			{
-				NetworkInterface::SendData(*client->GetSocket(), packet);
+				NETWORK_MANAGER.SendData(*client->GetSocket(), packet);
 				std::cout << "Sent this content: " << content << std::endl;
 			}
 		}
