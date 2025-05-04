@@ -1,7 +1,7 @@
 #include "SceneManager.h"
 #include "ClientManager.h"
 
-const sf::IpAddress SERVER_IP = sf::IpAddress(81, 202, 70, 32); //sf::IpAddress(10, 40, 2, 183); // Loopback /// 79, 152, 211, 184
+const sf::IpAddress SERVER_IP = sf::IpAddress(85, 251, 52, 92); //sf::IpAddress(10, 40, 2, 183); // Loopback /// 79, 152, 211, 184
 
 // FOR TESTING
 bool testingGameplay = false;
@@ -41,8 +41,6 @@ void main()
 
 		std::cout << "My IPadress: " << sf::IpAddress::getPublicAddress().value() << ": " << socket.getLocalPort() << std::endl; 
 
-
-
 		while (window->isOpen())
 		{
 			// LISTENER
@@ -59,6 +57,16 @@ void main()
 
 			if (SELECTOR.isReady(LISTENER))
 			{
+				// New client
+				Client* newClient = new Client(0, new sf::TcpSocket());
+				if (LISTENER.accept(*newClient->GetSocket()) == sf::Socket::Status::Done)
+				{
+					newClient->GetSocket()->setBlocking(false);
+					SELECTOR.add(*newClient->GetSocket());
+					newClient->SetID(CLIENT_MANAGER.GetSizeClients());
+					std::cout << "Nueva conexion establecida: " << " --> " << newClient->GetIP() << ":" << newClient->GetSocket()->getRemotePort() << std::endl;
+					CLIENT_MANAGER.AddClient(newClient);
+				}
 			}
 			else
 			{
