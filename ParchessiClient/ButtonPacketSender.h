@@ -19,4 +19,3 @@ public:
 
 	void OnLeftClick(const sf::Event::MouseButtonPressed* _mousePressed, sf::TcpSocket& _socket) override;
 };
-

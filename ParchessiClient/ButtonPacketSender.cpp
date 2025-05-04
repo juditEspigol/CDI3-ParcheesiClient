@@ -34,6 +34,9 @@ ButtonPacketSender::ButtonPacketSender(PacketType _packetType, std::vector<Butto
 	case DICE_ROLL:
 		text = new TextFill("DICE ROLL", positionText);
 		break;
+	case END_TURN:
+		text = new TextFill("END TURN", positionText);
+		break;
 	default:
 		break;
 	}

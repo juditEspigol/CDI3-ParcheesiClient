@@ -1,7 +1,6 @@
 #include "GameDirector.h"
 
-GameDirector::GameDirector(Table& table, Dice* dice) :
-    _dice(dice),
+GameDirector::GameDirector(Table& table) :
     _table(table), 
     _currentPlayer(1), 
     _currentState(GameState::WAITING_TURN)
@@ -17,7 +16,7 @@ void GameDirector::StartPlayerTurn(int playerId)
 {
     _currentPlayer = playerId;
     _currentState = GameState::WAITING_TURN;
-    std::cout << "Waiting Turn" << std::endl;
+    std::cout << "PLAYER TURN -> " << _currentPlayer << std::endl;
     _movableTokens.clear();
     _selectedToken = new Token(-1, -1);
 }
@@ -59,7 +58,8 @@ void GameDirector::MoveSelectedToken()
 
 void GameDirector::CalculateMovableTokens()
 {
-    if (_currentState != GameState::WAITING_TURN) return;
+    if (_currentState != GameState::WAITING_TURN) 
+        return;
 
     _currentState = GameState::DICE_ROLLED;
 
@@ -80,6 +80,8 @@ void GameDirector::CalculateMovableTokens()
             }
         }
     }
+
+    _dice->UnselectButton();
 
     if (_movableTokens.empty())
     {
@@ -106,7 +108,19 @@ bool GameDirector::IsTokenFromCurrentPlayer(Token& token)
 void GameDirector::EndTurn()
 {
     if (_currentState != GameState::TURN_COMPLETE) return;
-
+    
+    _dice->SetDiceValue(0);
     _currentPlayer = _currentPlayer % 4 + 1;
     StartPlayerTurn(_currentPlayer);
+}
+
+bool GameDirector::IsDiceRollAllowed() const
+{
+    return _currentState == GameState::WAITING_TURN;
+}
+
+bool GameDirector::IsEndTurnAllowed() const
+{
+    return _currentState == GameState::DICE_ROLLED ||
+        _currentState == GameState::PIECE_SELECTED;
 }

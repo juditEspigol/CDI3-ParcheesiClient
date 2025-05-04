@@ -5,13 +5,19 @@ GameplayScene::GameplayScene()
 	isFinished = false;
 	nextScene = WAITING;
 
-	table = new Table();
-	dice = new Dice();
-	buttons.push_back(dice);
-
-	gameDirector = new GameDirector(*table, dice);
-
 	tableSprite = new sf::Sprite(*TEXTURE_MANAGER.LoadTexture(TABLE_TEXTURE));
+
+	table = new Table();
+	gameDirector = new GameDirector(*table);
+
+	dice = new Dice(gameDirector);
+	endTurnButton = new EndTurnButton(gameDirector);
+
+	gameDirector->SetDice(dice);
+	gameDirector->SetEndTurn(endTurnButton);
+
+	buttons.push_back(dice);
+	buttons.push_back(endTurnButton);
 
 	gameDirector->StartGame();
 }
@@ -19,6 +25,12 @@ GameplayScene::GameplayScene()
 GameplayScene::~GameplayScene()
 {
 	delete gameDirector;
+	delete table;
+	delete dice;
+	delete endTurnButton;
+	delete tableSprite;
+
+	buttons.clear();
 }
 
 void GameplayScene::OnEnter()
@@ -31,9 +43,13 @@ void GameplayScene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _wind
 
 	if (_event.is < sf::Event::Closed>()) {
 		_window.close();
+		return;
 	}
-	if (const sf::Event::KeyPressed* keyPressed = _event.getIf<sf::Event::KeyPressed>()) {
-		switch (keyPressed->code) {
+
+	if (const sf::Event::KeyPressed* keyPressed = _event.getIf<sf::Event::KeyPressed>()) 
+	{
+		switch (keyPressed->code) 
+		{
 		case sf::Keyboard::Key::Escape:
 			_window.close();
 			break;
@@ -59,27 +75,30 @@ void GameplayScene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _wind
 			break;
 		}
 	}
-	if (const sf::Event::MouseButtonPressed* mousePressed = _event.getIf<sf::Event::MouseButtonPressed>()) {
+	if (const sf::Event::MouseButtonPressed* mousePressed = _event.getIf<sf::Event::MouseButtonPressed>()) 
+	{
 		if (mousePressed->button == sf::Mouse::Button::Left)
 		{
-
 			if (gameDirector->GetCurrentState() == GameDirector::GameState::WAITING_TURN)
 			{
-				dice->OnLeftClick(mousePressed, _socket);
-
 				std::cout << "Current Game State: " << "Wating Turn" << std::endl;
 
-				if (dice->HasBeenPressed())
+				dice->OnLeftClick(mousePressed, _socket);
+
+				if (dice->IsSelected())
 				{
 					gameDirector->CalculateMovableTokens();
 				}
+
 				return;
 			}
 			if (gameDirector->GetCurrentState() == GameDirector::GameState::DICE_ROLLED)
 			{
 				std::cout << "Current Game State: " << "Dice Rolled" << std::endl;
 
+				endTurnButton->OnLeftClick(mousePressed, _socket);
 				gameDirector->SelectToken(mousePressed->position);
+
 				return;
 			}
 		}
@@ -90,14 +109,15 @@ void GameplayScene::Render(sf::RenderWindow& _window)
 {
 	_window.clear();
 
-	// Dibujar mesa
+	// Draw Table
 	_window.draw(*tableSprite);
-	
-	dice->Render(_window);
 
-	// Dibujar dado
+	// Draw Dice
 	_window.draw(dice->GetTurnIndicator(gameDirector->GetCurrentPlayer(), WIDTH, HEIGHT));
 	_window.draw(dice->GetDiceText());
+
+	// Draw End Turn
+	_window.draw(endTurnButton->GetEndButton(WIDTH, HEIGHT));
 
 	table->Draw(_window);
 	_window.display();

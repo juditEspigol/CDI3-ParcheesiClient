@@ -9,6 +9,7 @@ private:
 	Table* table;
 	GameDirector* gameDirector;
 	Dice* dice;
+	EndTurnButton* endTurnButton;
 
 public:
 	GameplayScene();

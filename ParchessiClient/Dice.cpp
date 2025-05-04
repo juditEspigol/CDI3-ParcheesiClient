@@ -1,7 +1,8 @@
 #include "Dice.h"
 
-Dice::Dice() :
+Dice::Dice(IGameStateProvider* provider) :
     ButtonPacketSender(DICE_ROLL, {}, sf::Vector2f(0, 0)),
+    stateProvider(provider),
     _diceValue(0),
     _rng(std::random_device{}())
 {
@@ -19,17 +20,18 @@ Dice::Dice() :
 
 void Dice::OnLeftClick(const sf::Event::MouseButtonPressed* _mousePressed, sf::TcpSocket& _socket)
 {
+    if (!stateProvider->IsDiceRollAllowed()) 
+        return;
+
     if (_turnIndicator.getGlobalBounds().contains(sf::Vector2f(_mousePressed->position)))
     {
         sf::Packet tempPacket;
-        tempPacket << packetType;
 
         RollDice();
 
         tempPacket << GetDiceValue();
 
-        pressed = true;
-
+        selected = true;
         SendData(_socket, tempPacket);
     }
 }
@@ -95,4 +97,9 @@ sf::RectangleShape Dice::GetTurnIndicator(int currentPlayer, float width, float 
     }
 
     return indicator;
+}
+
+void Dice::UnselectButton()
+{
+    selected = false;
 }
