@@ -65,16 +65,16 @@ void WaitingScene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _windo
 				//	return;
 				//}
 				
-				if (socket->connect(address.first, 55010) != sf::Socket::Status::Done)
+				if (socket->connect(address.first, LISTENER_PORT) != sf::Socket::Status::Done)
 				{
-					std::cerr << "Error connecting to client: " << address.first.toString() << ":" << LISTENER_PORT << std::endl;
+					std::cerr << "Error connecting to client: " << address.first.toString() << std::endl;
 				}
 				else
 				{
-					std::cout << "Saved client: " << CLIENT_MANAGER.GetSizeClients() << address.first.toString() << ":" << LISTENER_PORT << std::endl;
+					/*std::cout << "Saved client: " << CLIENT_MANAGER.GetSizeClients() << address.first.toString() << std::endl;
 					
 					Client* newClient = new Client(CLIENT_MANAGER.GetSizeClients(), socket);
-					CLIENT_MANAGER.AddClient(newClient);
+					CLIENT_MANAGER.AddClient(newClient);*/
 				}
 				return;
 			}

@@ -1,7 +1,7 @@
 #include "SceneManager.h"
 #include "ClientManager.h"
 
-const sf::IpAddress SERVER_IP = sf::IpAddress(79, 152, 140, 103); //sf::IpAddress(10, 40, 2, 183); // Loopback /// 79, 152, 211, 184
+const sf::IpAddress SERVER_IP = sf::IpAddress(45, 13, 202, 207); //sf::IpAddress(10, 40, 2, 183); // Loopback /// 79, 152, 211, 184
 
 // FOR TESTING
 bool testingGameplay = false;
@@ -21,6 +21,7 @@ void main()
 
 	// TCP
 	sf::TcpSocket socket; 
+	
 	sf::SocketSelector selector;
 	sf::TcpListener listener;
 	if (listener.listen(LISTENER_PORT) != sf::Socket::Status::Done) // Comprbar puerto valido
@@ -51,7 +52,21 @@ void main()
 				SCENE_MANAGER.GetCurrentScene()->HandleEvent(*event, *window, socket);
 				
 				// ESTEM TOTA LA ESTONA ESCOLTANT SI ALGU ES CONECTA
-				if (!selector.isReady(listener))
+				if (selector.isReady(listener))
+				{
+					unsigned int id = CLIENT_MANAGER.GetSizeClients();
+					Client* newClient = new Client(id, new sf::TcpSocket());
+
+					if (listener.accept(*newClient->GetSocket()) == sf::Socket::Status::Done) // Añadir nuevo cliente HANDSHAKE
+					{
+						newClient->GetSocket()->setBlocking(false);
+						selector.add(*newClient->GetSocket());
+
+						std::cout << "Nueva conexion establecida: " << id << " --> " << newClient->GetIP() << ":" << newClient->GetSocket()->getRemotePort() << std::endl;
+						CLIENT_MANAGER.AddClient(newClient);
+					}
+				}
+				else
 				{
 					for (Client* client : CLIENT_MANAGER.GetClients())
 					{
@@ -60,11 +75,12 @@ void main()
 							sf::Packet packet;
 							if (client->GetSocket()->receive(packet) == sf::Socket::Status::Done)
 							{
-								// recieve packet
+								// Recieve packet
 							}
 							if (client->GetSocket()->receive(packet) == sf::Socket::Status::Disconnected)
 							{
-								// Stop game
+								// Remove client, pero en este caso si se pira uno todos se piran
+								window->close();
 							}
 						}
 					}
