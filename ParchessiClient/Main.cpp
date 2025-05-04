@@ -1,10 +1,58 @@
 #include "SceneManager.h"
 #include "ClientManager.h"
+#include <thread>
+#include <mutex>
 
 const sf::IpAddress SERVER_IP = sf::IpAddress(45, 13, 202, 207); //sf::IpAddress(10, 40, 2, 183); // Loopback /// 79, 152, 211, 184
 
 // FOR TESTING
 bool testingGameplay = false;
+std::mutex serverMutex;
+
+void ServerUpdate(sf::SocketSelector selector, sf::TcpListener listener, sf::RenderWindow* window)
+{
+	serverMutex.lock(); 
+	while (window->isOpen())
+	{
+		if (selector.wait())
+		{
+			if (selector.isReady(listener))
+			{
+				unsigned int id = CLIENT_MANAGER.GetSizeClients();
+				Client* newClient = new Client(id, new sf::TcpSocket());
+
+				if (listener.accept(*newClient->GetSocket()) == sf::Socket::Status::Done) // Añadir nuevo cliente HANDSHAKE
+				{
+					newClient->GetSocket()->setBlocking(false);
+					selector.add(*newClient->GetSocket());
+
+					std::cout << "Nueva conexion establecida: " << id << " --> " << newClient->GetIP() << ":" << newClient->GetSocket()->getRemotePort() << std::endl;
+					CLIENT_MANAGER.AddClient(newClient);
+				}
+			}
+			else
+			{
+				for (Client* client : CLIENT_MANAGER.GetClients())
+				{
+					if (selector.isReady(*client->GetSocket()))
+					{
+						sf::Packet packet;
+						if (client->GetSocket()->receive(packet) == sf::Socket::Status::Done)
+						{
+							// Recieve packet
+						}
+						if (client->GetSocket()->receive(packet) == sf::Socket::Status::Disconnected)
+						{
+							// Remove client, pero en este caso si se pira uno todos se piran
+							window->close();
+						}
+					}
+				}
+			}
+		}
+	}
+	serverMutex.unlock();
+}
 
 void main()
 {
@@ -19,20 +67,22 @@ void main()
 	SCENE_MANAGER.SetCurrentScene(AUTHENTICATION);
 	SCENE_MANAGER.GetCurrentScene()->OnEnter();
 
+	// Render SFML
+	sf::RenderWindow* window = new sf::RenderWindow(sf::VideoMode({ WIDTH, HEIGHT }), "ParchessiClient");
+
 	// TCP
 	sf::TcpSocket socket; 
 	
 	sf::SocketSelector selector;
 	sf::TcpListener listener;
+	std::thread threadServer(ServerUpdate, selector, listener, window);
+	threadServer.detach();
 	if (listener.listen(LISTENER_PORT) != sf::Socket::Status::Done) // Comprbar puerto valido
 	{
 		std::cerr << "Cannot Listen the port.\nExiting execution with code -1." << std::endl;
 		return;
 	}
 	selector.add(listener);
-
-	// Render SFML
-	sf::RenderWindow* window = new sf::RenderWindow(sf::VideoMode({ WIDTH, HEIGHT }), "ParchessiClient");
 
 	if (socket.connect(SERVER_IP, SERVER_PORT) != sf::Socket::Status::Done && !testingGameplay)
 	{
@@ -50,42 +100,10 @@ void main()
 			while (const std::optional event = window->pollEvent())
 			{
 				SCENE_MANAGER.GetCurrentScene()->HandleEvent(*event, *window, socket);
-				
-				// ESTEM TOTA LA ESTONA ESCOLTANT SI ALGU ES CONECTA
-				if (selector.isReady(listener))
-				{
-					unsigned int id = CLIENT_MANAGER.GetSizeClients();
-					Client* newClient = new Client(id, new sf::TcpSocket());
-
-					if (listener.accept(*newClient->GetSocket()) == sf::Socket::Status::Done) // Añadir nuevo cliente HANDSHAKE
-					{
-						newClient->GetSocket()->setBlocking(false);
-						selector.add(*newClient->GetSocket());
-
-						std::cout << "Nueva conexion establecida: " << id << " --> " << newClient->GetIP() << ":" << newClient->GetSocket()->getRemotePort() << std::endl;
-						CLIENT_MANAGER.AddClient(newClient);
-					}
-				}
-				else
-				{
-					for (Client* client : CLIENT_MANAGER.GetClients())
-					{
-						if (selector.isReady(*client->GetSocket()))
-						{
-							sf::Packet packet;
-							if (client->GetSocket()->receive(packet) == sf::Socket::Status::Done)
-							{
-								// Recieve packet
-							}
-							if (client->GetSocket()->receive(packet) == sf::Socket::Status::Disconnected)
-							{
-								// Remove client, pero en este caso si se pira uno todos se piran
-								window->close();
-							}
-						}
-					}
-				}
 			}
+
+			// ESTEM TOTA LA ESTONA ESCOLTANT SI ALGU ES CONECTA
+			
 			// UPDATE
 			SCENE_MANAGER.GetCurrentScene()->Update(0.f);
 
