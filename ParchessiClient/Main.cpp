@@ -3,28 +3,28 @@
 #include <thread>
 #include <mutex>
 
-const sf::IpAddress SERVER_IP = sf::IpAddress(45, 13, 202, 207); //sf::IpAddress(10, 40, 2, 183); // Loopback /// 79, 152, 211, 184
+const sf::IpAddress SERVER_IP = sf::IpAddress(81, 13, 202, 207); //sf::IpAddress(10, 40, 2, 183); // Loopback /// 79, 152, 211, 184
 
 // FOR TESTING
 bool testingGameplay = false;
 std::mutex serverMutex;
 
-void ServerUpdate(sf::SocketSelector selector, sf::TcpListener listener, sf::RenderWindow* window)
+void ServerUpdate(sf::SocketSelector* selector, sf::TcpListener* listener, sf::RenderWindow* window)
 {
 	serverMutex.lock(); 
 	while (window->isOpen())
 	{
-		if (selector.wait())
+		if (selector->wait())
 		{
-			if (selector.isReady(listener))
+			if (selector->isReady(*listener))
 			{
 				unsigned int id = CLIENT_MANAGER.GetSizeClients();
 				Client* newClient = new Client(id, new sf::TcpSocket());
 
-				if (listener.accept(*newClient->GetSocket()) == sf::Socket::Status::Done) // Añadir nuevo cliente HANDSHAKE
+				if (listener->accept(*newClient->GetSocket()) == sf::Socket::Status::Done) // Añadir nuevo cliente HANDSHAKE
 				{
 					newClient->GetSocket()->setBlocking(false);
-					selector.add(*newClient->GetSocket());
+					selector->add(*newClient->GetSocket());
 
 					std::cout << "Nueva conexion establecida: " << id << " --> " << newClient->GetIP() << ":" << newClient->GetSocket()->getRemotePort() << std::endl;
 					CLIENT_MANAGER.AddClient(newClient);
@@ -34,7 +34,7 @@ void ServerUpdate(sf::SocketSelector selector, sf::TcpListener listener, sf::Ren
 			{
 				for (Client* client : CLIENT_MANAGER.GetClients())
 				{
-					if (selector.isReady(*client->GetSocket()))
+					if (selector->isReady(*client->GetSocket()))
 					{
 						sf::Packet packet;
 						if (client->GetSocket()->receive(packet) == sf::Socket::Status::Done)
@@ -75,7 +75,7 @@ void main()
 	
 	sf::SocketSelector selector;
 	sf::TcpListener listener;
-	std::thread threadServer(ServerUpdate, selector, listener, window);
+	std::thread threadServer(ServerUpdate, &selector, &listener, window);
 	threadServer.detach();
 	if (listener.listen(LISTENER_PORT) != sf::Socket::Status::Done) // Comprbar puerto valido
 	{
