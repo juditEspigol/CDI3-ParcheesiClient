@@ -10,14 +10,14 @@ GameplayScene::GameplayScene()
 	table = new Table();
 	gameDirector = new GameDirector(*table);
 
-	dice = new Dice(gameDirector);
 	endTurnButton = new EndTurnButton(gameDirector);
+	dice = new Dice(gameDirector);
 
-	gameDirector->SetDice(dice);
 	gameDirector->SetEndTurn(endTurnButton);
+	gameDirector->SetDice(dice);
 
-	buttons.push_back(dice);
 	buttons.push_back(endTurnButton);
+	buttons.push_back(dice);
 
 	gameDirector->StartGame();
 }
@@ -116,9 +116,11 @@ void GameplayScene::Render(sf::RenderWindow& _window)
 	_window.draw(dice->GetTurnIndicator(gameDirector->GetCurrentPlayer(), WIDTH, HEIGHT));
 	_window.draw(dice->GetDiceText());
 
-	// Draw End Turn
 	_window.draw(endTurnButton->GetEndButton(WIDTH, HEIGHT));
 
+	// Draw End Turn
 	table->Draw(_window);
+
+
 	_window.display();
 }

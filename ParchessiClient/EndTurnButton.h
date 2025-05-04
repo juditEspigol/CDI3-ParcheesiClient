@@ -18,5 +18,6 @@ public:
     EndTurnButton(IGameStateProvider* provider);
     void OnLeftClick(const sf::Event::MouseButtonPressed* mousePressed, sf::TcpSocket& socket) override;
     sf::RectangleShape GetEndButton(float width, float height);
+    void UnselectButton() override;
 
 };

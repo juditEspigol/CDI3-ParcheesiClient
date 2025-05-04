@@ -83,7 +83,7 @@ void GameDirector::CalculateMovableTokens()
 
     _dice->UnselectButton();
 
-    if (_movableTokens.empty())
+    if (_movableTokens.empty() && _endTurn->IsSelected())
     {
         _currentState = GameState::TURN_COMPLETE;
         EndTurn();
@@ -108,8 +108,10 @@ bool GameDirector::IsTokenFromCurrentPlayer(Token& token)
 void GameDirector::EndTurn()
 {
     if (_currentState != GameState::TURN_COMPLETE) return;
-    
+
+    _endTurn->UnselectButton();
     _dice->SetDiceValue(0);
+
     _currentPlayer = _currentPlayer % 4 + 1;
     StartPlayerTurn(_currentPlayer);
 }
