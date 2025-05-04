@@ -61,7 +61,7 @@ sf::Text Dice::GetDiceText()
     text.setStyle(sf::Text::Bold);
 
     text.setString(std::to_string(_diceValue));
-    // Centrar el texto en el indicador
+
     sf::FloatRect textRect = text.getLocalBounds();
 
     text.setOrigin(sf::Vector2f(

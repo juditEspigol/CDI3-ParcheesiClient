@@ -52,8 +52,6 @@ void GameDirector::MoveSelectedToken()
     {
         currentToken->SetSelectable(false);
     }
-
-    EndTurn();
 }
 
 void GameDirector::CalculateMovableTokens()
@@ -83,10 +81,9 @@ void GameDirector::CalculateMovableTokens()
 
     _dice->UnselectButton();
 
-    if (_movableTokens.empty() && _endTurn->IsSelected())
+    if (_movableTokens.empty())
     {
         _currentState = GameState::TURN_COMPLETE;
-        EndTurn();
     }
 }
 
@@ -123,6 +120,5 @@ bool GameDirector::IsDiceRollAllowed() const
 
 bool GameDirector::IsEndTurnAllowed() const
 {
-    return _currentState == GameState::DICE_ROLLED ||
-        _currentState == GameState::PIECE_SELECTED;
+    return _currentState == GameState::TURN_COMPLETE;
 }

@@ -6,10 +6,11 @@ EndTurnButton::EndTurnButton(IGameStateProvider* provider) :
 {
     _buttonBorder.setSize(sf::Vector2f(100, 50));
     _buttonBorder.setPosition(sf::Vector2f(0, 0));
+	_buttonBorder.setOrigin(_buttonBorder.getSize() / 2.0f);
 
-    _buttonBorder.setOutlineThickness(2.0f);
-    _buttonBorder.setOutlineColor(sf::Color::Magenta);
-    _buttonBorder.setFillColor(sf::Color::Magenta);
+    _buttonBorder.setOutlineThickness(4.0f);
+    _buttonBorder.setOutlineColor(sf::Color::Black);
+    _buttonBorder.setFillColor(sf::Color::White);
 }
 
 void EndTurnButton::OnLeftClick(const sf::Event::MouseButtonPressed* mousePressed, sf::TcpSocket& socket)
@@ -24,14 +25,17 @@ void EndTurnButton::OnLeftClick(const sf::Event::MouseButtonPressed* mousePresse
 
         std::cout << "END TURN PRESSED" << std::endl;
 
-        pressed = true;
+        selected = true;
+
+        tempPacket << selected;
+
         SendData(socket, tempPacket);
     }
 }
 
 sf::RectangleShape EndTurnButton::GetEndButton(float width, float height)
 {
-    _buttonBorder.setPosition(sf::Vector2f(width * 0.75f, height * 0.75f)); // Cambio de posición para hacerlo más visible
+    _buttonBorder.setPosition(sf::Vector2f(width * 0.5f, (height * 0.5f) + END_TURN_Y_OFFSET));
 
     return _buttonBorder;
 }
