@@ -1,0 +1,61 @@
+#include "TextFill.h"
+
+TextFill::TextFill(const sf::String& _textDefault, sf::Vector2f _position)
+{
+	font.openFromFile(ROBOTO_MEDIUM);
+
+	textBox = new sf::Text(font);
+	textBox->setCharacterSize(TEXT_SIZE);
+	textBox->setFillColor(sf::Color::Gray);
+
+	defaultText = _textDefault;
+	content = _textDefault;
+
+	textBox->setString(content);
+	textBox->setPosition(_position);
+}
+
+TextFill::~TextFill()
+{
+	//delete textBox;
+}
+
+void TextFill::InsertChar(const sf::Event::TextEntered* _textEntered)
+{
+	if (_textEntered->unicode < 128 && _textEntered->unicode != 8 && _textEntered->unicode != 13)
+	{
+		if (content == defaultText)
+		{
+			textBox->setFillColor(sf::Color::Black);
+			content = _textEntered->unicode;
+		}
+		else
+		{
+			content += static_cast<char>(_textEntered->unicode); // Add new char
+		}
+		textBox->setString(content); // Update
+	}
+}
+
+void TextFill::RemoveChar()
+{
+	if (content.length() > 1) // Remove char from content
+	{
+		if (content != defaultText)
+		{
+			content.pop_back();
+			textBox->setString(content);
+		}
+	}
+	else // Set default text because there's no content
+	{
+		textBox->setFillColor(sf::Color::Gray);
+		content = defaultText;
+		textBox->setString(content);
+	}
+}
+
+void TextFill::Render(sf::RenderWindow& _window)
+{
+	_window.draw(*textBox);
+}

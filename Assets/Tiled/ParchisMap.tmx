@@ -1,0 +1,844 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.11.1" orientation="orthogonal" renderorder="right-down" width="1" height="1" tilewidth="960" tileheight="960" infinite="0" nextlayerid="3" nextobjectid="327">
+ <tileset firstgid="1" source="ParchisMap.tsx"/>
+ <tileset firstgid="1" source="ParchisTable.tsx"/>
+ <layer id="1" name="Capa de patrones 1" width="1" height="1">
+  <data encoding="csv">
+1
+</data>
+ </layer>
+ <objectgroup id="2" name="Cells">
+  <object id="200" x="374" y="20">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="true"/>
+    <property name="id" type="int" value="35"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="201" x="374" y="75">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="true"/>
+    <property name="id" type="int" value="36"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="202" x="374" y="120">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="true"/>
+    <property name="id" type="int" value="37"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="203" x="374" y="170">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="true"/>
+    <property name="id" type="int" value="38"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="204" x="374" y="205">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="true"/>
+    <property name="id" type="int" value="39"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="205" x="374" y="260">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="true"/>
+    <property name="id" type="int" value="40"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="206" x="374" y="305">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="true"/>
+    <property name="id" type="int" value="41"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="207" x="374" y="350">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="true"/>
+    <property name="id" type="int" value="42"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="208" x="480" y="20">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="true"/>
+    <property name="id" type="int" value="34"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="209" x="480" y="75">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="true"/>
+    <property name="id" type="int" value="200"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="210" x="480" y="120">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="true"/>
+    <property name="id" type="int" value="201"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="211" x="480" y="170">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="true"/>
+    <property name="id" type="int" value="202"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="212" x="480" y="205">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="true"/>
+    <property name="id" type="int" value="203"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="213" x="480" y="260">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="true"/>
+    <property name="id" type="int" value="204"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="214" x="480" y="305">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="true"/>
+    <property name="id" type="int" value="205"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="215" x="480" y="350">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="true"/>
+    <property name="id" type="int" value="206"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="216" x="586" y="20">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="true"/>
+    <property name="id" type="int" value="33"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="217" x="586" y="75">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="true"/>
+    <property name="id" type="int" value="32"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="218" x="586" y="120">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="true"/>
+    <property name="id" type="int" value="31"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="219" x="586" y="170">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="true"/>
+    <property name="id" type="int" value="30"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="220" x="586" y="205">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="true"/>
+    <property name="id" type="int" value="29"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="221" x="586" y="260">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="true"/>
+    <property name="id" type="int" value="28"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="222" x="586" y="305">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="true"/>
+    <property name="id" type="int" value="27"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="223" x="586" y="350">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="true"/>
+    <property name="id" type="int" value="26"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="232" x="586" y="620">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="true"/>
+    <property name="id" type="int" value="8"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="233" x="586" y="665">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="true"/>
+    <property name="id" type="int" value="7"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="234" x="586" y="710">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="true"/>
+    <property name="id" type="int" value="6"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="235" x="586" y="755">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="true"/>
+    <property name="id" type="int" value="5"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="236" x="586" y="805">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="true"/>
+    <property name="id" type="int" value="4"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="237" x="586" y="850">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="true"/>
+    <property name="id" type="int" value="3"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="238" x="586" y="895">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="true"/>
+    <property name="id" type="int" value="2"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="239" x="586" y="940">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="true"/>
+    <property name="id" type="int" value="1"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="240" x="480" y="620">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="true"/>
+    <property name="id" type="int" value="406"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="241" x="480" y="665">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="true"/>
+    <property name="id" type="int" value="405"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="242" x="480" y="710">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="true"/>
+    <property name="id" type="int" value="404"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="243" x="480" y="755">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="true"/>
+    <property name="id" type="int" value="403"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="244" x="480" y="805">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="true"/>
+    <property name="id" type="int" value="402"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="245" x="480" y="850">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="true"/>
+    <property name="id" type="int" value="401"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="246" x="480" y="895">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="true"/>
+    <property name="id" type="int" value="400"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="247" x="480" y="940">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="true"/>
+    <property name="id" type="int" value="68"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="248" x="374" y="620">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="true"/>
+    <property name="id" type="int" value="60"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="249" x="374" y="665">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="true"/>
+    <property name="id" type="int" value="61"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="250" x="374" y="710">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="true"/>
+    <property name="id" type="int" value="62"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="251" x="374" y="755">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="true"/>
+    <property name="id" type="int" value="63"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="252" x="374" y="805">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="true"/>
+    <property name="id" type="int" value="64"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="253" x="374" y="850">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="true"/>
+    <property name="id" type="int" value="65"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="254" x="374" y="895">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="true"/>
+    <property name="id" type="int" value="66"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="255" x="374" y="940">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="true"/>
+    <property name="id" type="int" value="67"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="259" x="940" y="586">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="false"/>
+    <property name="id" type="int" value="16"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="260" x="895" y="586">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="false"/>
+    <property name="id" type="int" value="15"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="261" x="850" y="586">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="false"/>
+    <property name="id" type="int" value="14"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="262" x="805" y="586">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="false"/>
+    <property name="id" type="int" value="13"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="263" x="755" y="586">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="false"/>
+    <property name="id" type="int" value="12"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="264" x="705" y="586">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="false"/>
+    <property name="id" type="int" value="11"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="265" x="665" y="586">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="false"/>
+    <property name="id" type="int" value="10"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="266" x="615" y="586">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="false"/>
+    <property name="id" type="int" value="9"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="267" x="940" y="480">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="false"/>
+    <property name="id" type="int" value="17"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="268" x="895" y="480">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="false"/>
+    <property name="id" type="int" value="100"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="269" x="850" y="480">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="false"/>
+    <property name="id" type="int" value="101"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="270" x="805" y="480">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="false"/>
+    <property name="id" type="int" value="102"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="271" x="755" y="480">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="false"/>
+    <property name="id" type="int" value="103"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="272" x="705" y="480">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="false"/>
+    <property name="id" type="int" value="104"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="273" x="665" y="480">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="false"/>
+    <property name="id" type="int" value="105"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="274" x="615" y="480">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="false"/>
+    <property name="id" type="int" value="106"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="275" x="940" y="374">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="false"/>
+    <property name="id" type="int" value="18"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="276" x="895" y="374">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="false"/>
+    <property name="id" type="int" value="19"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="277" x="850" y="374">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="false"/>
+    <property name="id" type="int" value="20"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="278" x="805" y="374">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="false"/>
+    <property name="id" type="int" value="21"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="279" x="755" y="374">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="false"/>
+    <property name="id" type="int" value="22"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="280" x="705" y="374">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="false"/>
+    <property name="id" type="int" value="23"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="281" x="665" y="374">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="false"/>
+    <property name="id" type="int" value="24"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="282" x="615" y="374">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="false"/>
+    <property name="id" type="int" value="25"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="291" x="345" y="586">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="false"/>
+    <property name="id" type="int" value="59"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="292" x="300" y="586">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="false"/>
+    <property name="id" type="int" value="58"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="293" x="250" y="586">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="false"/>
+    <property name="id" type="int" value="57"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="294" x="205" y="586">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="false"/>
+    <property name="id" type="int" value="56"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="295" x="160" y="586">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="false"/>
+    <property name="id" type="int" value="55"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="296" x="110" y="586">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="false"/>
+    <property name="id" type="int" value="54"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="297" x="65" y="586">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="false"/>
+    <property name="id" type="int" value="53"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="298" x="20" y="586">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="false"/>
+    <property name="id" type="int" value="52"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="299" x="345" y="480">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="false"/>
+    <property name="id" type="int" value="306"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="300" x="300" y="480">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="false"/>
+    <property name="id" type="int" value="305"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="301" x="250" y="480">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="false"/>
+    <property name="id" type="int" value="304"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="302" x="205" y="480">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="false"/>
+    <property name="id" type="int" value="303"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="303" x="160" y="480">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="false"/>
+    <property name="id" type="int" value="302"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="304" x="110" y="480">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="false"/>
+    <property name="id" type="int" value="301"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="305" x="65" y="480">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="false"/>
+    <property name="id" type="int" value="300"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="306" x="20" y="480">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="false"/>
+    <property name="id" type="int" value="51"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="307" x="345" y="374">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="false"/>
+    <property name="id" type="int" value="43"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="308" x="300" y="374">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="false"/>
+    <property name="id" type="int" value="44"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="309" x="250" y="374">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="false"/>
+    <property name="id" type="int" value="45"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="310" x="205" y="374">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="false"/>
+    <property name="id" type="int" value="46"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="311" x="160" y="374">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="false"/>
+    <property name="id" type="int" value="47"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="312" x="110" y="374">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="false"/>
+    <property name="id" type="int" value="48"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="313" x="65" y="374">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="false"/>
+    <property name="id" type="int" value="49"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="314" x="20" y="374">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="false"/>
+    <property name="id" type="int" value="50"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="315" x="415" y="480">
+   <properties>
+    <property name="finalCell" type="bool" value="true"/>
+    <property name="horizontal" type="bool" value="false"/>
+    <property name="id" type="int" value="307"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="318" x="540" y="480">
+   <properties>
+    <property name="finalCell" type="bool" value="true"/>
+    <property name="horizontal" type="bool" value="false"/>
+    <property name="id" type="int" value="107"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="319" x="480" y="425">
+   <properties>
+    <property name="finalCell" type="bool" value="true"/>
+    <property name="horizontal" type="bool" value="true"/>
+    <property name="id" type="int" value="207"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="320" x="480" y="550">
+   <properties>
+    <property name="finalCell" type="bool" value="true"/>
+    <property name="horizontal" type="bool" value="true"/>
+    <property name="id" type="int" value="407"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="322" x="155" y="165">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="false"/>
+    <property name="id" type="int" value="1002"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="323" x="800" y="165">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="false"/>
+    <property name="id" type="int" value="1001"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="324" x="800" y="815">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="false"/>
+    <property name="id" type="int" value="1004"/>
+   </properties>
+   <point/>
+  </object>
+  <object id="325" x="155" y="815">
+   <properties>
+    <property name="finalCell" type="bool" value="false"/>
+    <property name="horizontal" type="bool" value="false"/>
+    <property name="id" type="int" value="1003"/>
+   </properties>
+   <point/>
+  </object>
+ </objectgroup>
+</map>

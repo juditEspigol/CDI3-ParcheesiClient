@@ -1,0 +1,70 @@
+#include "SceneManager.h"
+#include "ClientManager.h"
+#include "NetworkInterface.h"
+
+const sf::IpAddress SERVER_IP = sf::IpAddress(85, 251, 52, 92); //sf::IpAddress(10, 40, 2, 183); // Loopback /// 79, 152, 211, 184
+
+// FOR TESTING
+bool testingGameplay = true;
+
+void main()
+{
+	TEXTURE_MANAGER.LoadTextures();
+
+	// CREATE SCENES
+	SCENE_MANAGER.AddScene(AUTHENTICATION, new AuthenticateScene()); 
+	SCENE_MANAGER.AddScene(ROOM, new RoomScene()); 
+	SCENE_MANAGER.AddScene(WAITING, new WaitingScene());
+	SCENE_MANAGER.AddScene(GAMEPLAY, new GameplayScene());
+
+	SCENE_MANAGER.SetCurrentScene(GAMEPLAY);
+	SCENE_MANAGER.GetCurrentScene()->OnEnter();
+
+	// Render SFML
+	sf::RenderWindow* window = new sf::RenderWindow(sf::VideoMode({ WIDTH, HEIGHT }), "ParchessiClient");
+
+	// TCP
+	sf::TcpSocket socket;
+	NETWORK_MANAGER.Init();
+
+	if (socket.connect(SERVER_IP, SERVER_PORT) != sf::Socket::Status::Done && !testingGameplay)
+	{
+		std::cerr << "Error connecting to server." << std::endl;
+	}
+	else
+	{
+		std::cout << "Connected to server" << std::endl;
+
+		std::cout << "My IPadress: " << sf::IpAddress::getPublicAddress().value() << ": " << socket.getLocalPort() << std::endl; 
+
+		while (window->isOpen())
+		{
+
+			// LISTENER
+			while (const std::optional event = window->pollEvent())
+			{
+				SCENE_MANAGER.GetCurrentScene()->HandleEvent(*event, *window, socket);
+			}
+			// UPDATE
+			SCENE_MANAGER.GetCurrentScene()->Update(0.f);
+
+			// DRAW
+			SCENE_MANAGER.GetCurrentScene()->Render(*window);
+
+			// CHANGE SCENE
+			if (SCENE_MANAGER.GetCurrentScene()->GetIsFinished())
+			{
+				std::cout << "Change scene!" << std::endl;
+				std::string nextScene = SCENE_MANAGER.GetCurrentScene()->OnExit();
+				SCENE_MANAGER.SetCurrentScene(nextScene);
+				SCENE_MANAGER.GetCurrentScene()->OnEnter();
+			}
+			
+		}
+	}
+
+	socket.disconnect();
+	std::cout << "Disconected from server" << std::endl;
+
+	delete window;
+}
