@@ -2,7 +2,7 @@
 #include "ClientManager.h"
 #include "NetworkInterface.h"
 
-const sf::IpAddress SERVER_IP = sf::IpAddress(81, 202, 70, 32); //sf::IpAddress(10, 40, 2, 183); // Loopback /// 79, 152, 211, 184
+const sf::IpAddress SERVER_IP = sf::IpAddress(85, 251, 52, 92); //sf::IpAddress(10, 40, 2, 183); // Loopback /// 79, 152, 211, 184
 
 // FOR TESTING
 bool testingGameplay = false;

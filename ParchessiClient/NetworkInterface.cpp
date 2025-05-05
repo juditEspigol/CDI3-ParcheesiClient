@@ -39,10 +39,9 @@ void NetworkManager::CheckConnections()
 		}
 		else
 		{
-
 			for (Client* client : CLIENT_MANAGER.GetClients())
 			{
-				std::cout << "HEMOS SALIDO" << std::endl;
+				std::cout << CLIENT_MANAGER.GetClients().size() << std::endl;
 
 				if (selector.isReady(*client->GetSocket()))
 				{
@@ -60,7 +59,10 @@ void NetworkManager::CheckConnections()
 					}
 					else if (client->GetSocket()->receive(packet) == sf::Socket::Status::Disconnected)
 					{
-						// close window
+						std::cout << "ME HE DESCONECTADOOOOOOOOOOOOOOOOO" << std::endl;
+						client->GetSocket()->disconnect();
+						selector.remove(*client->GetSocket());
+
 					}
 				}
 			}
@@ -71,16 +73,15 @@ void NetworkManager::CheckConnections()
 }
 
 void NetworkManager::RegisterNewUserConnection(Client* _newClient)
-{
-	// Client* newClient = new Client(0, new sf::TcpSocket());
-	//if (listener.accept(*_newClient->GetSocket()) == sf::Socket::Status::Done) // Añadir nuevo cliente HANDSHAKE
-	//{
+{	
+	if (listener.accept(*_newClient->GetSocket()) == sf::Socket::Status::Done) // Añadir nuevo cliente HANDSHAKE
+	{
 		_newClient->GetSocket()->setBlocking(false); // Desbloqueamos el socket
 		selector.add(*_newClient->GetSocket());
 
 		std::cout << "Nueva conexion establecida --> " << _newClient->GetIP() << ":" << _newClient->GetSocket()->getRemotePort() << std::endl;
 		CLIENT_MANAGER.AddClient(_newClient);
-	//}
+	}
 }
 
 void NetworkManager::SendData(sf::TcpSocket& _clientSocket, sf::Packet& _packet)
