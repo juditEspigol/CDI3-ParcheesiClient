@@ -59,6 +59,7 @@ void main()
 				SCENE_MANAGER.SetCurrentScene(nextScene);
 				SCENE_MANAGER.GetCurrentScene()->OnEnter();
 			}
+			
 		}
 	}
 
