@@ -3,13 +3,11 @@
 
 #include "ButtonTextUpdater.h"
 #include "PacketType.h"
-
-void SendData(sf::TcpSocket& _clientSocket, sf::Packet& _packet);
+#include "NetworkInterface.h"
 
 class ButtonPacketSender : public Button
 {
 protected:
-
 	PacketType packetType;
 	std::vector<ButtonTextUpdater*> buttonTexts;
 

@@ -1,17 +1,5 @@
 #include "ButtonPacketSender.h"
-
-void SendData(sf::TcpSocket& _clientSocket, sf::Packet& _packet)
-{
-	if (_clientSocket.send(_packet) != sf::Socket::Status::Done)
-	{
-		std::cerr << "Error al enviar el paquete al servidor" << std::endl;
-	}
-	else
-	{
-		std::cout << "Mensaje enviado" << std::endl;
-	}
-	_packet.clear();
-}
+#include "SceneManager.h"
 
 ButtonPacketSender::ButtonPacketSender(PacketType _packetType, std::vector<ButtonTextUpdater*> _buttonTexts, sf::Vector2f _position)
  : Button(_position), packetType(_packetType), buttonTexts(_buttonTexts)
@@ -70,6 +58,6 @@ void ButtonPacketSender::OnLeftClick(const sf::Event::MouseButtonPressed* _mouse
 		}
 		pressed = true;
 
-		SendData(_socket, tempPacket);
+		NETWORK_MANAGER.SendData(_socket, tempPacket);
 	}
 }

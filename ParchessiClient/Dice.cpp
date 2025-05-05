@@ -1,5 +1,6 @@
 #include "Dice.h"
 
+
 Dice::Dice(IGameStateProvider* provider) :
     ButtonPacketSender(DICE_ROLL, {}, sf::Vector2f(0, 0)),
     stateProvider(provider),
@@ -32,7 +33,8 @@ void Dice::OnLeftClick(const sf::Event::MouseButtonPressed* _mousePressed, sf::T
         tempPacket << GetDiceValue();
 
         selected = true;
-        SendData(_socket, tempPacket);
+
+        NETWORK_MANAGER.SendData(_socket, tempPacket);
     }
 }
 

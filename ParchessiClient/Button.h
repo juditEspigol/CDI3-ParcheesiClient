@@ -19,6 +19,7 @@ public:
 	~Button();
 
 	inline bool HasBeenPressed() const { return pressed; };
+	inline void SetBeenPressed(const bool _pressed) { pressed = _pressed; };
 	inline bool IsSelected() const { return selected; };
 	inline TextFill* GetText() const { return text; }
 

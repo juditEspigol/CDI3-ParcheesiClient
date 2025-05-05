@@ -1,4 +1,5 @@
 #include "GameplayScene.h"
+#include "ClientManager.h"
 
 void GameplayScene::HandleKeyPress(const sf::Event::KeyPressed* keyPressed, sf::RenderWindow& window)
 {
@@ -99,6 +100,7 @@ void GameplayScene::PrintCurrentState(GameDirector::GameState state)
 GameplayScene::GameplayScene()
 {
 	isFinished = false;
+	waitingPacket = false;
 	nextScene = WAITING;
 
 	tableSprite = new sf::Sprite(*TEXTURE_MANAGER.LoadTexture(TABLE_TEXTURE));
@@ -135,13 +137,47 @@ void GameplayScene::OnEnter()
 
 void GameplayScene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _window, sf::TcpSocket& _socket)
 {
-	Scene::HandleEvent(_event, _window, _socket);
-
-	if (_event.is < sf::Event::Closed>()) {
+	//Scene::HandleEvent(_event, _window, _socket);
+	if (_event.is < sf::Event::Closed>())
+	{
 		_window.close();
 		return;
 	}
+	if (const sf::Event::KeyPressed* keyPressed = _event.getIf<sf::Event::KeyPressed>())
+	{
+		switch (keyPressed->code)
+		{
+		case sf::Keyboard::Key::Escape:
+			std::cout << "Disconected..." << std::endl;
+			_window.close();
+			break;
+		case sf::Keyboard::Key::Enter:
+		{
+			std::cout << "Enter" << std::endl;
 
+			sf::Packet packet;
+			std::string content = "Hola que tal";
+			packet << content;
+			for (auto client : CLIENT_MANAGER.GetClients())
+			{
+				NETWORK_MANAGER.SendData(*client->GetSocket(), packet);
+				std::cout << "Sent this content: " << content << std::endl;
+			}
+		}
+			break;
+		case sf::Keyboard::Key::Backspace:
+			for (Button* button : buttons)
+			{
+				if (button->IsSelected())
+				{
+					button->GetText()->RemoveChar();
+				}
+			}
+			break;
+		default:
+			break;
+		}
+	}
 	// Manejar eventos de teclado
 	if (const sf::Event::KeyPressed* keyPressed = _event.getIf<sf::Event::KeyPressed>())
 	{
@@ -157,6 +193,8 @@ void GameplayScene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _wind
 		}
 	}
 }
+
+
 
 void GameplayScene::Render(sf::RenderWindow& _window)
 {
@@ -176,4 +214,9 @@ void GameplayScene::Render(sf::RenderWindow& _window)
 	table->Draw(_window);
 
 	_window.display();
+}
+
+void GameplayScene::Update(float _dt)
+{
+	//NETWORK_MANAGER.CheckConnections();
 }
