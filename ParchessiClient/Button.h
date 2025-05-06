@@ -5,6 +5,7 @@
 class Button
 {
 protected:
+	
 	bool pressed;
 	bool selected;
 

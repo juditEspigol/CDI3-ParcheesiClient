@@ -27,11 +27,8 @@ void NetworkManager::CheckConnections()
 
 			if (listener.accept(*newClient->GetSocket()) == sf::Socket::Status::Done)
 			{
-				newClient->GetSocket()->connect( *newClient->GetSocket()->getRemoteAddress(), 55010);
-				std::cout << "PORFAVOR ALEX MIRAME ESTE PUERTO: " << newClient->GetSocket()->getRemotePort() << std::endl;
 				newClient->GetSocket()->setBlocking(false); // Desbloqueamos el socket
 				selector.add(*newClient->GetSocket());
-				CLIENT_MANAGER.AddClient(newClient);
 			}
 			else
 			{
@@ -66,12 +63,13 @@ void NetworkManager::CheckConnections()
 						client->GetSocket()->disconnect();
 						selector.remove(*client->GetSocket());
 
-						std::cout << CLIENT_MANAGER.GetClients().size() << std::endl;
 					}
 				}
 			}
 		}
-	}	
+	}
+
+	
 }
 
 void NetworkManager::RegisterNewUserConnection(Client* _newClient)
@@ -88,34 +86,11 @@ void NetworkManager::RegisterNewUserConnection(Client* _newClient)
 
 void NetworkManager::SendData(sf::TcpSocket& _clientSocket, sf::Packet& _packet)
 {
-	sf::Socket::Status status = _clientSocket.send(_packet);
-
-	std::cout << ", Port: " << _clientSocket.getRemotePort() << std::endl;
-	if (status != sf::Socket::Status::Done)
+	if (_clientSocket.send(_packet) != sf::Socket::Status::Done)
 	{
-		std::cerr << "Error al enviar el paquete al cliente. Estado: ";
-
-		switch (status)
-		{
-		case sf::Socket::Status::NotReady:
-			std::cerr << "NotReady" << std::endl;
-			break;
-		case sf::Socket::Status::Partial:
-			std::cerr << "Partial" << std::endl;
-			break;
-		case sf::Socket::Status::Disconnected:
-			std::cerr << "Disconnected" << std::endl;
-			break;
-		case sf::Socket::Status::Error:
-			std::cerr << "Error" << std::endl;
-			break;
-		default:
-			std::cerr << "Unknown" << std::endl;
-			break;
-		}
+		std::cerr << "Error al enviar el paquete al servidor" << std::endl;
 	}
-	
-    _packet.clear();
+	_packet.clear();
 }
 
 int NetworkManager::OnRecieveAuthentication(sf::TcpSocket& _clientSocket)

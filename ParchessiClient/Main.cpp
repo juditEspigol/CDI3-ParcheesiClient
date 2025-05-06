@@ -5,7 +5,7 @@
 const sf::IpAddress SERVER_IP = sf::IpAddress(85, 251, 52, 92); //sf::IpAddress(10, 40, 2, 183); // Loopback /// 79, 152, 211, 184
 
 // FOR TESTING
-bool testingGameplay = true;
+bool testingGameplay = false;
 
 void main()
 {
@@ -17,7 +17,7 @@ void main()
 	SCENE_MANAGER.AddScene(WAITING, new WaitingScene());
 	SCENE_MANAGER.AddScene(GAMEPLAY, new GameplayScene());
 
-	SCENE_MANAGER.SetCurrentScene(GAMEPLAY);
+	SCENE_MANAGER.SetCurrentScene(AUTHENTICATION);
 	SCENE_MANAGER.GetCurrentScene()->OnEnter();
 
 	// Render SFML
@@ -39,14 +39,14 @@ void main()
 
 		while (window->isOpen())
 		{
+			// UPDATE
+			SCENE_MANAGER.GetCurrentScene()->Update(0.f);
 
 			// LISTENER
 			while (const std::optional event = window->pollEvent())
 			{
 				SCENE_MANAGER.GetCurrentScene()->HandleEvent(*event, *window, socket);
 			}
-			// UPDATE
-			SCENE_MANAGER.GetCurrentScene()->Update(0.f);
 
 			// DRAW
 			SCENE_MANAGER.GetCurrentScene()->Render(*window);
@@ -59,7 +59,6 @@ void main()
 				SCENE_MANAGER.SetCurrentScene(nextScene);
 				SCENE_MANAGER.GetCurrentScene()->OnEnter();
 			}
-			
 		}
 	}
 

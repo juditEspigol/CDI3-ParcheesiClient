@@ -7,7 +7,8 @@
 
 class ButtonPacketSender : public Button
 {
-protected:
+private:
+
 	PacketType packetType;
 	std::vector<ButtonTextUpdater*> buttonTexts;
 
@@ -17,3 +18,4 @@ public:
 
 	void OnLeftClick(const sf::Event::MouseButtonPressed* _mousePressed, sf::TcpSocket& _socket) override;
 };
+

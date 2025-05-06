@@ -1,5 +1,6 @@
 #include "ButtonPacketSender.h"
 #include "SceneManager.h"
+#include "NetworkInterface.h"
 
 ButtonPacketSender::ButtonPacketSender(PacketType _packetType, std::vector<ButtonTextUpdater*> _buttonTexts, sf::Vector2f _position)
  : Button(_position), packetType(_packetType), buttonTexts(_buttonTexts)
@@ -18,12 +19,6 @@ ButtonPacketSender::ButtonPacketSender(PacketType _packetType, std::vector<Butto
 		break;
 	case CREATE_ROOM:
 		text = new TextFill("CREATE ROOM", positionText);
-		break;
-	case DICE_ROLL:
-		text = new TextFill("DICE ROLL", positionText);
-		break;
-	case END_TURN:
-		text = new TextFill("END TURN", positionText);
 		break;
 	default:
 		break;

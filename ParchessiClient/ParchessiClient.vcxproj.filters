@@ -102,15 +102,6 @@
     <ClCompile Include="Client.cpp">
       <Filter>Source Files\Clients</Filter>
     </ClCompile>
-    <ClCompile Include="IGameStateProvider.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="EndTurnButton.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Dice.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cell.h">
@@ -178,15 +169,6 @@
     </ClInclude>
     <ClInclude Include="ClientManager.h">
       <Filter>Header Files\Clients</Filter>
-    </ClInclude>
-    <ClInclude Include="IGameStateProvider.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="EndTurnButton.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dice.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
