@@ -44,6 +44,7 @@ void GameplayScene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _wind
 		{
 			std::cout << "Enter" << std::endl;
 
+			// ENVIAR PACKETE SIEMPRE PRIMERO UN PACKETE TIPE
 			sf::Packet packet;
 			std::string content = "Hola que tal";
 			packet << content;
@@ -69,7 +70,7 @@ void GameplayScene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _wind
 	}
 
 
-	/*if (const sf::Event::KeyPressed* keyPressed = _event.getIf<sf::Event::KeyPressed>()) {
+	if (const sf::Event::KeyPressed* keyPressed = _event.getIf<sf::Event::KeyPressed>()) {
 		switch (keyPressed->code) {
 		case sf::Keyboard::Key::Escape:
 			_window.close();
@@ -114,7 +115,7 @@ void GameplayScene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _wind
 				return;
 			}
 		}
-	}*/
+	}
 }
 
 
@@ -135,6 +136,7 @@ void GameplayScene::Update(float _dt, sf::TcpSocket& _socket)
 {
 	for (Client* client : CLIENT_MANAGER.GetClients())
 	{
+		// SWITH AMB PACKETES
 		sf::Packet packet;
 		if (client->GetSocket()->receive(packet) == sf::Socket::Status::Done)
 		{

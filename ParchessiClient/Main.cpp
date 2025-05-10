@@ -4,6 +4,8 @@
 
 const sf::IpAddress SERVER_IP = sf::IpAddress(79, 152, 140, 103); //sf::IpAddress(10, 40, 2, 183); // Loopback /// 79, 152, 211, 184
 
+bool isTesting = true;
+
 void main()
 {
 	// LOAD ASSETS, SOUNDS, FONTS...
@@ -14,7 +16,7 @@ void main()
 	SCENE_MANAGER.AddScene(ROOM, new RoomScene()); 
 	SCENE_MANAGER.AddScene(WAITING, new WaitingScene());
 	SCENE_MANAGER.AddScene(GAMEPLAY, new GameplayScene());
-	SCENE_MANAGER.SetCurrentScene(AUTHENTICATION);
+	SCENE_MANAGER.SetCurrentScene(GAMEPLAY);
 	SCENE_MANAGER.GetCurrentScene()->OnEnter();
 
 	// Render SFML
@@ -23,7 +25,7 @@ void main()
 	sf::TcpSocket socket; // socket for the server
 	NETWORK_MANAGER.Init();
 
-	if (socket.connect(SERVER_IP, SERVER_PORT) != sf::Socket::Status::Done)
+	if (socket.connect(SERVER_IP, SERVER_PORT) != sf::Socket::Status::Done || !isTesting)
 	{
 		std::cerr << "Error connecting to server." << std::endl;
 	}
