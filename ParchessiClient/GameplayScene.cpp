@@ -133,4 +133,17 @@ void GameplayScene::Render(sf::RenderWindow& _window)
 
 void GameplayScene::Update(float _dt, sf::TcpSocket& _socket)
 {
+	for (Client* client : CLIENT_MANAGER.GetClients())
+	{
+		sf::Packet packet;
+		if (client->GetSocket()->receive(packet) == sf::Socket::Status::Done)
+		{
+			std::cout << "PARA BAILAR LA BAMBA" << std::endl;
+
+			std::string string;
+			packet >> string;
+			std::cout << "INFO: " << string << std::endl;
+			packet.clear();
+		}
+	}
 }
