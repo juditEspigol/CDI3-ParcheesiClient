@@ -66,8 +66,9 @@ void Scene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _window, sf::
 	}
 }
 
-void Scene::Update(float _dt)
+void Scene::Update(float _dt, sf::TcpSocket& _socket)
 {
+
 }
 
 void Scene::Render(sf::RenderWindow& _window)

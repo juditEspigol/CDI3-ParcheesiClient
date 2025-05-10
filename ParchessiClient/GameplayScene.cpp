@@ -131,7 +131,6 @@ void GameplayScene::Render(sf::RenderWindow& _window)
 	_window.display();
 }
 
-void GameplayScene::Update(float _dt)
+void GameplayScene::Update(float _dt, sf::TcpSocket& _socket)
 {
-	NETWORK_MANAGER.CheckConnections();
 }

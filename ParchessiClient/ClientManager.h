@@ -1,14 +1,15 @@
 #pragma once
 #include "Client.h"
 
-#define CLIENT_MANAGER ClientManager::Instance()
 #define MAX_CLIENTS 1
+
+#define CLIENT_MANAGER ClientManager::Instance()
 
 class ClientManager
 {
 private:
 
-    unsigned int selfID;
+    unsigned int selfID = 0;
     std::vector<Client*> clients{};
 
     ClientManager() = default;
@@ -27,4 +28,5 @@ public:
     inline std::vector<Client*> GetClients() const { return clients; }
     inline int GetSizeClients() const { return clients.size(); }
     inline void SetSelfID(const unsigned int _selfID) { selfID = _selfID; }
+    inline int GetSelfID() const { return selfID; }
 };

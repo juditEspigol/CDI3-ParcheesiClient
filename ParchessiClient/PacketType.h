@@ -9,7 +9,8 @@ enum PacketType
     JOIN_ROOM,
     SV_AUTH,
     SV_ROOM_CODE,
-    SV_SOCKET
+    SV_SOCKET,
+    SV_CONNECT_DATA
 };
 
 sf::Packet& operator>>(sf::Packet& _packet, PacketType& _type);

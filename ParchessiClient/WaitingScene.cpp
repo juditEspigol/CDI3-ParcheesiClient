@@ -33,8 +33,21 @@ void WaitingScene::Render(sf::RenderWindow& _window)
 	_window.display();
 }
 
-void WaitingScene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _window, sf::TcpSocket& _socket)
+void WaitingScene::Update(float _dt, sf::TcpSocket& _socket)
 {
+	if (CLIENT_MANAGER.GetSelfID() > 0)
+	{
+		if (NETWORK_MANAGER.GetConnect() <= 0)
+		{
+			NETWORK_MANAGER.CheckConnections();
+			if (NETWORK_MANAGER.GetListen() <= 0)
+			{
+				isFinished = true;
+				return;
+			}
+		}
+	}
+
 	sf::Packet tempPacket;
 	if (_socket.receive(tempPacket) == sf::Socket::Status::Done)
 	{
@@ -42,35 +55,37 @@ void WaitingScene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _windo
 		tempPacket >> type;
 		int validateAuthentication;
 
+		// cear un nuevo packete que setee lo demas
 		switch (type)
 		{
+		case SV_CONNECT_DATA:
+		{
+			int id, listen, connect;
+
+			tempPacket >> id;
+			tempPacket >> listen;
+			tempPacket >> connect;
+
+			
+			CLIENT_MANAGER.SetSelfID(id);
+			NETWORK_MANAGER.SetListen(listen);
+			NETWORK_MANAGER.SetConnect(connect);
+
+			std::cout << "Id: " << CLIENT_MANAGER.GetSelfID() << "-- Listen: " << NETWORK_MANAGER.GetListen() << "-- Connect: " << NETWORK_MANAGER.GetConnect() << std::endl;
+			tempPacket.clear();
+			return;
+		}
+		break;
 		case SV_SOCKET:
 		{
 			// Read packet
 			std::pair<sf::IpAddress, unsigned short> address(sf::IpAddress::Any, 0);
 			tempPacket >> address;
 
-			//sf::TcpSocket* socket = new sf::TcpSocket();
-			Client* newClient = new Client(0, new sf::TcpSocket());
-			std::cout << "Trying to connect with... " << address.first.toString() << " : " << address.second << "..." << std::endl;
+			NETWORK_MANAGER.ConnectToSocket(address.first);
 
-			if (newClient->GetSocket()->connect(address.first, LISTENER_PORT) != sf::Socket::Status::Done)
-			{
-				std::cerr << "Error connecting to client: " << address.first.toString() << std::endl;
-			}
-			else
-			{
-				isFinished = true;
-				NETWORK_MANAGER.RegisterNewUserConnection(newClient);
-				std::cout << "Connect to other client --> " << newClient->GetSocket()->getRemoteAddress().value() << std::endl;
-				//SELECTOR.add(*newClient->GetSocket());
-				//newClient->SetID(CLIENT_MANAGER.GetSizeClients());
-				//newClient->GetSocket()->setBlocking(false);
-				//CLIENT_MANAGER.AddClient(newClient);
-				// std::cout << "Num clients: " << CLIENT_MANAGER.GetSizeClients() << std::endl;
-				tempPacket.clear();
-				return;
-			}
+			tempPacket.clear();
+			return;
 		}
 		break;
 		default:

@@ -1,7 +1,7 @@
 #pragma once
+#include "GlobalValues.h"
 #include "ButtonPacketSender.h"
 #include "ButtonTextUpdater.h"
-#include "GlobalValues.h"
 
 #define AUTHENTICATION "AuthenticateScene"
 #define ROOM "RoomScene"
@@ -28,7 +28,7 @@ public:
 	inline std::vector<Button*> GetButtons() const { return buttons; }
 
 	virtual void HandleEvent(const sf::Event& _event, sf::RenderWindow& _window, sf::TcpSocket& _socket);
-	virtual void Update(float _dt);
+	virtual void Update(float _dt, sf::TcpSocket& _socket);
 	virtual void Render(sf::RenderWindow& _window);
 
 };
