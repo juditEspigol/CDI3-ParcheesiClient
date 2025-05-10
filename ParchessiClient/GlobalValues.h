@@ -13,7 +13,5 @@
 
 // Declaración de la variable global
 extern std::string CODE;
-extern sf::SocketSelector SELECTOR;
-extern sf::TcpListener LISTENER;
 
 #endif 
