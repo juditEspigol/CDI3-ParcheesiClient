@@ -26,5 +26,4 @@ public:
     sf::RectangleShape GetEndButton(float width, float height);
     sf::Text GetText();
     void UnselectButton() override;
-
 };

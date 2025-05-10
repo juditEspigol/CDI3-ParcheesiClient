@@ -6,4 +6,3 @@ public:
     virtual bool IsDiceRollAllowed() const = 0;
     virtual bool IsEndTurnAllowed() const = 0;
 };
-

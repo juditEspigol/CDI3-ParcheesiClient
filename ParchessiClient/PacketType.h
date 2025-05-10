@@ -10,7 +10,10 @@ enum PacketType
     SV_AUTH,
     SV_ROOM_CODE,
     SV_SOCKET,
-    SV_CONNECT_DATA
+    SV_CONNECT_DATA,
+    DICE_ROLL,
+    END_TURN,
+    MOVE_TOKEN
 };
 
 sf::Packet& operator>>(sf::Packet& _packet, PacketType& _type);

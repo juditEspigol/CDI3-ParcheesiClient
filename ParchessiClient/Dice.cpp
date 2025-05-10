@@ -1,6 +1,5 @@
 #include "Dice.h"
 
-
 Dice::Dice(IGameStateProvider* provider) :
     ButtonPacketSender(DICE_ROLL, {}, sf::Vector2f(0, 0)),
     stateProvider(provider),

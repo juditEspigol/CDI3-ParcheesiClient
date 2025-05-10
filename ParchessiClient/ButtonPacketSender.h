@@ -7,8 +7,7 @@
 
 class ButtonPacketSender : public Button
 {
-private:
-
+protected:
 	PacketType packetType;
 	std::vector<ButtonTextUpdater*> buttonTexts;
 

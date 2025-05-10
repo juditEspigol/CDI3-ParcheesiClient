@@ -22,10 +22,10 @@ void main()
 	// Render SFML
 	sf::RenderWindow* window = new sf::RenderWindow(sf::VideoMode({ WIDTH, HEIGHT }), "ParchessiClient");
 	// TCP
-	sf::TcpSocket socket; // socket for the server
+	sf::TcpSocket socket; 
 	NETWORK_MANAGER.Init();
 
-	if (socket.connect(SERVER_IP, SERVER_PORT) != sf::Socket::Status::Done || !isTesting)
+	if (socket.connect(SERVER_IP, SERVER_PORT) != sf::Socket::Status::Done && !isTesting)
 	{
 		std::cerr << "Error connecting to server." << std::endl;
 	}

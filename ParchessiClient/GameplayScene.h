@@ -8,7 +8,12 @@ private:
 	sf::Sprite* tableSprite;
 	Table* table;
 	GameDirector* gameDirector;
+	Dice* dice;
+	EndTurnButton* endTurnButton;
 
+	void HandleKeyPress(const sf::Event::KeyPressed* keyPressed, sf::RenderWindow& window);
+	void HandleMouseClick(const sf::Event::MouseButtonPressed* mousePressed, sf::TcpSocket& socket);
+	void PrintCurrentState(GameDirector::GameState state);
 public:
 	GameplayScene();
 	~GameplayScene();
