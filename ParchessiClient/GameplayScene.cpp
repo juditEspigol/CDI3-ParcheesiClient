@@ -4,10 +4,7 @@
 
 void GameplayScene::HandleKeyPress(const sf::Event::KeyPressed* keyPressed, sf::RenderWindow& window)
 {
-	/*
-	if (CLIENT_MANAGER.GetSelfID() != gameDirector->GetCurrentPlayer())
-		return;
-	*/
+	
 	switch (keyPressed->code)
 	{
 		case sf::Keyboard::Key::Escape:
@@ -173,11 +170,14 @@ void GameplayScene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _wind
 		return;
 	}
 
+	if (CLIENT_MANAGER.GetSelfID() != gameDirector->GetCurrentPlayer() || 4 != gameDirector->GetCurrentPlayer())
+		return;
+
 	if (const sf::Event::KeyPressed* keyPressed = _event.getIf<sf::Event::KeyPressed>())
 	{
 		HandleKeyPress(keyPressed, _window);
 	}
-	if (const sf::Event::MouseButtonPressed* mousePressed = _event.getIf<sf::Event::MouseButtonPressed>()) 
+	if (const sf::Event::MouseButtonPressed* mousePressed = _event.getIf<sf::Event::MouseButtonPressed>())
 	{
 		if (mousePressed->button == sf::Mouse::Button::Left)
 		{
@@ -213,15 +213,16 @@ void GameplayScene::Update(float _dt, sf::TcpSocket& _socket)
 		
 		if (client->GetSocket()->receive(packet) == sf::Socket::Status::Done)
 		{
-			/*
+			
+			std::cerr << "Recived packet" << std::endl;
 			PacketType type;
 			packet >> type;
-
 			
 			switch (type)
 			{
 			case DICE_ROLL:
 			{
+				std::cerr << "Dice roll " << std::endl;
 				int diceValue;
 				packet >> diceValue;
 				dice->ForceDiceValue(diceValue);
@@ -230,11 +231,13 @@ void GameplayScene::Update(float _dt, sf::TcpSocket& _socket)
 			}
 			case END_TURN:
 			{
+				std::cerr << "End turn " << std::endl;
 				gameDirector->EndTurn();
 				break;
 			}
 			case MOVE_TOKEN:
 			{
+				std::cerr << "Move token " << std::endl;
 				// Actualizar posición del token
 				int tokenId, newPosition;
 				packet >> tokenId >> newPosition;
@@ -244,11 +247,6 @@ void GameplayScene::Update(float _dt, sf::TcpSocket& _socket)
 				std::cerr << "Tipo de paquete desconocido" << std::endl;
 				break;
 			}
-			*/
-
-			std::string string;
-			packet >> string;
-			std::cout << "INFO: " << string << std::endl;
 
 			packet.clear();
 		}

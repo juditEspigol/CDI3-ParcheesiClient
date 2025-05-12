@@ -31,7 +31,10 @@ void Dice::OnLeftClick(const sf::Event::MouseButtonPressed* _mousePressed, sf::T
 
         sf::Packet tempPacket;
         tempPacket << DICE_ROLL << _diceValue;
-        NETWORK_MANAGER.SendData(_socket, tempPacket);
+        for (Client* client : CLIENT_MANAGER.GetClients())
+        {
+            NETWORK_MANAGER.SendData(*client->GetSocket(), tempPacket);
+        }
 
     }
 }

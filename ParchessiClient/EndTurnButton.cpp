@@ -33,7 +33,10 @@ void EndTurnButton::OnLeftClick(const sf::Event::MouseButtonPressed* mousePresse
         selected = true;
         tempPacket << selected;
 
-        NETWORK_MANAGER.SendData(socket, tempPacket);
+        for (Client* client : CLIENT_MANAGER.GetClients())
+        {
+            NETWORK_MANAGER.SendData(*client->GetSocket(), tempPacket);
+        }
     }
 }
 

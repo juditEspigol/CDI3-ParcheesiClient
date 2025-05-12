@@ -4,7 +4,7 @@
 
 const sf::IpAddress SERVER_IP = sf::IpAddress(79, 152, 140, 103); //sf::IpAddress(10, 40, 2, 183); // Loopback /// 79, 152, 211, 184
 
-bool isTesting = true;
+bool isTesting = false;
 
 void main()
 {
@@ -16,7 +16,7 @@ void main()
 	SCENE_MANAGER.AddScene(ROOM, new RoomScene()); 
 	SCENE_MANAGER.AddScene(WAITING, new WaitingScene());
 	SCENE_MANAGER.AddScene(GAMEPLAY, new GameplayScene());
-	SCENE_MANAGER.SetCurrentScene(GAMEPLAY);
+	SCENE_MANAGER.SetCurrentScene(AUTHENTICATION);
 	SCENE_MANAGER.GetCurrentScene()->OnEnter();
 
 	// Render SFML
