@@ -123,3 +123,8 @@ bool GameDirector::IsEndTurnAllowed() const
 {
 	return _currentState == GameState::TURN_COMPLETE;
 }
+
+int GameDirector::GetCurrentPlayer() const
+{
+    return _currentPlayer;
+}

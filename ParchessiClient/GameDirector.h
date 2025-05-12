@@ -50,13 +50,12 @@ public:
 
 	bool IsDiceRollAllowed() const override;
 	bool IsEndTurnAllowed() const override;
+    int GetCurrentPlayer() const override;
 
 	inline void SetEndTurn(EndTurnButton* endTurnButton) { _endTurnButton = endTurnButton; }
 	inline void SetDice(Dice* dice) { _dice = dice; }
-
     inline void SetState(GameState state) { _currentState = state; }
 
-    inline int GetCurrentPlayer() { return _currentPlayer; };
     inline std::vector<Token*>& GetMovableTokens() { return _movableTokens; }
     inline GameState GetCurrentState() { return _currentState; }
 };

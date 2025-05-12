@@ -59,9 +59,11 @@ void ButtonPacketSender::OnLeftClick(const sf::Event::MouseButtonPressed* _mouse
 			}
 			std::cout << button->GetTextContent() << std::endl;
 			tempPacket << button->GetTextContent();
+
 		}
-		pressed = true;
 
 		NETWORK_MANAGER.SendData(_socket, tempPacket);
+
+		pressed = true;
 	}
 }

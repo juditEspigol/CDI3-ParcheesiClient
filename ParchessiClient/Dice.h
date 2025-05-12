@@ -5,6 +5,7 @@
 
 #include "ButtonPacketSender.h"
 #include "IGameStateProvider.h"
+#include "ClientManager.h"
 
 #define PLAYER_INDICATOR_SIZE 50
 #define DICE_INDICATOR_SIZE 45

@@ -20,20 +20,19 @@ Dice::Dice(IGameStateProvider* provider) :
 
 void Dice::OnLeftClick(const sf::Event::MouseButtonPressed* _mousePressed, sf::TcpSocket& _socket)
 {
-    if (!stateProvider->IsDiceRollAllowed()) 
+    if (!stateProvider->IsDiceRollAllowed() /*|| CLIENT_MANAGER.GetSelfID() != stateProvider->GetCurrentPlayer()*/)
         return;
 
     if (_turnIndicator.getGlobalBounds().contains(sf::Vector2f(_mousePressed->position)))
     {
-        sf::Packet tempPacket;
-
         RollDice();
-
-        tempPacket << GetDiceValue();
 
         selected = true;
 
+        sf::Packet tempPacket;
+        tempPacket << DICE_ROLL << _diceValue;
         NETWORK_MANAGER.SendData(_socket, tempPacket);
+
     }
 }
 

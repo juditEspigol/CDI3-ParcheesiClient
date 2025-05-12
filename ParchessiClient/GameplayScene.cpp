@@ -4,6 +4,10 @@
 
 void GameplayScene::HandleKeyPress(const sf::Event::KeyPressed* keyPressed, sf::RenderWindow& window)
 {
+	/*
+	if (CLIENT_MANAGER.GetSelfID() != gameDirector->GetCurrentPlayer())
+		return;
+	*/
 	switch (keyPressed->code)
 	{
 		case sf::Keyboard::Key::Escape:
@@ -189,6 +193,7 @@ void GameplayScene::Render(sf::RenderWindow& _window)
 	_window.clear();
 
 	_window.draw(*tableSprite);
+
 	_window.draw(dice->GetTurnIndicator(gameDirector->GetCurrentPlayer(), WIDTH, HEIGHT));
 	_window.draw(dice->GetDiceText());
 
@@ -204,15 +209,47 @@ void GameplayScene::Update(float _dt, sf::TcpSocket& _socket)
 {
 	for (Client* client : CLIENT_MANAGER.GetClients())
 	{
-		// SWITH AMB PACKETES
 		sf::Packet packet;
+		
 		if (client->GetSocket()->receive(packet) == sf::Socket::Status::Done)
 		{
-			std::cout << "PARA BAILAR LA BAMBA" << std::endl;
+			/*
+			PacketType type;
+			packet >> type;
+
+			
+			switch (type)
+			{
+			case DICE_ROLL:
+			{
+				int diceValue;
+				packet >> diceValue;
+				dice->ForceDiceValue(diceValue);
+				gameDirector->CalculateMovableTokens();
+				break;
+			}
+			case END_TURN:
+			{
+				gameDirector->EndTurn();
+				break;
+			}
+			case MOVE_TOKEN:
+			{
+				// Actualizar posición del token
+				int tokenId, newPosition;
+				packet >> tokenId >> newPosition;
+				break;
+			}
+			default:
+				std::cerr << "Tipo de paquete desconocido" << std::endl;
+				break;
+			}
+			*/
 
 			std::string string;
 			packet >> string;
 			std::cout << "INFO: " << string << std::endl;
+
 			packet.clear();
 		}
 	}
