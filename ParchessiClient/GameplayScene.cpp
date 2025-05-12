@@ -163,25 +163,26 @@ void GameplayScene::OnEnter()
 
 void GameplayScene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _window, sf::TcpSocket& _socket)
 {
-	//Scene::HandleEvent(_event, _window, _socket);
 	if (_event.is < sf::Event::Closed>())
 	{
 		_window.close();
 		return;
 	}
 
-	if (CLIENT_MANAGER.GetSelfID() != gameDirector->GetCurrentPlayer() || 4 != gameDirector->GetCurrentPlayer())
+	std::cout << gameDirector->GetCurrentPlayer() << " --> " << CLIENT_MANAGER.GetSelfID() << std::endl;
+	if (CLIENT_MANAGER.GetSelfID() != gameDirector->GetCurrentPlayer())
 		return;
 
+	std::cout << "Me toca" << std::endl;
 	if (const sf::Event::KeyPressed* keyPressed = _event.getIf<sf::Event::KeyPressed>())
 	{
-		HandleKeyPress(keyPressed, _window);
+		HandleKeyPress(keyPressed, _window); // teclado
 	}
 	if (const sf::Event::MouseButtonPressed* mousePressed = _event.getIf<sf::Event::MouseButtonPressed>())
 	{
 		if (mousePressed->button == sf::Mouse::Button::Left)
 		{
-			HandleMouseClick(mousePressed, _socket);
+			HandleMouseClick(mousePressed, _socket); // raton
 		}
 	}
 }

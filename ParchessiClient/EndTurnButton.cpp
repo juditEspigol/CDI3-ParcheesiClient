@@ -18,7 +18,7 @@ EndTurnButton::EndTurnButton(IGameStateProvider* provider) :
     _buttonBorder.setFillColor(sf::Color::White);
 }
 
-void EndTurnButton::OnLeftClick(const sf::Event::MouseButtonPressed* mousePressed, sf::TcpSocket& socket)
+void EndTurnButton::OnLeftClick(const sf::Event::MouseButtonPressed* mousePressed, sf::TcpSocket& /*socket*/)
 {
     if (!stateProvider || !stateProvider->IsEndTurnAllowed() /* || CLIENT_MANAGER.GetSelfID() != stateProvider->GetCurrentPlayer() */)
         return;
