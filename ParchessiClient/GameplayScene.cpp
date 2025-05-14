@@ -204,8 +204,6 @@ void GameplayScene::Render(sf::RenderWindow& _window)
 	table->Draw(_window);
 
 	_window.display();
-
-
 }
 
 void GameplayScene::Update(float _dt, sf::TcpSocket& _socket)
@@ -215,11 +213,10 @@ void GameplayScene::Update(float _dt, sf::TcpSocket& _socket)
 
 	for (Client* client : CLIENT_MANAGER.GetClients())
 	{
-		if (gameDirector->GetCurrentPlayer() != client->GetID())
+		if (gameDirector->GetCurrentPlayer() != client->GetID()) // no recibo nada de alguien a quien no le toca
 			return;
 
 		sf::Packet packet;
-		
 		if (client->GetSocket()->receive(packet) == sf::Socket::Status::Done)
 		{
 			std::cerr << "Recived packet" << std::endl;
@@ -235,6 +232,7 @@ void GameplayScene::Update(float _dt, sf::TcpSocket& _socket)
 				packet >> diceValue;
 				dice->ForceDiceValue(diceValue);
 				gameDirector->CalculateMovableTokens();
+				packet.clear();
 				return;
 			}
 			case END_TURN:
@@ -242,6 +240,7 @@ void GameplayScene::Update(float _dt, sf::TcpSocket& _socket)
 				std::cerr << "End turn " << std::endl;
 				gameDirector->EndTurn();
 				bucles++;
+				packet.clear();
 				return;
 			}
 			case MOVE_TOKEN:
@@ -250,13 +249,14 @@ void GameplayScene::Update(float _dt, sf::TcpSocket& _socket)
 				// Actualizar posición del token
 				int tokenId, newPosition;
 				packet >> tokenId >> newPosition;
+				packet.clear();
 				return;
 			}
 			default:
 				std::cerr << "Tipo de paquete desconocido" << std::endl;
+				packet.clear();
 				return;
 			}
-
 			packet.clear();
 		}
 	}

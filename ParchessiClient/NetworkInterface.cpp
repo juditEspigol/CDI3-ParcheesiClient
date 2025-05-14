@@ -74,10 +74,12 @@ void NetworkManager::ConnectToSocket(sf::IpAddress _address)
 		delete newClient;
 		return;
 	}
-	std::cout << "Connect to other client --> (" << CLIENT_MANAGER.GetSizeClients() << ")" << newClient->GetSocket()->getRemoteAddress().value() << std::endl;
 
 	CLIENT_MANAGER.AddClient(newClient);
+
 	newClient->SetID(CLIENT_MANAGER.GetSizeClients());
+	std::cout << "Connect to other client --> (" << newClient->GetID() << ") --> " << newClient->GetSocket()->getRemoteAddress().value() << std::endl;
+
 	connect--;
 	return;
 }
@@ -96,6 +98,8 @@ void NetworkManager::RegisterNewUserConnection()
 		CLIENT_MANAGER.AddClient(newClient);
 
 		newClient->SetID(CLIENT_MANAGER.GetSizeClients() + 1);
+
+		std::cout << "Connect to other client --> (" << newClient->GetID() << ") --> " << newClient->GetSocket()->getRemoteAddress().value() << std::endl;
 		
 		listen--;
 		return;
