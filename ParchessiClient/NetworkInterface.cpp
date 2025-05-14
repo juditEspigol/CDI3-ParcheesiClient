@@ -17,13 +17,14 @@ void NetworkManager::CheckConnections()
 	if (listen <= 0)
 		return; 
 
-	std::cout << "Estoy esdcuchando" << std::endl;
+	std::cout << "Estoy esdcuchando --> " << listen << std::endl;
 
 	if (selector.wait())
 	{
 		if (selector.isReady(listener))
 		{
 			RegisterNewUserConnection();
+			return;
 		}
 		else
 		{
@@ -94,6 +95,7 @@ void NetworkManager::RegisterNewUserConnection()
 		newClient->SetID(CLIENT_MANAGER.GetSizeClients());
 		CLIENT_MANAGER.AddClient(newClient);
 		listen--;
+		return;
 	}
 	else
 	{

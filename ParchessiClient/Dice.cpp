@@ -1,10 +1,9 @@
 #include "Dice.h"
 
-
 Dice::Dice(IGameStateProvider* provider) :
     ButtonPacketSender(DICE_ROLL, {}, sf::Vector2f(0, 0)),
     stateProvider(provider),
-    _diceValue(0),
+    _diceValue(2),
     _rng(std::random_device{}())
 {
     _turnIndicator.setSize(sf::Vector2f(PLAYER_INDICATOR_SIZE, PLAYER_INDICATOR_SIZE));
@@ -21,20 +20,26 @@ Dice::Dice(IGameStateProvider* provider) :
 
 void Dice::OnLeftClick(const sf::Event::MouseButtonPressed* _mousePressed, sf::TcpSocket& _socket)
 {
-    if (!stateProvider->IsDiceRollAllowed()) 
+    if (!stateProvider->IsDiceRollAllowed() /*|| CLIENT_MANAGER.GetSelfID() != stateProvider->GetCurrentPlayer()*/)
         return;
 
     if (_turnIndicator.getGlobalBounds().contains(sf::Vector2f(_mousePressed->position)))
     {
-        sf::Packet tempPacket;
-
         RollDice();
-
-        tempPacket << GetDiceValue();
 
         selected = true;
 
-        NETWORK_MANAGER.SendData(_socket, tempPacket);
+        sf::Packet tempPacket;  
+
+        for (Client* client : CLIENT_MANAGER.GetClients())
+        {
+            tempPacket << DICE_ROLL << _diceValue;
+
+            std::cout << "Dice rolled --> " << client->GetIP() << std::endl;
+            NETWORK_MANAGER.SendData(*client->GetSocket(), tempPacket);
+            tempPacket.clear();
+        }
+
     }
 }
 

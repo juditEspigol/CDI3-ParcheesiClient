@@ -45,6 +45,7 @@ void WaitingScene::Update(float _dt, sf::TcpSocket& _socket)
 				isFinished = true;
 				return;
 			}
+			return;
 		}
 	}
 
@@ -66,7 +67,6 @@ void WaitingScene::Update(float _dt, sf::TcpSocket& _socket)
 			tempPacket >> listen;
 			tempPacket >> connect;
 
-			
 			CLIENT_MANAGER.SetSelfID(id);
 			NETWORK_MANAGER.SetListen(listen);
 			NETWORK_MANAGER.SetConnect(connect);

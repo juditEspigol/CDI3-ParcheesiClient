@@ -44,6 +44,7 @@
                 for (auto& obj : layer["objects"]) {
                     int cellId = 0;
                     bool isHorizontal = false;
+                    bool isFinalCell = false;
 
                     // Buscar las propiedades "id" y "horizontal" dentro de "properties"
                     if (obj.contains("properties") && obj["properties"].is_array()) {
@@ -54,6 +55,9 @@
                                 }
                                 else if (prop["name"] == "horizontal") {
                                     isHorizontal = prop["value"].get<bool>();
+                                }
+                                if (prop["name"] == "finalCell") {
+									isFinalCell = prop["value"].get<bool>();
                                 }
                             }
                         }
@@ -69,7 +73,7 @@
                         continue; // Salta esta celda si ya fue insertada
                     }
 
-                    _cells.emplace(cellId, new Cell(cellId, sf::Vector2f(x, y), isHorizontal));
+                    _cells.emplace(cellId, new Cell(cellId, sf::Vector2f(x, y), isHorizontal, isFinalCell));
                 }
             }
         }
@@ -117,6 +121,11 @@
                 // Recorremos desde la posición actual hasta la nueva
                 for (int i = token->GetIdPosition(); i <= newPos; i++)
                 {
+                    if (i >= (token->GetPlayerId() * 100) + 7)
+                    {
+                        _newPosition = (token->GetPlayerId() * 100) + 7;
+                        break;
+                    }
                     // Si llegamos a la última celda del recorrido principal
                     if (i == token->GetFinalCellId())
                     {
@@ -171,6 +180,8 @@
                 // Comprobamos si hay otra ficha en la nueva posición
                 if (GetCell(_newPosition)->GetTokens().size() != 0)
                 {
+                    std::cout << GetCell(_newPosition)->GetTokens().size() << std::endl;
+
                     // Comprobamos si es ficha de otro jugador
                     if (GetCell(_newPosition)->GetTokens()[0]->GetPlayerId() != token->GetPlayerId())
                     {
