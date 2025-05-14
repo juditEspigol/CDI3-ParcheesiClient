@@ -39,6 +39,7 @@ public:
 	inline void SetConnect(const int _connect) { connect = _connect; }
 	inline int GetConnect() const { return connect; }
 
+	inline sf::SocketSelector GetSelector() { return selector; }
 	static void SendData(sf::TcpSocket& _clientSocket, sf::Packet& _packet);
 	static int OnRecieveAuthentication(sf::TcpSocket& _clientSocket);
 	static std::string OnRecieveRoomCode(sf::TcpSocket& _clientSocket);

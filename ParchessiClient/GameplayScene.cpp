@@ -210,54 +210,56 @@ void GameplayScene::Update(float _dt, sf::TcpSocket& _socket)
 {
 	if (CLIENT_MANAGER.GetSelfID() == gameDirector->GetCurrentPlayer())
 		return;
-
-	for (Client* client : CLIENT_MANAGER.GetClients())
+	
+	// Esperar hasta que al menos un socket tenga datos disponibles (sin bloquear)
+	if (NETWORK_MANAGER.GetSelector().wait(sf::seconds(0.f))) // no bloqueante (espera 0 segundos)
 	{
-		if (gameDirector->GetCurrentPlayer() != client->GetID()) // no recibo nada de alguien a quien no le toca
-			return;
-
-		sf::Packet packet;
-		if (client->GetSocket()->receive(packet) == sf::Socket::Status::Done)
+		for (Client* client : CLIENT_MANAGER.GetClients())
 		{
-			std::cerr << "Recived packet" << std::endl;
-			PacketType type;
-			packet >> type;
-			
-			switch (type)
+			sf::TcpSocket* socket = client->GetSocket();
+			if (NETWORK_MANAGER.GetSelector().isReady(*socket))
 			{
-			case DICE_ROLL:
-			{
-				std::cerr << "Dice roll " << std::endl;
-				int diceValue;
-				packet >> diceValue;
-				dice->ForceDiceValue(diceValue);
-				gameDirector->CalculateMovableTokens();
-				packet.clear();
-				return;
+				sf::Packet packet;
+				if (socket->receive(packet) == sf::Socket::Status::Done)
+				{
+					std::cerr << "Recibido paquete" << std::endl;
+					PacketType type;
+					packet >> type;
+
+					switch (type)
+					{
+					case DICE_ROLL:
+					{
+						std::cerr << "Dice roll " << std::endl;
+						int diceValue;
+						packet >> diceValue;
+						dice->ForceDiceValue(diceValue);
+						gameDirector->CalculateMovableTokens();
+						break;
+					}
+					case END_TURN:
+					{
+						std::cerr << "End turn " << std::endl;
+						gameDirector->EndTurn();
+						bucles++;
+						break;
+					}
+					case MOVE_TOKEN:
+					{
+						std::cerr << "Move token " << std::endl;
+						int tokenId, newPosition;
+						packet >> tokenId >> newPosition;
+						// Actualiza la posición aquí si hace falta
+						break;
+					}
+					default:
+						std::cerr << "Tipo de paquete desconocido" << std::endl;
+						break;
+					}
+
+					packet.clear();
+				}
 			}
-			case END_TURN:
-			{
-				std::cerr << "End turn " << std::endl;
-				gameDirector->EndTurn();
-				bucles++;
-				packet.clear();
-				return;
-			}
-			case MOVE_TOKEN:
-			{
-				std::cerr << "Move token " << std::endl;
-				// Actualizar posición del token
-				int tokenId, newPosition;
-				packet >> tokenId >> newPosition;
-				packet.clear();
-				return;
-			}
-			default:
-				std::cerr << "Tipo de paquete desconocido" << std::endl;
-				packet.clear();
-				return;
-			}
-			packet.clear();
 		}
 	}
 }
