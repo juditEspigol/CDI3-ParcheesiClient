@@ -76,8 +76,8 @@ void NetworkManager::ConnectToSocket(sf::IpAddress _address)
 	}
 	std::cout << "Connect to other client --> (" << CLIENT_MANAGER.GetSizeClients() << ")" << newClient->GetSocket()->getRemoteAddress().value() << std::endl;
 
-	newClient->SetID(CLIENT_MANAGER.GetSizeClients());
 	CLIENT_MANAGER.AddClient(newClient);
+	newClient->SetID(CLIENT_MANAGER.GetSizeClients());
 	connect--;
 	return;
 }
@@ -92,8 +92,11 @@ void NetworkManager::RegisterNewUserConnection()
 		selector.add(*newClient->GetSocket());
 
 		std::cout << "Nueva conexion establecida --> " << newClient->GetIP() << "..." << std::endl;
-		newClient->SetID(CLIENT_MANAGER.GetSizeClients());
+
 		CLIENT_MANAGER.AddClient(newClient);
+
+		newClient->SetID(CLIENT_MANAGER.GetSizeClients() + 1);
+		
 		listen--;
 		return;
 	}

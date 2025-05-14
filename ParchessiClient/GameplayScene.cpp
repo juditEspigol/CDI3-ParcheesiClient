@@ -215,6 +215,9 @@ void GameplayScene::Update(float _dt, sf::TcpSocket& _socket)
 
 	for (Client* client : CLIENT_MANAGER.GetClients())
 	{
+		if (gameDirector->GetCurrentPlayer() != client->GetID())
+			return;
+
 		sf::Packet packet;
 		
 		if (client->GetSocket()->receive(packet) == sf::Socket::Status::Done)
@@ -238,6 +241,7 @@ void GameplayScene::Update(float _dt, sf::TcpSocket& _socket)
 			{
 				std::cerr << "End turn " << std::endl;
 				gameDirector->EndTurn();
+				bucles++;
 				return;
 			}
 			case MOVE_TOKEN:
