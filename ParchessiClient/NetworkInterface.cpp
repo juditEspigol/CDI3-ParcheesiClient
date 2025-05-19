@@ -17,13 +17,14 @@ void NetworkManager::CheckConnections()
 	if (listen <= 0)
 		return; 
 
-	std::cout << "Estoy esdcuchando" << std::endl;
+	std::cout << "Estoy esdcuchando --> " << listen << std::endl;
 
 	if (selector.wait())
 	{
 		if (selector.isReady(listener))
 		{
 			RegisterNewUserConnection();
+			return;
 		}
 		else
 		{
@@ -73,10 +74,12 @@ void NetworkManager::ConnectToSocket(sf::IpAddress _address)
 		delete newClient;
 		return;
 	}
-	std::cout << "Connect to other client --> (" << CLIENT_MANAGER.GetSizeClients() << ")" << newClient->GetSocket()->getRemoteAddress().value() << std::endl;
 
-	newClient->SetID(CLIENT_MANAGER.GetSizeClients());
 	CLIENT_MANAGER.AddClient(newClient);
+	newClient->GetSocket()->setBlocking(false);
+	newClient->SetID(CLIENT_MANAGER.GetSizeClients());
+	std::cout << "Connect to other client --> (" << newClient->GetID() << ") --> " << newClient->GetSocket()->getRemoteAddress().value() << std::endl;
+
 	connect--;
 	return;
 }
@@ -91,9 +94,15 @@ void NetworkManager::RegisterNewUserConnection()
 		selector.add(*newClient->GetSocket());
 
 		std::cout << "Nueva conexion establecida --> " << newClient->GetIP() << "..." << std::endl;
-		newClient->SetID(CLIENT_MANAGER.GetSizeClients());
+
 		CLIENT_MANAGER.AddClient(newClient);
+
+		newClient->SetID(CLIENT_MANAGER.GetSizeClients() + 1);
+
+		std::cout << "Connect to other client --> (" << newClient->GetID() << ") --> " << newClient->GetSocket()->getRemoteAddress().value() << std::endl;
+		
 		listen--;
+		return;
 	}
 	else
 	{

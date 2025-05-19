@@ -35,7 +35,6 @@ void GameDirector::SelectToken(sf::Vector2i mousePos)
         if (length <= TOKEN_RADIUS && currentToken->GetIsSelectable())
         {
             _selectedToken = currentToken;
-            _newTokenPosition = currentToken->Move(_dice->GetDiceValue());
             _currentState = GameState::PIECE_SELECTED;
             MoveSelectedToken();
         }

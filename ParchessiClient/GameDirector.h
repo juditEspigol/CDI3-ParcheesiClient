@@ -34,8 +34,6 @@ private:
     Dice* _dice;
 	EndTurnButton* _endTurnButton;
 
-    int _newTokenPosition;
-
     std::vector<Token*> _movableTokens;
    
     bool CanTokenMove(Token& token);
@@ -60,6 +58,4 @@ public:
 
     inline std::vector<Token*>& GetMovableTokens() { return _movableTokens; }
     inline GameState GetCurrentState() { return _currentState; }
-    Token* GetSelectedToken() const { return _selectedToken; }
-    int GetNewTokenPosition() const { return _newTokenPosition; }
 };

@@ -36,4 +36,6 @@ sf::Packet& operator>>(sf::Packet& _packet, std::pair<sf::IpAddress, unsigned sh
     return _packet;
 }
 
-Client::Client(const unsigned int _id, sf::TcpSocket* _socket) : socket(_socket) {}
+Client::Client(const unsigned int _id, sf::TcpSocket* _socket) : socket(_socket) 
+{
+}

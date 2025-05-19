@@ -10,6 +10,7 @@ private:
 	GameDirector* gameDirector;
 	Dice* dice;
 	EndTurnButton* endTurnButton;
+	int bucles = 0;
 
 	void HandleKeyPress(const sf::Event::KeyPressed* keyPressed, sf::RenderWindow& window);
 	void HandleMouseClick(const sf::Event::MouseButtonPressed* mousePressed, sf::TcpSocket& socket);

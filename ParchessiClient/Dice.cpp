@@ -3,7 +3,7 @@
 Dice::Dice(IGameStateProvider* provider) :
     ButtonPacketSender(DICE_ROLL, {}, sf::Vector2f(0, 0)),
     stateProvider(provider),
-    _diceValue(0),
+    _diceValue(2),
     _rng(std::random_device{}())
 {
     _turnIndicator.setSize(sf::Vector2f(PLAYER_INDICATOR_SIZE, PLAYER_INDICATOR_SIZE));
@@ -29,11 +29,15 @@ void Dice::OnLeftClick(const sf::Event::MouseButtonPressed* _mousePressed, sf::T
 
         selected = true;
 
-        sf::Packet tempPacket;
-        tempPacket << DICE_ROLL << _diceValue;
+        sf::Packet tempPacket;  
+
         for (Client* client : CLIENT_MANAGER.GetClients())
         {
+            tempPacket << DICE_ROLL << _diceValue;
+
+            std::cout << "Dice rolled --> " << client->GetIP() << std::endl;
             NETWORK_MANAGER.SendData(*client->GetSocket(), tempPacket);
+            tempPacket.clear();
         }
 
     }

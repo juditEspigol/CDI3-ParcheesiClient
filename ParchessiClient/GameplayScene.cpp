@@ -74,9 +74,6 @@ void GameplayScene::HandleMouseClick(const sf::Event::MouseButtonPressed* mouseP
 
 	PrintCurrentState(currentState);
 
-	Token* movedToken = gameDirector->GetSelectedToken();
-	int newPos = gameDirector->GetNewTokenPosition();
-
 	switch (currentState)
 	{
 	case GameDirector::GameState::WAITING_TURN:
@@ -89,16 +86,6 @@ void GameplayScene::HandleMouseClick(const sf::Event::MouseButtonPressed* mouseP
 
 	case GameDirector::GameState::DICE_ROLLED:
 		gameDirector->SelectToken(mousePressed->position);
-
-		if (movedToken) {
-			sf::Packet movePacket;
-			movePacket << MOVE_TOKEN << movedToken->GetPlayerId() << newPos;
-			for (Client* client : CLIENT_MANAGER.GetClients()) 
-			{
-				NETWORK_MANAGER.SendData(*client->GetSocket(), movePacket);
-			}
-			gameDirector->SetState(GameDirector::GameState::TURN_COMPLETE);
-		}
 		break;
 
 	case GameDirector::GameState::TURN_COMPLETE:
@@ -176,26 +163,25 @@ void GameplayScene::OnEnter()
 
 void GameplayScene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _window, sf::TcpSocket& _socket)
 {
+	//Scene::HandleEvent(_event, _window, _socket);
 	if (_event.is < sf::Event::Closed>())
 	{
 		_window.close();
 		return;
 	}
-
-	std::cout << gameDirector->GetCurrentPlayer() << " --> " << CLIENT_MANAGER.GetSelfID() << std::endl;
+	std::cout << "My id: " << gameDirector->GetCurrentPlayer() << "--->" << CLIENT_MANAGER.GetSelfID() <<  std::endl;
 	if (CLIENT_MANAGER.GetSelfID() != gameDirector->GetCurrentPlayer())
 		return;
 
-	std::cout << "Me toca" << std::endl;
 	if (const sf::Event::KeyPressed* keyPressed = _event.getIf<sf::Event::KeyPressed>())
 	{
-		HandleKeyPress(keyPressed, _window); // teclado
+		HandleKeyPress(keyPressed, _window);
 	}
 	if (const sf::Event::MouseButtonPressed* mousePressed = _event.getIf<sf::Event::MouseButtonPressed>())
 	{
 		if (mousePressed->button == sf::Mouse::Button::Left)
 		{
-			HandleMouseClick(mousePressed, _socket); // raton
+			HandleMouseClick(mousePressed, _socket);
 		}
 	}
 }
@@ -204,6 +190,7 @@ void GameplayScene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _wind
 
 void GameplayScene::Render(sf::RenderWindow& _window)
 {
+
 	_window.clear();
 
 	_window.draw(*tableSprite);
@@ -221,17 +208,21 @@ void GameplayScene::Render(sf::RenderWindow& _window)
 
 void GameplayScene::Update(float _dt, sf::TcpSocket& _socket)
 {
+	if (CLIENT_MANAGER.GetSelfID() == gameDirector->GetCurrentPlayer())
+		return;
+	
+	// Esperar hasta que al menos un socket tenga datos disponibles (sin bloquear)
 	for (Client* client : CLIENT_MANAGER.GetClients())
 	{
-		sf::Packet packet;
+		sf::TcpSocket* socket = client->GetSocket();
 		
-		if (client->GetSocket()->receive(packet) == sf::Socket::Status::Done)
+		sf::Packet packet;
+		if (socket->receive(packet) == sf::Socket::Status::Done)
 		{
-			
-			std::cerr << "Recived packet" << std::endl;
+			std::cerr << "Recibido paquete" << std::endl;
 			PacketType type;
 			packet >> type;
-			
+
 			switch (type)
 			{
 			case DICE_ROLL:
@@ -247,18 +238,15 @@ void GameplayScene::Update(float _dt, sf::TcpSocket& _socket)
 			{
 				std::cerr << "End turn " << std::endl;
 				gameDirector->EndTurn();
+				bucles++;
 				break;
 			}
-			case MOVE_TOKEN: {
-				int playerId, newPosition;
-				packet >> playerId >> newPosition;
-				// Encuentra y mueve el Token correspondiente
-				for (Token* token : table->GetTokens()) {
-					if (token->GetPlayerId() == playerId) {
-						token->SetPosition(table->GetCell(newPosition)->GetPosition(), newPosition);
-						break;
-					}
-				}
+			case MOVE_TOKEN:
+			{
+				std::cerr << "Move token " << std::endl;
+				int tokenId, newPosition;
+				packet >> tokenId >> newPosition;
+				// Actualiza la posición aquí si hace falta
 				break;
 			}
 			default:
@@ -268,5 +256,7 @@ void GameplayScene::Update(float _dt, sf::TcpSocket& _socket)
 
 			packet.clear();
 		}
+		
 	}
+	
 }
