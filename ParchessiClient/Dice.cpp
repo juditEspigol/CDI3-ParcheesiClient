@@ -1,6 +1,5 @@
 #include "Dice.h"
 
-
 Dice::Dice(IGameStateProvider* provider) :
     ButtonPacketSender(DICE_ROLL, {}, sf::Vector2f(0, 0)),
     stateProvider(provider),
@@ -21,20 +20,22 @@ Dice::Dice(IGameStateProvider* provider) :
 
 void Dice::OnLeftClick(const sf::Event::MouseButtonPressed* _mousePressed, sf::TcpSocket& _socket)
 {
-    if (!stateProvider->IsDiceRollAllowed()) 
+    if (!stateProvider->IsDiceRollAllowed() /*|| CLIENT_MANAGER.GetSelfID() != stateProvider->GetCurrentPlayer()*/)
         return;
 
     if (_turnIndicator.getGlobalBounds().contains(sf::Vector2f(_mousePressed->position)))
     {
-        sf::Packet tempPacket;
-
         RollDice();
-
-        tempPacket << GetDiceValue();
 
         selected = true;
 
-        NETWORK_MANAGER.SendData(_socket, tempPacket);
+        sf::Packet tempPacket;
+        tempPacket << DICE_ROLL << _diceValue;
+        for (Client* client : CLIENT_MANAGER.GetClients())
+        {
+            NETWORK_MANAGER.SendData(*client->GetSocket(), tempPacket);
+        }
+
     }
 }
 

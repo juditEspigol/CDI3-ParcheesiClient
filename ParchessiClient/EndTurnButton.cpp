@@ -8,7 +8,6 @@ EndTurnButton::EndTurnButton(IGameStateProvider* provider) :
     _buttonBorder.setPosition(sf::Vector2f(0, 0));
 	_buttonBorder.setOrigin(_buttonBorder.getSize() / 2.0f);
 
-    // Cargar la fuente
     if (!_buttonFont.openFromFile("../Assets/Fonts/Arial.ttf"))
     {
         std::cerr << "Error cargando fuente" << std::endl;
@@ -19,9 +18,9 @@ EndTurnButton::EndTurnButton(IGameStateProvider* provider) :
     _buttonBorder.setFillColor(sf::Color::White);
 }
 
-void EndTurnButton::OnLeftClick(const sf::Event::MouseButtonPressed* mousePressed, sf::TcpSocket& socket)
+void EndTurnButton::OnLeftClick(const sf::Event::MouseButtonPressed* mousePressed, sf::TcpSocket& /*socket*/)
 {
-    if (!stateProvider || !stateProvider->IsEndTurnAllowed())
+    if (!stateProvider || !stateProvider->IsEndTurnAllowed() /* || CLIENT_MANAGER.GetSelfID() != stateProvider->GetCurrentPlayer() */)
         return;
 
     if (_buttonBorder.getGlobalBounds().contains(sf::Vector2f(mousePressed->position)))
@@ -32,10 +31,12 @@ void EndTurnButton::OnLeftClick(const sf::Event::MouseButtonPressed* mousePresse
         std::cout << "END TURN PRESSED" << std::endl;
 
         selected = true;
-
         tempPacket << selected;
 
-        NETWORK_MANAGER.SendData(socket, tempPacket);
+        for (Client* client : CLIENT_MANAGER.GetClients())
+        {
+            NETWORK_MANAGER.SendData(*client->GetSocket(), tempPacket);
+        }
     }
 }
 

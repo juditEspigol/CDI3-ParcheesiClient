@@ -5,6 +5,7 @@
 
 #include "ButtonPacketSender.h"
 #include "IGameStateProvider.h"
+#include "ClientManager.h"
 
 #define END_TURN_WIDTH 125
 #define END_TURN_HEIGHT 40
@@ -26,5 +27,4 @@ public:
     sf::RectangleShape GetEndButton(float width, float height);
     sf::Text GetText();
     void UnselectButton() override;
-
 };

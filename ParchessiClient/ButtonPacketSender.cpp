@@ -20,6 +20,15 @@ ButtonPacketSender::ButtonPacketSender(PacketType _packetType, std::vector<Butto
 	case CREATE_ROOM:
 		text = new TextFill("CREATE ROOM", positionText);
 		break;
+	case DICE_ROLL:
+		text = new TextFill("ROLL DICE", positionText);
+		break;
+	case END_TURN:
+		text = new TextFill("END TURN", positionText);
+		break;
+	case MOVE_TOKEN:
+		text = new TextFill("MOVE TOKEN", positionText);
+		break;
 	default:
 		break;
 	}
@@ -50,9 +59,11 @@ void ButtonPacketSender::OnLeftClick(const sf::Event::MouseButtonPressed* _mouse
 			}
 			std::cout << button->GetTextContent() << std::endl;
 			tempPacket << button->GetTextContent();
+
 		}
-		pressed = true;
 
 		NETWORK_MANAGER.SendData(_socket, tempPacket);
+
+		pressed = true;
 	}
 }

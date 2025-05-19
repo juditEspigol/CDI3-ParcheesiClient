@@ -5,5 +5,5 @@ public:
     virtual ~IGameStateProvider() = default;
     virtual bool IsDiceRollAllowed() const = 0;
     virtual bool IsEndTurnAllowed() const = 0;
+	virtual int GetCurrentPlayer() const = 0;
 };
-

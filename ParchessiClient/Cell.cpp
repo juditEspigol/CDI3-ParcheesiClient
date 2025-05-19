@@ -1,7 +1,7 @@
 #include "Cell.h"
 
 
-Cell::Cell(int id, sf::Vector2f position, bool _isHoriz)
+Cell::Cell(int id, sf::Vector2f position, bool _isHoriz, bool _isFinal)
 {
 	_id = id;
 	_position = position;	
@@ -9,13 +9,8 @@ Cell::Cell(int id, sf::Vector2f position, bool _isHoriz)
 	_shape.setFillColor(sf::Color::Magenta);
 	_shape.setSize(newSize);
 	_shape.setPosition(position);
+	_isFinalCell = _isFinal;
 	_isHorizontal = _isHoriz;
-}
-
-void Cell::Draw(sf::RenderWindow& window)
-{
-	window.draw(_shape);
-	window.display();
 }
 
 void Cell::AddToken(Token* token)
@@ -48,27 +43,59 @@ void Cell::AddToken(Token* token)
 		}
 		return;
 	}
+	else if (_isFinalCell)
+	{
+		std::vector<sf::Vector2f> baseOffsets = {};
 
+		if (_isHorizontal)
+		{
+			baseOffsets =
+			{
+				sf::Vector2f(0, 0),
+				sf::Vector2f(-25, 0),
+				sf::Vector2f(25, 0),
+				sf::Vector2f(0, 25)
+			};		
+		}
+		else
+		{
+			baseOffsets =
+			{
+				sf::Vector2f(0, 0),
+				sf::Vector2f(-25, 0),
+				sf::Vector2f(0, 25),
+				sf::Vector2f(0, -25)
+			};
+		}
+
+		_tokens.push_back(token);
+
+		for (size_t i = 0; i < _tokens.size(); ++i)
+		{
+			if (i < baseOffsets.size())
+			{
+				_tokens[i]->SetPosition(_position + baseOffsets[i], _id);
+			}
+		}
+
+		if (_tokens.size() == 4)
+		{
+			std::cout << "Has ganado" << std::endl;
+		}
+	}
 	else
 	{
 		if (_isHorizontal)
 		{
 			if (_tokens.size() == 0)
-			{
 				token->SetPosition(_position + sf::Vector2f(-20, 0), _id);
-			}
 			else
-			{
 				token->SetPosition(_position + sf::Vector2f(20, 0), _id);
-			}
 		}
-
 		else
 		{
 			if (_tokens.size() == 0)
-			{
 				token->SetPosition(_position + sf::Vector2f(0, -20), _id);
-			}
 			else
 				token->SetPosition(_position + sf::Vector2f(0, 20), _id);
 		}

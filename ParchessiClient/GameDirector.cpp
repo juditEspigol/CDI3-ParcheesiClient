@@ -2,22 +2,9 @@
 
 GameDirector::GameDirector(Table& table) :
     _table(table), 
-    _currentPlayer(1), 
-    _diceValue(0),
-    _currentState(GameState::WAITING_TURN), 
-    _rng(std::random_device{}()) 
-{
-    _turnIndicator.setSize(sf::Vector2f(PLAYER_INDICATOR_SIZE, PLAYER_INDICATOR_SIZE));
-    _turnIndicator.setOrigin(sf::Vector2f(PLAYER_INDICATOR_SIZE * 0.5f, PLAYER_INDICATOR_SIZE * 0.5f));
-    _turnIndicator.setPosition(sf::Vector2f(0, 0));
-    _turnIndicator.setOutlineThickness(2.0f);
-    _turnIndicator.setOutlineColor(sf::Color::Black);
-
-    if (!_font.openFromFile("../Assets/Fonts/Dice.ttf")) 
-    {
-        std::cerr << "Error cargando fuente" << std::endl;
-    }
-}
+    _currentPlayer(1),
+    _currentState(GameState::WAITING_TURN) 
+{}
 
 void GameDirector::StartGame()
 {
@@ -29,44 +16,26 @@ void GameDirector::StartPlayerTurn(int playerId)
 {
     _currentPlayer = playerId;
     _currentState = GameState::WAITING_TURN;
-    std::cout << "Waiting Turn" << std::endl;
+    std::cout << "PLAYER TURN -> " << _currentPlayer << std::endl;
     _movableTokens.clear();
     _selectedToken = new Token(-1, -1);
 }
 
-void GameDirector::RollDice()
-{
-    if (_currentState != GameState::WAITING_TURN) return;
-
-    std::uniform_int_distribution<int> dist(1, 6);
-    _diceValue = dist(_rng);
-
-    std::cout << "Dice Value = " << _diceValue << std::endl;
-
-    CalculateMovableTokens();
-}
-
-void GameDirector::ForceDiceValue(int value)
-{
-    _diceValue = value;
-
-    std::cout << "Forced Dice Value = " << _diceValue << std::endl;
-
-    CalculateMovableTokens();
-}
-
 void GameDirector::SelectToken(sf::Vector2i mousePos)
 {
-    if (_currentState != GameState::DICE_ROLLED) return;
+    if (_currentState != GameState::DICE_ROLLED) 
+        return;
 
     for (Token* currentToken : _movableTokens)
     {
         sf::Vector2f distance = static_cast<sf::Vector2f>(mousePos) - currentToken->GetPosition();
         float length = std::sqrt(distance.x * distance.x + distance.y * distance.y);
         //std::cout << "Distance between mouse and token: " << length << std::endl;
+
         if (length <= TOKEN_RADIUS && currentToken->GetIsSelectable())
         {
             _selectedToken = currentToken;
+            _newTokenPosition = currentToken->Move(_dice->GetDiceValue());
             _currentState = GameState::PIECE_SELECTED;
             MoveSelectedToken();
         }
@@ -77,7 +46,7 @@ void GameDirector::MoveSelectedToken()
 {
     if (_currentState != GameState::PIECE_SELECTED) return;
 
-    _table.UpdatePositions(_selectedToken->Move(_diceValue));
+    _table.UpdatePositions(_selectedToken->Move(_dice->GetDiceValue()));
 
     _currentState = GameState::TURN_COMPLETE;
 
@@ -86,61 +55,13 @@ void GameDirector::MoveSelectedToken()
     {
         currentToken->SetSelectable(false);
     }
-
-    EndTurn();
 }
-
-sf::Text GameDirector::GetDiceText()
-{
-    sf::Text text(_font);
-
-    text.setFont(_font);
-    text.setCharacterSize(DICE_INDICATOR_SIZE);
-    text.setFillColor(sf::Color::Black);
-    text.setStyle(sf::Text::Bold);
-
-    text.setString(std::to_string(_diceValue));
-    // Centrar el texto en el indicador
-    sf::FloatRect textRect = text.getLocalBounds();
-
-    text.setOrigin(sf::Vector2f(
-        textRect.position.x + textRect.size.x / 2.0f,
-        textRect.position.y + textRect.size.y / 2.0f
-    ));
-
-    text.setPosition(_turnIndicator.getPosition());
-    return text;
-}
-
-sf::RectangleShape GameDirector::GetTurnIndicator(float width, float height)
-{
-    sf::RectangleShape indicator = _turnIndicator;
-    _turnIndicator.setPosition(sf::Vector2f(width * 0.5f, height * 0.5f));
-
-    switch (_currentPlayer) {
-        case 1: 
-            indicator.setFillColor(sf::Color::Blue); 
-            break;
-        case 2: 
-            indicator.setFillColor(sf::Color::Red); 
-            break;
-        case 3: 
-            indicator.setFillColor(sf::Color::Green);
-            break;
-        case 4: 
-            indicator.setFillColor(sf::Color::Yellow);
-            break;
-        default: 
-            indicator.setFillColor(sf::Color::White); 
-            break;
-    }
-
-    return indicator;
-}
-
 
 void GameDirector::CalculateMovableTokens()
 {
+    if (_currentState != GameState::WAITING_TURN)
+        return;
+
     _currentState = GameState::DICE_ROLLED;
 
     for (Token* currentToken : _table.GetTokens())
@@ -153,7 +74,7 @@ void GameDirector::CalculateMovableTokens()
                 _movableTokens.push_back(currentToken);
             }
 
-            if (currentToken->GetIsInBase() && _diceValue == 5)
+            if (currentToken->GetIsInBase() && _dice->GetDiceValue() == 5)
             {
                 currentToken->SetSelectable(CanTokenMove(*currentToken));
                 _movableTokens.push_back(currentToken);
@@ -161,16 +82,17 @@ void GameDirector::CalculateMovableTokens()
         }
     }
 
+    _dice->UnselectButton();
+
     if (_movableTokens.empty())
     {
         _currentState = GameState::TURN_COMPLETE;
-        EndTurn();
     }
 }
 
 bool GameDirector::CanTokenMove(Token& token)
 {
-    // Comrpobar si el token es movible
+    // Comprobar si el token es movible
     return true;
 }
 
@@ -187,6 +109,24 @@ void GameDirector::EndTurn()
 {
     if (_currentState != GameState::TURN_COMPLETE) return;
 
+	_endTurnButton->UnselectButton();
+	_dice->SetDiceValue(0);
+
     _currentPlayer = _currentPlayer % 4 + 1;
     StartPlayerTurn(_currentPlayer);
+}
+
+bool GameDirector::IsDiceRollAllowed() const
+{
+	return _currentState == GameState::WAITING_TURN;
+}
+
+bool GameDirector::IsEndTurnAllowed() const
+{
+	return _currentState == GameState::TURN_COMPLETE;
+}
+
+int GameDirector::GetCurrentPlayer() const
+{
+    return _currentPlayer;
 }
