@@ -74,6 +74,9 @@ void GameplayScene::HandleMouseClick(const sf::Event::MouseButtonPressed* mouseP
 
 	PrintCurrentState(currentState);
 
+	Token* movedToken = gameDirector->GetSelectedToken();
+	int newPos = gameDirector->GetNewTokenPosition();
+
 	switch (currentState)
 	{
 	case GameDirector::GameState::WAITING_TURN:
@@ -86,6 +89,17 @@ void GameplayScene::HandleMouseClick(const sf::Event::MouseButtonPressed* mouseP
 
 	case GameDirector::GameState::DICE_ROLLED:
 		gameDirector->SelectToken(mousePressed->position);
+
+		if (movedToken) {
+			sf::Packet movePacket;
+			movePacket << MOVE_TOKEN << movedToken->GetPlayerId() << newPos;
+			for (Client* client : CLIENT_MANAGER.GetClients())
+			{
+				NETWORK_MANAGER.SendData(*client->GetSocket(), movePacket);
+			}
+			gameDirector->SetState(GameDirector::GameState::TURN_COMPLETE);
+		}
+
 		break;
 
 	case GameDirector::GameState::TURN_COMPLETE:

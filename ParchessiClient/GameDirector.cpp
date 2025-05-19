@@ -5,13 +5,11 @@ GameDirector::GameDirector(Table& table) :
     _currentPlayer(1),
     _currentState(GameState::WAITING_TURN) 
 {}
-
 void GameDirector::StartGame()
 {
     _currentPlayer = 1;
     StartPlayerTurn(_currentPlayer);
 }
-
 void GameDirector::StartPlayerTurn(int playerId)
 {
     _currentPlayer = playerId;
@@ -20,7 +18,6 @@ void GameDirector::StartPlayerTurn(int playerId)
     _movableTokens.clear();
     _selectedToken = new Token(-1, -1);
 }
-
 void GameDirector::SelectToken(sf::Vector2i mousePos)
 {
     if (_currentState != GameState::DICE_ROLLED) 
@@ -35,12 +32,12 @@ void GameDirector::SelectToken(sf::Vector2i mousePos)
         if (length <= TOKEN_RADIUS && currentToken->GetIsSelectable())
         {
             _selectedToken = currentToken;
+            _newTokenPosition = currentToken->Move(_dice->GetDiceValue());
             _currentState = GameState::PIECE_SELECTED;
             MoveSelectedToken();
         }
     }
 }
-
 void GameDirector::MoveSelectedToken()
 {
     if (_currentState != GameState::PIECE_SELECTED) return;
@@ -55,7 +52,6 @@ void GameDirector::MoveSelectedToken()
         currentToken->SetSelectable(false);
     }
 }
-
 void GameDirector::CalculateMovableTokens()
 {
     if (_currentState != GameState::WAITING_TURN)
@@ -88,13 +84,11 @@ void GameDirector::CalculateMovableTokens()
         _currentState = GameState::TURN_COMPLETE;
     }
 }
-
 bool GameDirector::CanTokenMove(Token& token)
 {
     // Comprobar si el token es movible
     return true;
 }
-
 bool GameDirector::IsTokenFromCurrentPlayer(Token& token)
 {
     if (_currentPlayer == token.GetPlayerId())
@@ -103,7 +97,6 @@ bool GameDirector::IsTokenFromCurrentPlayer(Token& token)
     }
     return false;
 }
-
 void GameDirector::EndTurn()
 {
     if (_currentState != GameState::TURN_COMPLETE) return;
@@ -114,17 +107,14 @@ void GameDirector::EndTurn()
     _currentPlayer = _currentPlayer % 4 + 1;
     StartPlayerTurn(_currentPlayer);
 }
-
 bool GameDirector::IsDiceRollAllowed() const
 {
 	return _currentState == GameState::WAITING_TURN;
 }
-
 bool GameDirector::IsEndTurnAllowed() const
 {
 	return _currentState == GameState::TURN_COMPLETE;
 }
-
 int GameDirector::GetCurrentPlayer() const
 {
     return _currentPlayer;
