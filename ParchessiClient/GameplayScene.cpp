@@ -212,54 +212,51 @@ void GameplayScene::Update(float _dt, sf::TcpSocket& _socket)
 		return;
 	
 	// Esperar hasta que al menos un socket tenga datos disponibles (sin bloquear)
-	if (NETWORK_MANAGER.GetSelector().wait(sf::seconds(0.f))) // no bloqueante (espera 0 segundos)
+	for (Client* client : CLIENT_MANAGER.GetClients())
 	{
-		for (Client* client : CLIENT_MANAGER.GetClients())
+		sf::TcpSocket* socket = client->GetSocket();
+		
+		sf::Packet packet;
+		if (socket->receive(packet) == sf::Socket::Status::Done)
 		{
-			sf::TcpSocket* socket = client->GetSocket();
-			if (NETWORK_MANAGER.GetSelector().isReady(*socket))
+			std::cerr << "Recibido paquete" << std::endl;
+			PacketType type;
+			packet >> type;
+
+			switch (type)
 			{
-				sf::Packet packet;
-				if (socket->receive(packet) == sf::Socket::Status::Done)
-				{
-					std::cerr << "Recibido paquete" << std::endl;
-					PacketType type;
-					packet >> type;
-
-					switch (type)
-					{
-					case DICE_ROLL:
-					{
-						std::cerr << "Dice roll " << std::endl;
-						int diceValue;
-						packet >> diceValue;
-						dice->ForceDiceValue(diceValue);
-						gameDirector->CalculateMovableTokens();
-						break;
-					}
-					case END_TURN:
-					{
-						std::cerr << "End turn " << std::endl;
-						gameDirector->EndTurn();
-						bucles++;
-						break;
-					}
-					case MOVE_TOKEN:
-					{
-						std::cerr << "Move token " << std::endl;
-						int tokenId, newPosition;
-						packet >> tokenId >> newPosition;
-						// Actualiza la posición aquí si hace falta
-						break;
-					}
-					default:
-						std::cerr << "Tipo de paquete desconocido" << std::endl;
-						break;
-					}
-
-					packet.clear();
-				}
+			case DICE_ROLL:
+			{
+				std::cerr << "Dice roll " << std::endl;
+				int diceValue;
+				packet >> diceValue;
+				dice->ForceDiceValue(diceValue);
+				gameDirector->CalculateMovableTokens();
+				break;
 			}
+			case END_TURN:
+			{
+				std::cerr << "End turn " << std::endl;
+				gameDirector->EndTurn();
+				bucles++;
+				break;
+			}
+			case MOVE_TOKEN:
+			{
+				std::cerr << "Move token " << std::endl;
+				int tokenId, newPosition;
+				packet >> tokenId >> newPosition;
+				// Actualiza la posición aquí si hace falta
+				break;
+			}
+			default:
+				std::cerr << "Tipo de paquete desconocido" << std::endl;
+				break;
+			}
+
+			packet.clear();
 		}
+		
 	}
+	
 }
