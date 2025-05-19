@@ -76,7 +76,7 @@ void NetworkManager::ConnectToSocket(sf::IpAddress _address)
 	}
 
 	CLIENT_MANAGER.AddClient(newClient);
-
+	newClient->GetSocket()->setBlocking(false);
 	newClient->SetID(CLIENT_MANAGER.GetSizeClients());
 	std::cout << "Connect to other client --> (" << newClient->GetID() << ") --> " << newClient->GetSocket()->getRemoteAddress().value() << std::endl;
 
