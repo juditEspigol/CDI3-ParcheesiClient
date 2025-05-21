@@ -29,16 +29,6 @@ void Dice::OnLeftClick(const sf::Event::MouseButtonPressed* _mousePressed, sf::T
 
         selected = true;
 
-        sf::Packet tempPacket;  
-
-        for (Client* client : CLIENT_MANAGER.GetClients())
-        {
-            tempPacket << DICE_ROLL << _diceValue;
-
-            std::cout << "Dice rolled --> " << client->GetIP() << std::endl;
-            NETWORK_MANAGER.SendData(*client->GetSocket(), tempPacket);
-            tempPacket.clear();
-        }
 
     }
 }

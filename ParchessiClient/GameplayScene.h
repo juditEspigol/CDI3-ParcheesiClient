@@ -28,6 +28,7 @@ public:
 
 	void SendDicePacket();
 	void SendTokenPacket(Token* token);
+	void SendEndTurn();
 
 	void HandleEvent(const sf::Event& _event, sf::RenderWindow& _window, sf::TcpSocket& _socket) override;
 	void Render(sf::RenderWindow& _window) override;

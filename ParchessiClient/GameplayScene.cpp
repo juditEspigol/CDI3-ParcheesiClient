@@ -101,6 +101,7 @@ void GameplayScene::HandleMouseClick(const sf::Event::MouseButtonPressed* mouseP
 		endTurnButton->OnLeftClick(mousePressed, socket);
 		if (endTurnButton->IsSelected())
 		{
+			SendEndTurn();
 			gameDirector->EndTurn();
 		}
 		break;
@@ -254,6 +255,16 @@ void GameplayScene::SendTokenPacket(Token* token)
 	{
 		movePacket << MOVE_TOKEN << token->GetTokenId() << dice->GetDiceValue();
 		NETWORK_MANAGER.SendData(*client->GetSocket(), movePacket);
+	}
+}
+
+void GameplayScene::SendEndTurn()
+{
+	sf::Packet packet;
+	for (Client* client : CLIENT_MANAGER.GetClients())
+	{
+		packet << PacketType::END_TURN;
+		NETWORK_MANAGER.SendData(*client->GetSocket(), packet);
 	}
 }
 

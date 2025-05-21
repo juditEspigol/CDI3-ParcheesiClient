@@ -28,15 +28,7 @@ void EndTurnButton::OnLeftClick(const sf::Event::MouseButtonPressed* mousePresse
         sf::Packet tempPacket;
 
         std::cout << "END TURN PRESSED" << std::endl;
-        selected = true;
-
-        for (Client* client : CLIENT_MANAGER.GetClients())
-        {
-            tempPacket << packetType;
-            tempPacket << selected;
-            NETWORK_MANAGER.SendData(*client->GetSocket(), tempPacket);
-            tempPacket.clear();
-        }
+        selected = true;        
     }
 }
 
