@@ -75,13 +75,14 @@ void GameplayScene::HandleMouseClick(const sf::Event::MouseButtonPressed* mouseP
 	PrintCurrentState(currentState);
 
 	Token* movedToken;
-
+	
 	switch (currentState)
 	{
 	case GameDirector::GameState::WAITING_TURN:
 		dice->OnLeftClick(mousePressed, socket);
 		if (dice->IsSelected())
 		{
+			SendDicePacket();
 			gameDirector->CalculateMovableTokens();
 		}
 		break;
@@ -91,17 +92,9 @@ void GameplayScene::HandleMouseClick(const sf::Event::MouseButtonPressed* mouseP
 		movedToken = gameDirector->GetSelectedToken();
 
 		if (movedToken) {
-			sf::Packet movePacket;
-			for (Client* client : CLIENT_MANAGER.GetClients())
-			{
-				std::cout << "Moved Tocken: ID:" << movedToken->GetTokenId()
-					<< " Dice Value:" << dice->GetDiceValue() << std::endl;
-				movePacket << MOVE_TOKEN << movedToken->GetTokenId() << dice->GetDiceValue();
-				NETWORK_MANAGER.SendData(*client->GetSocket(), movePacket);
-			}
+			SendTokenPacket(movedToken);
 			gameDirector->SetState(GameDirector::GameState::TURN_COMPLETE);
 		}
-
 		break;
 
 	case GameDirector::GameState::TURN_COMPLETE:
@@ -237,6 +230,30 @@ void GameplayScene::OnReceiveMoveToken(int tokenID, int diceValue)
 			token->Move(diceValue);
 			break;
 		}
+	}
+}
+
+void GameplayScene::SendDicePacket()
+{
+	sf::Packet packet;
+	std::cout << "Sending Packet Dice: " << dice->GetDiceValue() << std::endl;
+
+	for (Client* client : CLIENT_MANAGER.GetClients())
+	{
+		packet << DICE_ROLL << dice->GetDiceValue();
+		NETWORK_MANAGER.SendData(*client->GetSocket(), packet);
+	}
+}
+
+void GameplayScene::SendTokenPacket(Token* token)
+{
+	sf::Packet movePacket;
+	std::cout << "Send Packet: Moved Tocken: ID:" << token->GetTokenId()
+		<< " Dice Value:" << dice->GetDiceValue() << std::endl;
+	for (Client* client : CLIENT_MANAGER.GetClients())
+	{
+		movePacket << MOVE_TOKEN << token->GetTokenId() << dice->GetDiceValue();
+		NETWORK_MANAGER.SendData(*client->GetSocket(), movePacket);
 	}
 }
 
