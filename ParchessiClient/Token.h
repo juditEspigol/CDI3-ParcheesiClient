@@ -13,17 +13,21 @@ private:
 	int _playerId;
 	int _exitCell;
 	int _finalCell;
+
 	bool _inBase;
 	bool _isMoving;
 	bool _selectable;
 	bool _isLastZone;
+
 	int _idPosition;
+	int _tokenId;
+
 	sf::Vector2f _position;
 	sf::CircleShape _shape;
 	sf::CircleShape _selectionIndicator;
 
 public:
-	Token(int playerId, int _idPosition);
+	Token(int playerId, int _idPosition, int tokenID);
 	void Draw(sf::RenderWindow& window);
 	int Move(int value);
 	void SetPosition(sf::Vector2f newPositon, int idCell);
@@ -41,6 +45,7 @@ public:
 	inline bool GetIsInBase() { return _inBase; }
 	inline int GetFinalCellId() { return _finalCell; }
 	inline int GetPlayerId() { return _playerId;  }
+	inline int GetTokenId() { return _tokenId; }
 	inline sf::Vector2f GetPosition() { return _position; }
 
 };

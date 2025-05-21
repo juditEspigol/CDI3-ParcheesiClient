@@ -1,7 +1,7 @@
 #include "Token.h"
 
 
-Token::Token(int playerId, int _idPos)
+Token::Token(int playerId, int _idPos, int tokenID)
 {
 	switch (playerId)
 	{
@@ -33,6 +33,8 @@ Token::Token(int playerId, int _idPos)
 	_isMoving = false;
 	_playerId = playerId;
 	_selectable = false;
+	_tokenId = tokenID;
+
 
 	_shape.setOrigin(sf::Vector2f(TOKEN_RADIUS, TOKEN_RADIUS));
 	_shape.setRadius(TOKEN_RADIUS);

@@ -80,12 +80,13 @@
 
         std::cout << "Total de celdas cargadas: " << _cells.size() << std::endl;
 
-    
+        int count = 0;
         for (int i = 1; i <= 4; i++)
         {
             for (int j = 0; j < 4; j++)
             {
-                Token* token = new Token(i, 2);
+                count++;
+                Token* token = new Token(i, 2, count);
                 token->UpdateIdPosition(1000 + token->GetPlayerId());
                 GetCell(token->GetIdPosition())->AddToken(token);
                 _tokens.push_back(token);
