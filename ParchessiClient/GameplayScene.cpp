@@ -74,6 +74,9 @@ void GameplayScene::HandleMouseClick(const sf::Event::MouseButtonPressed* mouseP
 
 	PrintCurrentState(currentState);
 
+	Token* movedToken = gameDirector->GetSelectedToken();
+	int newPos = gameDirector->GetNewTokenPosition();
+
 	switch (currentState)
 	{
 	case GameDirector::GameState::WAITING_TURN:
@@ -85,10 +88,6 @@ void GameplayScene::HandleMouseClick(const sf::Event::MouseButtonPressed* mouseP
 		break;
 
 	case GameDirector::GameState::DICE_ROLLED:
-
-		Token* movedToken = gameDirector->GetSelectedToken();
-		int newPos = gameDirector->GetNewTokenPosition();
-
 		gameDirector->SelectToken(mousePressed->position);
 
 		if (movedToken) {
