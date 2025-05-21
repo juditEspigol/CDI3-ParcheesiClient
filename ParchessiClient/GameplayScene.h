@@ -20,6 +20,13 @@ public:
 	~GameplayScene();
 	void OnEnter() override;
 
+	void OnReceivePacket(sf::Packet packet);
+
+	void OnReceiveDiceRoll(int diceValue);
+	void OnReceiveEndTurn();
+	void OnReceiveMoveToken(int tokenID, int diceValue);
+
+
 	void HandleEvent(const sf::Event& _event, sf::RenderWindow& _window, sf::TcpSocket& _socket) override;
 	void Render(sf::RenderWindow& _window) override;
 	void Update(float _dt, sf::TcpSocket& _socket) override;

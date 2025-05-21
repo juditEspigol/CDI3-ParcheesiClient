@@ -74,8 +74,6 @@ void GameplayScene::HandleMouseClick(const sf::Event::MouseButtonPressed* mouseP
 
 	PrintCurrentState(currentState);
 
-	Token* movedToken = gameDirector->GetSelectedToken();
-	int newPos = gameDirector->GetNewTokenPosition();
 
 	switch (currentState)
 	{
@@ -89,12 +87,14 @@ void GameplayScene::HandleMouseClick(const sf::Event::MouseButtonPressed* mouseP
 
 	case GameDirector::GameState::DICE_ROLLED:
 		gameDirector->SelectToken(mousePressed->position);
-
+		Token* movedToken = gameDirector->GetSelectedToken();
 		if (movedToken) {
 			sf::Packet movePacket;
-			movePacket << MOVE_TOKEN << movedToken->GetTokenId() << newPos;
 			for (Client* client : CLIENT_MANAGER.GetClients())
 			{
+				std::cout << "Moved Tocken: ID:" << movedToken->GetTokenId()
+					<< " Dice Value:" << dice->GetDiceValue() << std::endl;
+				movePacket << MOVE_TOKEN << movedToken->GetTokenId() << dice->GetDiceValue();
 				NETWORK_MANAGER.SendData(*client->GetSocket(), movePacket);
 			}
 			gameDirector->SetState(GameDirector::GameState::TURN_COMPLETE);
@@ -175,6 +175,69 @@ void GameplayScene::OnEnter()
 {
 }
 
+void GameplayScene::OnReceivePacket(sf::Packet packet)
+{
+	std::cerr << "Recibido paquete" << std::endl;
+	PacketType type;
+	packet >> type;
+
+	Token* movedToken = gameDirector->GetSelectedToken();
+	int newPos = gameDirector->GetNewTokenPosition();
+
+	switch (type)
+	{
+	case DICE_ROLL:
+	{
+		int diceValue;
+		packet >> diceValue;
+		OnReceiveDiceRoll(diceValue);
+		break;
+	}
+	case END_TURN:
+	{
+		OnReceiveEndTurn();
+		break;
+	}
+	case MOVE_TOKEN: {
+		int tokenId, newPosition;
+		packet >> tokenId >> newPosition;
+		OnReceiveMoveToken(tokenId, newPosition);
+		break;
+	}
+	default:
+		std::cerr << "Tipo de paquete desconocido" << std::endl;
+		break;
+	}
+
+	packet.clear();
+}
+
+void GameplayScene::OnReceiveDiceRoll(int diceValue)
+{
+	dice->ForceDiceValue(diceValue);
+	gameDirector->CalculateMovableTokens();
+
+}
+
+void GameplayScene::OnReceiveEndTurn()
+{
+	std::cerr << "End turn " << std::endl;
+	gameDirector->EndTurn();
+	bucles++;
+}
+
+void GameplayScene::OnReceiveMoveToken(int tokenID, int diceValue)
+{
+	for (Token* token : table->GetTokens())
+	{
+		if (token->GetTokenId() == tokenID)
+		{
+			token->Move(diceValue);
+			break;
+		}
+	}
+}
+
 void GameplayScene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _window, sf::TcpSocket& _socket)
 {
 	//Scene::HandleEvent(_event, _window, _socket);
@@ -233,61 +296,7 @@ void GameplayScene::Update(float _dt, sf::TcpSocket& _socket)
 		sf::Packet packet;
 		if (socket->receive(packet) == sf::Socket::Status::Done)
 		{
-			std::cerr << "Recibido paquete" << std::endl;
-			PacketType type;
-			packet >> type;
-
-			Token* movedToken = gameDirector->GetSelectedToken();
-			int newPos = gameDirector->GetNewTokenPosition();
-
-			switch (type)
-			{
-			case DICE_ROLL:
-			{
-				std::cerr << "Dice roll " << std::endl;
-				int diceValue;
-				packet >> diceValue;
-				dice->ForceDiceValue(diceValue);
-				gameDirector->CalculateMovableTokens();
-
-				if (movedToken) {
-					sf::Packet movePacket;
-					for (Client* client : CLIENT_MANAGER.GetClients())
-					{
-						movePacket << MOVE_TOKEN << movedToken->GetPlayerId() << newPos;
-						NETWORK_MANAGER.SendData(*client->GetSocket(), movePacket);
-					}
-					gameDirector->SetState(GameDirector::GameState::TURN_COMPLETE);
-				}
-
-				break;
-			}
-			case END_TURN:
-			{
-				std::cerr << "End turn " << std::endl;
-				gameDirector->EndTurn();
-				bucles++;
-				break;
-			}
-			case MOVE_TOKEN: {
-				int tokenId, newPosition;
-				packet >> tokenId >> newPosition;
-				// Encuentra y mueve el Token correspondiente
-				for (Token* token : table->GetTokens()) 
-				{
-					if (token->GetTokenId() == tokenId) 
-					{
-						token->SetPosition(table->GetCell(newPosition)->GetPosition(), newPosition);
-						break;
-					}
-				}
-			}
-			default:
-				std::cerr << "Tipo de paquete desconocido" << std::endl;
-				break;
-			}
-
-			packet.clear();
+			
 		}
 		
 	}
