@@ -74,6 +74,7 @@ void GameplayScene::HandleMouseClick(const sf::Event::MouseButtonPressed* mouseP
 
 	PrintCurrentState(currentState);
 
+	Token* movedToken;
 
 	switch (currentState)
 	{
@@ -87,7 +88,8 @@ void GameplayScene::HandleMouseClick(const sf::Event::MouseButtonPressed* mouseP
 
 	case GameDirector::GameState::DICE_ROLLED:
 		gameDirector->SelectToken(mousePressed->position);
-		Token* movedToken = gameDirector->GetSelectedToken();
+		movedToken = gameDirector->GetSelectedToken();
+
 		if (movedToken) {
 			sf::Packet movePacket;
 			for (Client* client : CLIENT_MANAGER.GetClients())
