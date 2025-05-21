@@ -271,11 +271,13 @@ void GameplayScene::Update(float _dt, sf::TcpSocket& _socket)
 				break;
 			}
 			case MOVE_TOKEN: {
-				int playerId, newPosition;
-				packet >> playerId >> newPosition;
+				int tokenId, newPosition;
+				packet >> tokenId >> newPosition;
 				// Encuentra y mueve el Token correspondiente
-				for (Token* token : table->GetTokens()) {
-					if (token->GetPlayerId() == playerId) {
+				for (Token* token : table->GetTokens()) 
+				{
+					if (token->GetTokenId() == tokenId) 
+					{
 						token->SetPosition(table->GetCell(newPosition)->GetPosition(), newPosition);
 						break;
 					}
