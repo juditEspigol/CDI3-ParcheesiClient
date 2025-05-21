@@ -183,7 +183,7 @@ void GameplayScene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _wind
 		_window.close();
 		return;
 	}
-	std::cout << "My id: " << gameDirector->GetCurrentPlayer() << "--->" << CLIENT_MANAGER.GetSelfID() <<  std::endl;
+	//std::cout << "My id: " << gameDirector->GetCurrentPlayer() << "--->" << CLIENT_MANAGER.GetSelfID() <<  std::endl;
 	if (CLIENT_MANAGER.GetSelfID() != gameDirector->GetCurrentPlayer())
 		return;
 
@@ -237,6 +237,9 @@ void GameplayScene::Update(float _dt, sf::TcpSocket& _socket)
 			PacketType type;
 			packet >> type;
 
+			Token* movedToken = gameDirector->GetSelectedToken();
+			int newPos = gameDirector->GetNewTokenPosition();
+
 			switch (type)
 			{
 			case DICE_ROLL:
@@ -246,6 +249,17 @@ void GameplayScene::Update(float _dt, sf::TcpSocket& _socket)
 				packet >> diceValue;
 				dice->ForceDiceValue(diceValue);
 				gameDirector->CalculateMovableTokens();
+
+				if (movedToken) {
+					sf::Packet movePacket;
+					for (Client* client : CLIENT_MANAGER.GetClients())
+					{
+						movePacket << MOVE_TOKEN << movedToken->GetPlayerId() << newPos;
+						NETWORK_MANAGER.SendData(*client->GetSocket(), movePacket);
+					}
+					gameDirector->SetState(GameDirector::GameState::TURN_COMPLETE);
+				}
+
 				break;
 			}
 			case END_TURN:
@@ -255,13 +269,16 @@ void GameplayScene::Update(float _dt, sf::TcpSocket& _socket)
 				bucles++;
 				break;
 			}
-			case MOVE_TOKEN:
-			{
-				std::cerr << "Move token " << std::endl;
-				int tokenId, newPosition;
-				packet >> tokenId >> newPosition;
-				// Actualiza la posición aquí si hace falta
-				break;
+			case MOVE_TOKEN: {
+				int playerId, newPosition;
+				packet >> playerId >> newPosition;
+				// Encuentra y mueve el Token correspondiente
+				for (Token* token : table->GetTokens()) {
+					if (token->GetPlayerId() == playerId) {
+						token->SetPosition(table->GetCell(newPosition)->GetPosition(), newPosition);
+						break;
+					}
+				}
 			}
 			default:
 				std::cerr << "Tipo de paquete desconocido" << std::endl;
