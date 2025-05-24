@@ -63,10 +63,9 @@ void Token::OnLeftClick(const sf::Event::MouseButtonPressed* _mousePressed, sf::
 		int diceValue = dynamic_cast<IGameStateProvider*>(_stateProvider)->GetDiceValue();
 		int newPosition = Move(diceValue);
 
-
 		for (Client* client : CLIENT_MANAGER.GetClients())
 		{
-			packet << packetType << _tokenId << selected;
+			packet << packetType << _tokenId << newPosition;
 			NETWORK_MANAGER.SendData(*client->GetSocket(), packet);
 		}
 	}

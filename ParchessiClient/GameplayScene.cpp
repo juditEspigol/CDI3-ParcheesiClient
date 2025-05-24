@@ -92,7 +92,7 @@ void GameplayScene::HandleMouseClick(const sf::Event::MouseButtonPressed* mouseP
 		movedToken = gameDirector->GetSelectedToken();
 
 		if (movedToken) {
-			SendTokenPacket(movedToken);
+			//SendTokenPacket(movedToken);
 			gameDirector->SetState(GameDirector::GameState::TURN_COMPLETE);
 		}
 		break;
@@ -229,6 +229,7 @@ void GameplayScene::OnReceiveMoveToken(int tokenID, int diceValue)
 		if (token->GetTokenId() == tokenID)
 		{
 			token->Move(diceValue);
+			table->UpdatePositions(diceValue);
 			break;
 		}
 	}

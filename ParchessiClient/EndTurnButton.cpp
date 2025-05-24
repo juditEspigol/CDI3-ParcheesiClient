@@ -26,8 +26,7 @@ void EndTurnButton::OnLeftClick(const sf::Event::MouseButtonPressed* mousePresse
     if (_buttonBorder.getGlobalBounds().contains(sf::Vector2f(mousePressed->position)))
     {
         sf::Packet packet;
-
-        selected = true;        
+        selected = true;
 
 		for (Client* client : CLIENT_MANAGER.GetClients())
 		{
