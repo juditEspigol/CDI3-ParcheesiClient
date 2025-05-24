@@ -78,6 +78,11 @@ Table::Table()
         }
     }
 
+
+}
+
+void Table::InitTokens(IGameStateProvider* provider)
+{
     std::cout << "Total de celdas cargadas: " << _cells.size() << std::endl;
 
     int count = 0;
@@ -86,12 +91,12 @@ Table::Table()
         for (int j = 0; j < 4; j++)
         {
             count++;
-            Token* token = new Token(i, 2, count);
+            Token* token = new Token(i, 2, count, provider);
             token->UpdateIdPosition(1000 + token->GetPlayerId());
             GetCell(token->GetIdPosition())->AddToken(token);
             _tokens.push_back(token);
         }
-    }   
+    }
 }
 
 void Table::Draw(sf::RenderWindow& window)

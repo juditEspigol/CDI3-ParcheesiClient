@@ -1,7 +1,7 @@
 #include "Token.h"
 
 
-Token::Token(int playerId, int _idPos, int tokenID) :
+Token::Token(int playerId, int _idPos, int tokenID, IGameStateProvider* provider) :
 ButtonPacketSender(MOVE_TOKEN, {}, sf::Vector2f(0, 0))
 {
 	switch (playerId)
@@ -35,6 +35,7 @@ ButtonPacketSender(MOVE_TOKEN, {}, sf::Vector2f(0, 0))
 	_playerId = playerId;
 	selected = false;
 	_tokenId = tokenID;
+	_stateProvider = provider;
 
 	_shape.setOrigin(sf::Vector2f(TOKEN_RADIUS, TOKEN_RADIUS));
 	_shape.setRadius(TOKEN_RADIUS);
@@ -50,11 +51,14 @@ ButtonPacketSender(MOVE_TOKEN, {}, sf::Vector2f(0, 0))
 
 void Token::OnLeftClick(const sf::Event::MouseButtonPressed* _mousePressed, sf::TcpSocket& _socket)
 {
+
 	if (!_stateProvider->IsTokenMoveAllowed())
 		return;
 
+
 	if (_shape.getGlobalBounds().contains(sf::Vector2f(_mousePressed->position)))
 	{
+
 		sf::Packet packet;
 
 		selected = true;

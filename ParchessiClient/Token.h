@@ -30,7 +30,7 @@ private:
 	sf::CircleShape _selectionIndicator;
 	IGameStateProvider* _stateProvider;
 public:
-	Token(int playerId, int _idPosition, int tokenID);
+	Token(int playerId, int _idPosition, int tokenID, IGameStateProvider* provider);
 	void OnLeftClick(const sf::Event::MouseButtonPressed* _mousePressed, sf::TcpSocket& _socket) override;
 	
 	void Draw(sf::RenderWindow& window);

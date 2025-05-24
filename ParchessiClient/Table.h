@@ -18,6 +18,8 @@ public:
 	Table();
 	void Draw(sf::RenderWindow& window);
 	void UpdatePositions(int newPos);
+	void InitTokens(IGameStateProvider* provider);
+
 	Cell* GetCell(int id);
 
 	std::vector<Token*> GetTokens() { return _tokens; }

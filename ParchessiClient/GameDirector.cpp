@@ -16,7 +16,7 @@ void GameDirector::StartPlayerTurn(int playerId)
     _currentState = GameState::WAITING_TURN;
     std::cout << "PLAYER TURN -> " << _currentPlayer << std::endl;
     _movableTokens.clear();
-    _selectedToken = new Token(-1, -1, 0);
+    _selectedToken = new Token(-1, -1, 0, this);
 }
 void GameDirector::SelectToken(const sf::Event::MouseButtonPressed* mouse, sf::TcpSocket& _socket)
 {

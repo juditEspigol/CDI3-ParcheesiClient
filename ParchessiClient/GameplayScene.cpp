@@ -143,6 +143,7 @@ GameplayScene::GameplayScene()
 
 	table = new Table();
 	gameDirector = new GameDirector(*table);
+	table->InitTokens(gameDirector);
 
 	endTurnButton = new EndTurnButton(gameDirector);
 	dice = new Dice(gameDirector);
@@ -278,9 +279,11 @@ void GameplayScene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _wind
 		return;
 	}
 	//std::cout << "My id: " << gameDirector->GetCurrentPlayer() << "--->" << CLIENT_MANAGER.GetSelfID() <<  std::endl;
+	
+	
 	if (CLIENT_MANAGER.GetSelfID() != gameDirector->GetCurrentPlayer())
 		return;
-
+		
 	if (const sf::Event::KeyPressed* keyPressed = _event.getIf<sf::Event::KeyPressed>())
 	{
 		HandleKeyPress(keyPressed, _window);
@@ -314,6 +317,7 @@ void GameplayScene::Render(sf::RenderWindow& _window)
 
 void GameplayScene::Update(float _dt, sf::TcpSocket& _socket)
 {
+	
 	if (CLIENT_MANAGER.GetSelfID() == gameDirector->GetCurrentPlayer())
 		return;
 	
