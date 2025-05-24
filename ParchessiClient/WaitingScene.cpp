@@ -81,8 +81,11 @@ void WaitingScene::Update(float _dt, sf::TcpSocket& _socket)
 			// Read packet
 			std::pair<sf::IpAddress, unsigned short> address(sf::IpAddress::Any, 0);
 			tempPacket >> address;
+			int port;
+			tempPacket >> port;
 
-			NETWORK_MANAGER.ConnectToSocket(address.first);
+			NETWORK_MANAGER.ConnectToSocket(address.first, port);
+			//NETWORK_MANAGER.ConnectToSocket(address.first, address.second);
 
 			tempPacket.clear();
 			return;

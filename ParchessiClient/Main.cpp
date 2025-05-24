@@ -2,7 +2,8 @@
 #include "ClientManager.h"
 #include "NetworkInterface.h"
 
-const sf::IpAddress SERVER_IP = sf::IpAddress(10, 40, 2, 208); //sf::IpAddress(10, 40, 2, 183); // Loopback /// 79, 152, 211, 184
+//const sf::IpAddress SERVER_IP = sf::IpAddress(10, 40, 2, 208); // JP PC
+const sf::IpAddress SERVER_IP = sf::IpAddress(127, 0, 0, 1); // LOOPBACK
 
 bool isTesting = false;
 
