@@ -34,6 +34,7 @@ public:
 	void Init();
 	void CheckConnections();
 	void ConnectToSocket(sf::IpAddress _address);
+	void ConnectToSocket(sf::IpAddress _address, unsigned short _port);
 	inline int GetListen() const { return listen; }
 	inline void SetListen(const int _listen) { listen = _listen; }
 	inline void SetConnect(const int _connect) { connect = _connect; }

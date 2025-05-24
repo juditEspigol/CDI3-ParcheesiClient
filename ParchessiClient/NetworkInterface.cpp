@@ -4,10 +4,12 @@
 
 void NetworkManager::Init()
 {
-	if (listener.listen(LISTENER_PORT) != sf::Socket::Status::Done) // Comprbar puerto valido
+	bool listen = (listener.listen(LISTENER_PORT) != sf::Socket::Status::Done);
+
+	if (listen)
 	{
-		std::cerr << "Cannot Listen the port.\nExiting execution with code -1." << std::endl;
-		return;
+		std::cerr << "Cannot Listen the port: " << LISTENER_PORT << std::endl;
+		return; 
 	}
 	selector.add(listener);
 }
@@ -68,7 +70,58 @@ void NetworkManager::ConnectToSocket(sf::IpAddress _address)
 
 	std::cout << "Trying to connect with... " << _address.toString() << "..." << std::endl;
 
-	if (newClient->GetSocket()->connect(_address, LISTENER_PORT) != sf::Socket::Status::Done)
+	// Para que funcione en local
+	bool temp = false;
+
+	int ports[] = { 55011,55012,55013,55014 };
+
+	for (int i = 0; i < 4 ; i++)
+	{
+		if (newClient->GetSocket()->connect(_address, LISTENER_PORT + i) == sf::Socket::Status::Done)
+		{
+			std::cout << "Connected with client with port: " << LISTENER_PORT + i << std::endl;
+			temp = true;
+			break;
+		}
+	}
+
+	if (!temp)
+	{
+		std::cerr << "Error connecting to client: " << _address.toString() << std::endl;
+		delete newClient;
+		return;
+	}
+
+	// Con varios PC
+
+	//if (newClient->GetSocket()->connect(_address, LISTENER_PORT) != sf::Socket::Status::Done)
+	////if (newClient->GetSocket()->connect(_address, LISTENER_PORT) != sf::Socket::Status::Done)
+	//{
+	//	std::cerr << "Error connecting to client: " << _address.toString() << std::endl;
+	//	delete newClient;
+	//	return;
+	//}
+
+	CLIENT_MANAGER.AddClient(newClient);
+	newClient->GetSocket()->setBlocking(false);
+	newClient->SetID(CLIENT_MANAGER.GetSizeClients());
+	std::cout << "Connect to other client --> (" << newClient->GetID() << ") --> " << newClient->GetSocket()->getRemoteAddress().value() << std::endl;
+
+	connect--;
+	return;
+}
+
+void NetworkManager::ConnectToSocket(sf::IpAddress _address, unsigned short _port)
+{
+	if (connect <= 0) // detect if the client have to connect with someone
+		return;
+
+	Client* newClient = new Client(0, new sf::TcpSocket());
+
+	std::cout << "Trying to connect with... " << _address.toString() << ":" << _port << "..." << std::endl;
+
+	if (newClient->GetSocket()->connect(_address, _port) != sf::Socket::Status::Done)
+		//if (newClient->GetSocket()->connect(_address, LISTENER_PORT) != sf::Socket::Status::Done)
 	{
 		std::cerr << "Error connecting to client: " << _address.toString() << std::endl;
 		delete newClient;

@@ -16,5 +16,6 @@ public:
 	~ButtonPacketSender();
 
 	void OnLeftClick(const sf::Event::MouseButtonPressed* _mousePressed, sf::TcpSocket& _socket) override;
+	PacketType GetPacketType() { return packetType; }
 };
 

@@ -62,6 +62,11 @@ void ButtonPacketSender::OnLeftClick(const sf::Event::MouseButtonPressed* _mouse
 
 		}
 
+		if (packetType == PacketType::LOGIN)
+		{
+			tempPacket << LISTENER_PORT;
+		}
+
 		NETWORK_MANAGER.SendData(_socket, tempPacket);
 
 		pressed = true;

@@ -272,7 +272,7 @@ void GameplayScene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _wind
 {
 	//Scene::HandleEvent(_event, _window, _socket);
 	if (_event.is < sf::Event::Closed>())
-	{
+	{	
 		_window.close();
 		return;
 	}
