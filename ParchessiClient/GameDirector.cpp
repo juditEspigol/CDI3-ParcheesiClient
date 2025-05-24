@@ -18,23 +18,30 @@ void GameDirector::StartPlayerTurn(int playerId)
     _movableTokens.clear();
     _selectedToken = new Token(-1, -1, 0);
 }
-void GameDirector::SelectToken(sf::Vector2i mousePos)
+void GameDirector::SelectToken(const sf::Event::MouseButtonPressed* mouse, sf::TcpSocket& _socket)
 {
     if (_currentState != GameState::DICE_ROLLED) 
         return;
 
     for (Token* currentToken : _movableTokens)
     {
-        sf::Vector2f distance = static_cast<sf::Vector2f>(mousePos) - currentToken->GetPosition();
+        /*
+        sf::Vector2f distance = static_cast<sf::Vector2f>(mouse->position) - currentToken->GetPosition();
         float length = std::sqrt(distance.x * distance.x + distance.y * distance.y);
-
+        
         if (length <= TOKEN_RADIUS && currentToken->GetIsSelectable())
+        {
+        */
+        currentToken->OnLeftClick(mouse, _socket);
+        if (currentToken->GetIsSelectable())
         {
             _selectedToken = currentToken;
             _newTokenPosition = currentToken->Move(_dice->GetDiceValue());
             _currentState = GameState::PIECE_SELECTED;
             MoveSelectedToken();
         }
+
+        //}
     }
 }
 void GameDirector::MoveSelectedToken()

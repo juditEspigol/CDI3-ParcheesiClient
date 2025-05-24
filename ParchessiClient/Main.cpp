@@ -5,7 +5,7 @@
 //const sf::IpAddress SERVER_IP = sf::IpAddress(10, 40, 2, 208); // JP PC
 const sf::IpAddress SERVER_IP = sf::IpAddress(127, 0, 0, 1); // LOOPBACK
 
-bool isTesting = true;
+bool isTesting = false;
 
 void main()
 {
@@ -17,7 +17,7 @@ void main()
 	SCENE_MANAGER.AddScene(ROOM, new RoomScene()); 
 	SCENE_MANAGER.AddScene(WAITING, new WaitingScene());
 	SCENE_MANAGER.AddScene(GAMEPLAY, new GameplayScene());
-	SCENE_MANAGER.SetCurrentScene(GAMEPLAY);
+	SCENE_MANAGER.SetCurrentScene(AUTHENTICATION);
 	SCENE_MANAGER.GetCurrentScene()->OnEnter();
 
 	// Render SFML
@@ -36,7 +36,6 @@ void main()
 		//std::cout << "Connected to server" << std::endl;
 		while (window->isOpen())
 		{
-		
 			SCENE_MANAGER.GetCurrentScene()->Render(*window);
 
 			// LISTENER

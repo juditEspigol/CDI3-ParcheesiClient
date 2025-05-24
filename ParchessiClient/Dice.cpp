@@ -44,6 +44,9 @@ void Dice::RollDice()
     std::uniform_int_distribution<int> dist(1, 6);
     _diceValue = dist(_rng);
 
+    // Delete this line
+    _diceValue = 5;
+
     std::cout << "Dice Value = " << _diceValue << std::endl;
 }
 

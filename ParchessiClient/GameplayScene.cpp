@@ -88,7 +88,7 @@ void GameplayScene::HandleMouseClick(const sf::Event::MouseButtonPressed* mouseP
 		break;
 
 	case GameDirector::GameState::DICE_ROLLED:
-		gameDirector->SelectToken(mousePressed->position);
+		gameDirector->SelectToken(mousePressed, socket);
 		movedToken = gameDirector->GetSelectedToken();
 
 		if (movedToken) {

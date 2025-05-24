@@ -50,7 +50,7 @@ ButtonPacketSender(MOVE_TOKEN, {}, sf::Vector2f(0, 0))
 
 void Token::OnLeftClick(const sf::Event::MouseButtonPressed* _mousePressed, sf::TcpSocket& _socket)
 {
-	if (!_stateProvider->IsDiceRollAllowed())
+	if (!_stateProvider->IsTokenMoveAllowed())
 		return;
 
 	if (_shape.getGlobalBounds().contains(sf::Vector2f(_mousePressed->position)))
@@ -58,9 +58,11 @@ void Token::OnLeftClick(const sf::Event::MouseButtonPressed* _mousePressed, sf::
 		sf::Packet packet;
 
 		selected = true;
+		std::cout << "Token Selected" << std::endl;
 
 		int diceValue = dynamic_cast<IGameStateProvider*>(_stateProvider)->GetDiceValue();
 		int newPosition = Move(diceValue);
+		std::cout << "Sended Token" << std::endl;
 
 		for (Client* client : CLIENT_MANAGER.GetClients())
 		{

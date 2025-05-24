@@ -42,7 +42,7 @@ private:
 public:
     void StartGame();
     void StartPlayerTurn(int playerId);
-    void SelectToken(sf::Vector2i mousePos);
+    void SelectToken(const sf::Event::MouseButtonPressed* mouse, sf::TcpSocket& _socket);
     void MoveSelectedToken();
 
 	void CalculateMovableTokens();
