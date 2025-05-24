@@ -210,9 +210,9 @@ void GameplayScene::OnReceivePacket(sf::Packet packet)
 
 void GameplayScene::OnReceiveDiceRoll(int diceValue)
 {
+	std::cout << "Recived dice value packet with value: " << diceValue << std::endl;
 	dice->ForceDiceValue(diceValue);
 	gameDirector->CalculateMovableTokens();
-
 }
 
 void GameplayScene::OnReceiveEndTurn()
@@ -273,7 +273,7 @@ void GameplayScene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _wind
 {
 	//Scene::HandleEvent(_event, _window, _socket);
 	if (_event.is < sf::Event::Closed>())
-	{	
+	{
 		_window.close();
 		return;
 	}
@@ -293,8 +293,6 @@ void GameplayScene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _wind
 		}
 	}
 }
-
-
 
 void GameplayScene::Render(sf::RenderWindow& _window)
 {
@@ -327,9 +325,7 @@ void GameplayScene::Update(float _dt, sf::TcpSocket& _socket)
 		sf::Packet packet;
 		if (socket->receive(packet) == sf::Socket::Status::Done)
 		{
-			
+			OnReceivePacket(packet);
 		}
-		
 	}
-	
 }

@@ -57,7 +57,6 @@ void Token::OnLeftClick(const sf::Event::MouseButtonPressed* _mousePressed, sf::
 	{
 		sf::Packet packet;
 
-		std::cout << "TOKEN PRESSED" << std::endl;
 		selected = true;
 
 		int diceValue = dynamic_cast<IGameStateProvider*>(_stateProvider)->GetDiceValue();
@@ -65,6 +64,7 @@ void Token::OnLeftClick(const sf::Event::MouseButtonPressed* _mousePressed, sf::
 
 		for (Client* client : CLIENT_MANAGER.GetClients())
 		{
+			std::cout << "Client Id: " << client->GetID() << ". Sended Packet Token " << _tokenId << std::endl;
 			packet << packetType << _tokenId << newPosition;
 			NETWORK_MANAGER.SendData(*client->GetSocket(), packet);
 		}

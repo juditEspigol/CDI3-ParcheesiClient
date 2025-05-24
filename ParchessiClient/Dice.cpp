@@ -20,7 +20,7 @@ Dice::Dice(IGameStateProvider* provider) :
 
 void Dice::OnLeftClick(const sf::Event::MouseButtonPressed* _mousePressed, sf::TcpSocket& _socket)
 {
-    if (!stateProvider->IsDiceRollAllowed() )
+    if (!stateProvider->IsDiceRollAllowed())
         return;
 
     if (_turnIndicator.getGlobalBounds().contains(sf::Vector2f(_mousePressed->position)))
@@ -31,6 +31,8 @@ void Dice::OnLeftClick(const sf::Event::MouseButtonPressed* _mousePressed, sf::T
 
 		for (Client* client : CLIENT_MANAGER.GetClients())
 		{
+            std::cout << "Client Id: " << client->GetID() << ". Sended Packet Dice " << _diceValue << std::endl;
+
 			packet << packetType << _diceValue;
 			NETWORK_MANAGER.SendData(*client->GetSocket(), packet);
 		}
