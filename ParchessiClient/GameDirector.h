@@ -10,7 +10,6 @@
 #include "Dice.h"
 #include "EndTurnButton.h"
 
-
 #define PLAYER_INDICATOR_SIZE 50
 #define DICE_INDICATOR_SIZE 45
 
@@ -38,7 +37,6 @@ private:
 
     std::vector<Token*> _movableTokens;
    
-    bool CanTokenMove(Token& token);
     bool IsTokenFromCurrentPlayer(Token& token);
 
 public:
@@ -51,8 +49,10 @@ public:
     void EndTurn();
 
 	bool IsDiceRollAllowed() const override;
+	bool IsTokenMoveAllowed() const override;
 	bool IsEndTurnAllowed() const override;
     int GetCurrentPlayer() const override;
+	int GetDiceValue() const override;
 
 	inline void SetEndTurn(EndTurnButton* endTurnButton) { _endTurnButton = endTurnButton; }
 	inline void SetDice(Dice* dice) { _dice = dice; }

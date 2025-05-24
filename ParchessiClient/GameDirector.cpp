@@ -27,7 +27,6 @@ void GameDirector::SelectToken(sf::Vector2i mousePos)
     {
         sf::Vector2f distance = static_cast<sf::Vector2f>(mousePos) - currentToken->GetPosition();
         float length = std::sqrt(distance.x * distance.x + distance.y * distance.y);
-        //std::cout << "Distance between mouse and token: " << length << std::endl;
 
         if (length <= TOKEN_RADIUS && currentToken->GetIsSelectable())
         {
@@ -40,9 +39,10 @@ void GameDirector::SelectToken(sf::Vector2i mousePos)
 }
 void GameDirector::MoveSelectedToken()
 {
-    if (_currentState != GameState::PIECE_SELECTED) return;
+    if (_currentState != GameState::PIECE_SELECTED) 
+        return;
 
-    _table.UpdatePositions(_selectedToken->Move(_dice->GetDiceValue()));
+    _table.UpdatePositions(_newTokenPosition);
 
     _currentState = GameState::TURN_COMPLETE;
 
@@ -65,13 +65,13 @@ void GameDirector::CalculateMovableTokens()
         {
             if (!currentToken->GetIsInBase())
             {
-                currentToken->SetSelectable(CanTokenMove(*currentToken));
+                currentToken->SetSelectable(true);
                 _movableTokens.push_back(currentToken);
             }
 
             if (currentToken->GetIsInBase() && _dice->GetDiceValue() == 5)
             {
-                currentToken->SetSelectable(CanTokenMove(*currentToken));
+                currentToken->SetSelectable(true);
                 _movableTokens.push_back(currentToken);
             }
         }
@@ -83,11 +83,6 @@ void GameDirector::CalculateMovableTokens()
     {
         _currentState = GameState::TURN_COMPLETE;
     }
-}
-bool GameDirector::CanTokenMove(Token& token)
-{
-    // Comprobar si el token es movible
-    return true;
 }
 bool GameDirector::IsTokenFromCurrentPlayer(Token& token)
 {
@@ -111,11 +106,20 @@ bool GameDirector::IsDiceRollAllowed() const
 {
 	return _currentState == GameState::WAITING_TURN;
 }
+bool GameDirector::IsTokenMoveAllowed() const
+{
+    return _currentState == GameState::DICE_ROLLED;
+}
 bool GameDirector::IsEndTurnAllowed() const
 {
 	return _currentState == GameState::TURN_COMPLETE;
 }
+
 int GameDirector::GetCurrentPlayer() const
 {
     return _currentPlayer;
+}
+int GameDirector::GetDiceValue() const
+{
+	return _dice->GetDiceValue();
 }

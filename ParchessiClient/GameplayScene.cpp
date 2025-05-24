@@ -82,7 +82,7 @@ void GameplayScene::HandleMouseClick(const sf::Event::MouseButtonPressed* mouseP
 		dice->OnLeftClick(mousePressed, socket);
 		if (dice->IsSelected())
 		{
-			SendDicePacket();
+			//SendDicePacket();
 			gameDirector->CalculateMovableTokens();
 		}
 		break;
@@ -101,7 +101,7 @@ void GameplayScene::HandleMouseClick(const sf::Event::MouseButtonPressed* mouseP
 		endTurnButton->OnLeftClick(mousePressed, socket);
 		if (endTurnButton->IsSelected())
 		{
-			SendEndTurn();
+			//SendEndTurn();
 			gameDirector->EndTurn();
 		}
 		break;

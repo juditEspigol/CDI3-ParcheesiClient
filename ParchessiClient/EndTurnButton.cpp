@@ -20,15 +20,20 @@ EndTurnButton::EndTurnButton(IGameStateProvider* provider) :
 
 void EndTurnButton::OnLeftClick(const sf::Event::MouseButtonPressed* mousePressed, sf::TcpSocket& socket)
 {
-    if (!stateProvider || !stateProvider->IsEndTurnAllowed() /* || CLIENT_MANAGER.GetSelfID() != stateProvider->GetCurrentPlayer() */)
+    if (!stateProvider || !stateProvider->IsEndTurnAllowed())
         return;
 
     if (_buttonBorder.getGlobalBounds().contains(sf::Vector2f(mousePressed->position)))
     {
-        sf::Packet tempPacket;
+        sf::Packet packet;
 
-        std::cout << "END TURN PRESSED" << std::endl;
         selected = true;        
+
+		for (Client* client : CLIENT_MANAGER.GetClients())
+		{
+            packet << packetType << selected;
+			NETWORK_MANAGER.SendData(*client->GetSocket(), packet);
+		}
     }
 }
 

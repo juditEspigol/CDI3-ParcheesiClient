@@ -1,7 +1,8 @@
 #include "Token.h"
 
 
-Token::Token(int playerId, int _idPos, int tokenID)
+Token::Token(int playerId, int _idPos, int tokenID) :
+ButtonPacketSender(MOVE_TOKEN, {}, sf::Vector2f(0, 0))
 {
 	switch (playerId)
 	{
@@ -32,9 +33,8 @@ Token::Token(int playerId, int _idPos, int tokenID)
 	_idPosition = _idPos;
 	_isMoving = false;
 	_playerId = playerId;
-	_selectable = false;
+	selected = false;
 	_tokenId = tokenID;
-
 
 	_shape.setOrigin(sf::Vector2f(TOKEN_RADIUS, TOKEN_RADIUS));
 	_shape.setRadius(TOKEN_RADIUS);
@@ -48,9 +48,33 @@ Token::Token(int playerId, int _idPos, int tokenID)
 	_isLastZone = false;
 }
 
+void Token::OnLeftClick(const sf::Event::MouseButtonPressed* _mousePressed, sf::TcpSocket& _socket)
+{
+	if (!_stateProvider->IsDiceRollAllowed())
+		return;
+
+	if (_shape.getGlobalBounds().contains(sf::Vector2f(_mousePressed->position)))
+	{
+		sf::Packet packet;
+
+		std::cout << "TOKEN PRESSED" << std::endl;
+		selected = true;
+
+		int diceValue = dynamic_cast<IGameStateProvider*>(_stateProvider)->GetDiceValue();
+		int newPosition = Move(diceValue);
+
+
+		for (Client* client : CLIENT_MANAGER.GetClients())
+		{
+			packet << packetType << _tokenId << selected;
+			NETWORK_MANAGER.SendData(*client->GetSocket(), packet);
+		}
+	}
+}
+
 void Token::Draw(sf::RenderWindow& window)
 {
-	if (_selectable)
+	if (selected)
 	{
 		_selectionIndicator.setPosition(_position);
 		window.draw(_selectionIndicator);

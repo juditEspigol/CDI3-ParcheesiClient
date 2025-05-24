@@ -21,6 +21,7 @@ void main()
 
 	// Render SFML
 	sf::RenderWindow* window = new sf::RenderWindow(sf::VideoMode({ WIDTH, HEIGHT }), "ParchessiClient");
+
 	// TCP
 	sf::TcpSocket socket; 
 	NETWORK_MANAGER.Init();
@@ -48,8 +49,6 @@ void main()
 
 			// UPDATE
 			SCENE_MANAGER.GetCurrentScene()->Update(0.f, socket);
-
-
 
 			// CHANGE SCENE
 			if (SCENE_MANAGER.GetCurrentScene()->GetIsFinished())
