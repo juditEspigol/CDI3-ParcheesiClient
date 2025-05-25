@@ -93,6 +93,7 @@ void GameplayScene::HandleMouseClick(const sf::Event::MouseButtonPressed* mouseP
 		movedToken = gameDirector->GetSelectedToken();
 
 		if (movedToken) {
+			table->UpdatePositions(dice->GetDiceValue());
 			//SendTokenPacket(movedToken);
 			gameDirector->SetState(GameDirector::GameState::TURN_COMPLETE);
 		}

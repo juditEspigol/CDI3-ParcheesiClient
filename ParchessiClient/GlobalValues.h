@@ -3,7 +3,7 @@
 #define GLOBAL_VALUES
 
 #define SERVER_PORT 55000 // puertos abiertos del 55000 - 55050
-#define LISTENER_PORT 55015
+#define LISTENER_PORT 55013
 
 #define WIDTH 960
 #define HEIGHT 960
