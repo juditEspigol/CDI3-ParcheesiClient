@@ -95,7 +95,8 @@ void GameplayScene::HandleMouseClick(const sf::Event::MouseButtonPressed* mouseP
 		if (movedToken) {
 			//SendTokenPacket(movedToken);
 			std::cout << dice->GetDiceValue() << std::endl;
-			table->UpdatePositions(dice->GetDiceValue());
+			//std::cout << movedToken->Move(dice->GetDiceValue()) << std::endl;
+			table->UpdatePositions(movedToken->Move(dice->GetDiceValue()));
 			gameDirector->SetState(GameDirector::GameState::TURN_COMPLETE);
 		}
 		break;

@@ -46,6 +46,7 @@ public:
 	inline int GetIdPosition() { return _idPosition; }
 	inline bool GetIsSelectable() { return selected; }
 	inline bool GetIsLastZone() { return _isLastZone; }
+	inline int GetExitCell() { return _exitCell; }
 	inline bool GetIsMoving() { return _isMoving; }
 	inline bool GetIsInBase() { return _inBase; }
 	inline int GetFinalCellId() { return _finalCell; }

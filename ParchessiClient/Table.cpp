@@ -120,8 +120,15 @@ void Table::UpdatePositions(int newPos)
 
     for (Token* token : _tokens)
     {
+        std::cout << "[DEBUG] Token con id " << token->GetTokenId() << " IS MOVING: " << token->GetIsMoving() << std::endl;
         if (token->GetIsMoving())
         {
+            if (newPos >= 1000)
+            {
+                _newPosition = token->GetExitCell();
+                newPos = 0;
+            }
+
             std::cout << "[DEBUG] Moviendo token ID " << token->GetTokenId()
                 << " del jugador " << token->GetPlayerId()
                 << " desde casilla " << token->GetIdPosition() << std::endl;
