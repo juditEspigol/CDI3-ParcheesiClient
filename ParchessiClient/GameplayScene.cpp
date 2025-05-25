@@ -89,6 +89,7 @@ void GameplayScene::HandleMouseClick(const sf::Event::MouseButtonPressed* mouseP
 
 	case GameDirector::GameState::DICE_ROLLED:
 		gameDirector->SelectToken(mousePressed, socket);
+		std::cout << "Apretado boton" << std::endl;
 		movedToken = gameDirector->GetSelectedToken();
 
 		if (movedToken) {
@@ -196,8 +197,11 @@ void GameplayScene::OnReceivePacket(sf::Packet packet)
 		break;
 	}
 	case MOVE_TOKEN: {
+		std::cout << "He recibido un paquete" << std::endl;
 		int tokenId, newPosition;
 		packet >> tokenId >> newPosition;
+		std::cout << "Token ID: " << tokenId << " on position: " << newPosition << std::endl;
+
 		OnReceiveMoveToken(tokenId, newPosition);
 		break;
 	}
@@ -212,15 +216,17 @@ void GameplayScene::OnReceivePacket(sf::Packet packet)
 void GameplayScene::OnReceiveDiceRoll(int diceValue)
 {
 	std::cout << "Recived dice value packet with value: " << diceValue << std::endl;
-	if (diceValue != 5)
-	{
-		dice->ForceDiceValue(diceValue);
-	}
-	else
+	/*if (diceValue != 5)
+	{*/
+	dice->ForceDiceValue(diceValue);
+	//}
+	/*else
 	{
 		dice->ForceDiceValue(6);
-	}
-	gameDirector->CalculateMovableTokens();
+	}*/
+	//gameDirector->CalculateMovableTokens();
+	gameDirector->SetState(GameDirector::GameState::TURN_COMPLETE);
+
 }
 
 void GameplayScene::OnReceiveEndTurn()
@@ -236,7 +242,8 @@ void GameplayScene::OnReceiveMoveToken(int tokenID, int diceValue)
 	{
 		if (token->GetTokenId() == tokenID)
 		{
-			gameDirector->MoveSelectedToken();
+			std::cout << "Vamo a mover el token" << std::endl;
+			gameDirector->MoveTokenById(tokenID, diceValue);
 			table->UpdatePositions(diceValue);
 			break;
 		}

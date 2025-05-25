@@ -44,6 +44,7 @@ public:
     void StartPlayerTurn(int playerId);
     void SelectToken(const sf::Event::MouseButtonPressed* mouse, sf::TcpSocket& _socket);
     void MoveSelectedToken();
+    void MoveTokenById(int tokenId, int positionsForward);
 
 	void CalculateMovableTokens();
     void EndTurn();

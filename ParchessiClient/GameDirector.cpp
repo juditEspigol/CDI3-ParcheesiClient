@@ -58,6 +58,20 @@ void GameDirector::MoveSelectedToken()
         currentToken->SetSelectable(false);
     }
 }
+void GameDirector::MoveTokenById(int tokenId, int positionsForward)
+{
+    for (Token* currentToken : _table.GetTokens())
+    {
+        if (currentToken->GetTokenId() == tokenId)
+        {
+            currentToken->Move(123);
+        }
+        else
+        {
+            currentToken->EndMove();
+        }
+    }
+}
 void GameDirector::CalculateMovableTokens()
 {
     if (_currentState != GameState::WAITING_TURN)
