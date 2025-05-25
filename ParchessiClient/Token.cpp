@@ -53,10 +53,10 @@ void Token::OnLeftClick(const sf::Event::MouseButtonPressed* _mousePressed, sf::
 {
 	if (!_stateProvider->IsTokenMoveAllowed())
 		return;
+
 	if (_shape.getGlobalBounds().contains(sf::Vector2f(_mousePressed->position)))
 	{
 		sf::Packet packet;
-
 
 		int diceValue = dynamic_cast<IGameStateProvider*>(_stateProvider)->GetDiceValue();
 		int newPosition = Move(diceValue);

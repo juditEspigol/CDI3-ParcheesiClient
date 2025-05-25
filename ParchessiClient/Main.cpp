@@ -41,7 +41,6 @@ void main()
 			// LISTENER
 			while (const std::optional event = window->pollEvent())
 			{
-				//std::cout << "Click o algo" << std::endl;
 				SCENE_MANAGER.GetCurrentScene()->HandleEvent(*event, *window, socket);
 			}
 

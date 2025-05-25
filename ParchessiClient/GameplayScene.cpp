@@ -1,23 +1,22 @@
 #include "GameplayScene.h"
 #include "ClientManager.h"
 
-
 void GameplayScene::HandleKeyPress(const sf::Event::KeyPressed* keyPressed, sf::RenderWindow& window)
 {
-	
 	switch (keyPressed->code)
 	{
 		case sf::Keyboard::Key::Escape:
+			// Cierra la ventana del juego
 			std::cout << "Disconected..." << std::endl;
 			window.close();
 			break;
 		case sf::Keyboard::Key::Enter:
 		{
+			// Envía un mensaje de prueba a todos los clientes conectados
 			std::cout << "Enter" << std::endl;
 
-			// ENVIAR PACKETE SIEMPRE PRIMERO UN PACKETE TIPE
 			sf::Packet packet;
-			std::string content = "Hola que tal";
+			std::string content = "Test Packet";
 			packet << content;
 			for (auto client : CLIENT_MANAGER.GetClients())
 			{
@@ -27,6 +26,7 @@ void GameplayScene::HandleKeyPress(const sf::Event::KeyPressed* keyPressed, sf::
 		}
 		break;
 		case sf::Keyboard::Key::Backspace:
+			// Borra un carácter del botón seleccionado
 			for (Button* button : buttons)
 			{
 				if (button->IsSelected())
@@ -35,6 +35,7 @@ void GameplayScene::HandleKeyPress(const sf::Event::KeyPressed* keyPressed, sf::
 				}
 			}
 			break;
+		// Forzar valor del dado con teclas del 1 al 6 y recalcular fichas que se pueden mover
 		case sf::Keyboard::Key::Num1:
 			dice->ForceDiceValue(1);
 			gameDirector->SetState(GameDirector::GameState::WAITING_TURN);
@@ -71,7 +72,7 @@ void GameplayScene::HandleKeyPress(const sf::Event::KeyPressed* keyPressed, sf::
 void GameplayScene::HandleMouseClick(const sf::Event::MouseButtonPressed* mousePressed, sf::TcpSocket& socket)
 {
 	GameDirector::GameState currentState = gameDirector->GetCurrentState();
-
+	// Imprime el estado actual para debug
 	PrintCurrentState(currentState);
 
 	Token* movedToken;
@@ -79,33 +80,33 @@ void GameplayScene::HandleMouseClick(const sf::Event::MouseButtonPressed* mouseP
 	switch (currentState)
 	{
 	case GameDirector::GameState::WAITING_TURN:
+		// Si estamos esperando turno, dejamos lanzar el dado
 		dice->OnLeftClick(mousePressed, socket);
 		if (dice->IsSelected())
 		{
-			//SendDicePacket();
+			// calcular fichas movibles tras lanzar el dado
 			gameDirector->CalculateMovableTokens();
 		}
 		break;
 
 	case GameDirector::GameState::DICE_ROLLED:
+		// Si el dado ya fue lanzado, podemos seleccionar una ficha
 		gameDirector->SelectToken(mousePressed, socket);
-		std::cout << "Apretado boton" << std::endl;
 		movedToken = gameDirector->GetSelectedToken();
 
-		if (movedToken) {
-			//SendTokenPacket(movedToken);
-			std::cout << dice->GetDiceValue() << std::endl;
-			//std::cout << movedToken->Move(dice->GetDiceValue()) << std::endl;
+		if (movedToken) 
+		{
+			// Actualizamos la posición de la ficha seleccionada
 			table->UpdatePositions(movedToken->Move(dice->GetDiceValue()));
 			gameDirector->SetState(GameDirector::GameState::TURN_COMPLETE);
 		}
 		break;
 
 	case GameDirector::GameState::TURN_COMPLETE:
+		// Si ya se ha movido una ficha, permitimos terminar el turno
 		endTurnButton->OnLeftClick(mousePressed, socket);
 		if (endTurnButton->IsSelected())
 		{
-			//SendEndTurn();
 			gameDirector->EndTurn();
 		}
 		break;
@@ -143,11 +144,11 @@ GameplayScene::GameplayScene()
 	waitingPacket = false;
 	nextScene = WAITING;
 
-	tableSprite = new sf::Sprite(*TEXTURE_MANAGER.LoadTexture(TABLE_TEXTURE));
+	tableSprite = new sf::Sprite(*TEXTURE_MANAGER.LoadTexture(TABLE_TEXTURE)); // fondo del tablero
 
-	table = new Table();
-	gameDirector = new GameDirector(*table);
-	table->InitTokens(gameDirector);
+	table = new Table();                         // Carga las celdas desde el JSON
+	gameDirector = new GameDirector(*table);     // Controlador principal del juego
+	table->InitTokens(gameDirector);             // Coloca las fichas iniciales
 
 	endTurnButton = new EndTurnButton(gameDirector);
 	dice = new Dice(gameDirector);
@@ -158,7 +159,7 @@ GameplayScene::GameplayScene()
 	buttons.push_back(endTurnButton);
 	buttons.push_back(dice);
 
-	gameDirector->StartGame();
+	gameDirector->StartGame(); // Empieza el primer turno
 }
 
 GameplayScene::~GameplayScene()
@@ -169,7 +170,7 @@ GameplayScene::~GameplayScene()
 	delete endTurnButton;
 	delete tableSprite;
 
-	buttons.clear();
+	buttons.clear(); // Limpieza de punteros a botones
 }
 
 void GameplayScene::OnEnter()
@@ -200,10 +201,8 @@ void GameplayScene::OnReceivePacket(sf::Packet packet)
 		break;
 	}
 	case MOVE_TOKEN: {
-		std::cout << "He recibido un paquete" << std::endl;
 		int tokenId, newPosition;
 		packet >> tokenId >> newPosition;
-		std::cout << "Token ID: " << tokenId << " on position: " << newPosition << std::endl;
 
 		OnReceiveMoveToken(tokenId, newPosition);
 		break;
@@ -219,24 +218,16 @@ void GameplayScene::OnReceivePacket(sf::Packet packet)
 void GameplayScene::OnReceiveDiceRoll(int diceValue)
 {
 	std::cout << "Recived dice value packet with value: " << diceValue << std::endl;
-	/*if (diceValue != 5)
-	{*/
-	dice->ForceDiceValue(diceValue);
-	//}
-	/*else
-	{
-		dice->ForceDiceValue(6);
-	}*/
-	//gameDirector->CalculateMovableTokens();
-	gameDirector->SetState(GameDirector::GameState::TURN_COMPLETE);
 
+	dice->ForceDiceValue(diceValue); // Forzar valor recibido
+	gameDirector->SetState(GameDirector::GameState::TURN_COMPLETE); // Se salta directamente al final del turno
 }
 
 void GameplayScene::OnReceiveEndTurn()
 {
 	std::cerr << "End turn " << std::endl;
 	gameDirector->EndTurn();
-	bucles++;
+	bucles++; // contador de bucles
 }
 
 void GameplayScene::OnReceiveMoveToken(int tokenID, int diceValue)
@@ -245,65 +236,31 @@ void GameplayScene::OnReceiveMoveToken(int tokenID, int diceValue)
 	{
 		if (token->GetTokenId() == tokenID)
 		{
-			std::cout << "Vamo a mover el token" << std::endl;
-			gameDirector->MoveTokenById(tokenID, diceValue);
-			table->UpdatePositions(diceValue);
+			gameDirector->MoveTokenById(tokenID, diceValue); // mueve internamente el token
+			table->UpdatePositions(diceValue);               // lo actualiza visualmente
 			break;
 		}
 	}
 }
 
-void GameplayScene::SendDicePacket()
-{
-	sf::Packet packet;
-	std::cout << "Sending Packet Dice: " << dice->GetDiceValue() << std::endl;
-
-	for (Client* client : CLIENT_MANAGER.GetClients())
-	{
-		packet << DICE_ROLL << dice->GetDiceValue();
-		NETWORK_MANAGER.SendData(*client->GetSocket(), packet);
-	}
-}
-
-void GameplayScene::SendTokenPacket(Token* token)
-{
-	sf::Packet movePacket;
-	std::cout << "Send Packet: Moved Tocken: ID:" << token->GetTokenId()
-		<< " Dice Value:" << dice->GetDiceValue() << std::endl;
-	for (Client* client : CLIENT_MANAGER.GetClients())
-	{
-		movePacket << MOVE_TOKEN << token->GetTokenId() << dice->GetDiceValue();
-		NETWORK_MANAGER.SendData(*client->GetSocket(), movePacket);
-	}
-}
-
-void GameplayScene::SendEndTurn()
-{
-	sf::Packet packet;
-	for (Client* client : CLIENT_MANAGER.GetClients())
-	{
-		packet << PacketType::END_TURN;
-		NETWORK_MANAGER.SendData(*client->GetSocket(), packet);
-	}
-}
-
 void GameplayScene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _window, sf::TcpSocket& _socket)
 {
-	//Scene::HandleEvent(_event, _window, _socket);
 	if (_event.is < sf::Event::Closed>())
 	{
-		_window.close();
+		_window.close(); // Si se cierra la ventana
 		return;
 	}
-	//std::cout << "My id: " << gameDirector->GetCurrentPlayer() << "--->" << CLIENT_MANAGER.GetSelfID() <<  std::endl;
-	
+
+	// Si no es tu turno, no puedes interactuar
 	if (CLIENT_MANAGER.GetSelfID() != gameDirector->GetCurrentPlayer())
 		return;
 		
+	// Tecla pulsada
 	if (const sf::Event::KeyPressed* keyPressed = _event.getIf<sf::Event::KeyPressed>())
 	{
 		HandleKeyPress(keyPressed, _window);
 	}
+	// Clic izquierdo del ratón
 	if (const sf::Event::MouseButtonPressed* mousePressed = _event.getIf<sf::Event::MouseButtonPressed>())
 	{
 		if (mousePressed->button == sf::Mouse::Button::Left)

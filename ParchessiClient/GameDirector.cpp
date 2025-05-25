@@ -5,6 +5,7 @@ GameDirector::GameDirector(Table& table) :
     _currentPlayer(1),
     _currentState(GameState::WAITING_TURN) 
 {}
+
 void GameDirector::StartGame()
 {
     _currentPlayer = 1;
@@ -25,13 +26,6 @@ void GameDirector::SelectToken(const sf::Event::MouseButtonPressed* mouse, sf::T
 
     for (Token* currentToken : _movableTokens)
     {
-        /*
-        sf::Vector2f distance = static_cast<sf::Vector2f>(mouse->position) - currentToken->GetPosition();
-        float length = std::sqrt(distance.x * distance.x + distance.y * distance.y);
-        
-        if (length <= TOKEN_RADIUS && currentToken->GetIsSelectable())
-        {
-        */
         currentToken->OnLeftClick(mouse, _socket);
         if (currentToken->GetIsMoving())
         {
@@ -40,8 +34,6 @@ void GameDirector::SelectToken(const sf::Event::MouseButtonPressed* mouse, sf::T
             _currentState = GameState::PIECE_SELECTED;
             MoveSelectedToken();
         }
-
-        //}
     }
 }
 void GameDirector::MoveSelectedToken()
