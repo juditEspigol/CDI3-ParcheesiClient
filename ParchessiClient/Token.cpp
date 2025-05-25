@@ -53,20 +53,16 @@ void Token::OnLeftClick(const sf::Event::MouseButtonPressed* _mousePressed, sf::
 {
 	if (!_stateProvider->IsTokenMoveAllowed())
 		return;
-	std::cout << "Coñete" << std::endl;
 	if (_shape.getGlobalBounds().contains(sf::Vector2f(_mousePressed->position)))
 	{
 		sf::Packet packet;
 
-		std::cout << "Token Selected" << std::endl;
 
 		int diceValue = dynamic_cast<IGameStateProvider*>(_stateProvider)->GetDiceValue();
 		int newPosition = Move(diceValue);
-		std::cout << "Sended Token" << std::endl;
 
 		for (Client* client : CLIENT_MANAGER.GetClients())
 		{
-			std::cout << "Client Id: " << client->GetID() << ". Sended Packet Token " << _tokenId << std::endl;
 			packet << packetType << _tokenId << newPosition;
 			NETWORK_MANAGER.SendData(*client->GetSocket(), packet);
 		}

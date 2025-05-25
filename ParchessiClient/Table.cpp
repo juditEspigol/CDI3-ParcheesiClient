@@ -116,51 +116,61 @@ Cell* Table::GetCell(int id)
 void Table::UpdatePositions(int newPos)
 {
     int _newPosition = newPos;
+    std::cout << "[DEBUG] Iniciando UpdatePositions con newPos = " << newPos << std::endl;
 
     for (Token* token : _tokens)
     {
         if (token->GetIsMoving())
         {
-            // Lo sacamos de la casilla anterior
+            std::cout << "[DEBUG] Moviendo token ID " << token->GetTokenId()
+                << " del jugador " << token->GetPlayerId()
+                << " desde casilla " << token->GetIdPosition() << std::endl;
+
             GetCell(token->GetIdPosition())->RemoveToken(token);
 
-            // Recorremos desde la posición actual hasta la nueva
             for (int i = token->GetIdPosition(); i <= newPos; i++)
             {
+                std::cout << "[DEBUG] Recorriendo casilla " << i << std::endl;
+
                 if (i >= (token->GetPlayerId() * 100) + 7)
                 {
+                    std::cout << "[DEBUG] Llegamos al límite del recorrido especial, forzando _newPosition a "
+                        << (token->GetPlayerId() * 100) + 7 << std::endl;
                     _newPosition = (token->GetPlayerId() * 100) + 7;
                     break;
                 }
-                // Si llegamos a la última celda del recorrido principal
+
                 if (i == token->GetFinalCellId())
                 {
+                    std::cout << "[DEBUG] Entrando en zona final desde casilla " << i << std::endl;
                     token->ArriveLastZone();
                     _newPosition = token->GetPlayerId() * 100;
 
                     int newLoop = (newPos - i) + _newPosition;
-                    std::cout << "NewLoop = " << newLoop << std::endl;
+                    std::cout << "[DEBUG] newLoop = " << newLoop << std::endl;
 
                     for (int j = _newPosition; j <= newLoop; j++)
                     {
                         newPos = j;
-                        _newPosition = j;                    
-                        
+                        _newPosition = j;
+                        std::cout << "[DEBUG] Avanzando por zona final: nueva pos = " << _newPosition << std::endl;
                     }
                     break;
                 }
 
                 if (_newPosition > 68 && !token->GetIsLastZone())
                 {
+                    std::cout << "[DEBUG] Se pasó de 68 sin estar en zona final. Reiniciando a 1." << std::endl;
                     _newPosition = 1;
-
                     int newLoop = newPos - 68;
-                    std::cout << "NewLoop = " << newLoop << std::endl;
+                    std::cout << "[DEBUG] newLoop = " << newLoop << std::endl;
 
                     for (int j = _newPosition; j <= newLoop; j++)
                     {
+                        std::cout << "[DEBUG] Posible celda en rebote: " << j << std::endl;
                         if (GetCell(j)->GetTokens().size() == 2)
                         {
+                            std::cout << "[DEBUG] Celda " << j << " ocupada por 2 tokens, retrocedemos." << std::endl;
                             _newPosition = j - 1;
                             continue;
                         }
@@ -168,29 +178,35 @@ void Table::UpdatePositions(int newPos)
                         {
                             newPos = j;
                             _newPosition = j;
+                            std::cout << "[DEBUG] Avanzamos a celda " << j << std::endl;
                         }
                     }
                 }
                 else if (_newPosition < 1)
                 {
+                    std::cout << "[DEBUG] newPosition < 1. Lo fijamos a 68." << std::endl;
                     _newPosition = 68;
                 }
 
                 if (GetCell(i)->GetTokens().size() == 2)
                 {
+                    std::cout << "[DEBUG] Celda " << i << " tiene 2 tokens, detenemos avance." << std::endl;
                     _newPosition = i - 1;
                     continue;
                 }
-            }          
+            }
 
-            // Comprobamos si hay otra ficha en la nueva posición
+            std::cout << "[DEBUG] Final de recorrido. Posición destino tentativa: " << _newPosition << std::endl;
+
             if (GetCell(_newPosition)->GetTokens().size() != 0)
             {
-                std::cout << GetCell(_newPosition)->GetTokens().size() << std::endl;
+                std::cout << "[DEBUG] Celda " << _newPosition << " contiene "
+                    << GetCell(_newPosition)->GetTokens().size() << " tokens." << std::endl;
 
-                // Comprobamos si es ficha de otro jugador
                 if (GetCell(_newPosition)->GetTokens()[0]->GetPlayerId() != token->GetPlayerId())
                 {
+                    std::cout << "[DEBUG] Se encontró un token rival. Iniciando captura." << std::endl;
+
                     Token* rivalToken = GetCell(_newPosition)->GetTokens()[0];
                     rivalToken->SetPosition(
                         GetCell(1000 + rivalToken->GetPlayerId())->GetPosition(),
@@ -198,22 +214,25 @@ void Table::UpdatePositions(int newPos)
                     );
                     GetCell(1000 + rivalToken->GetPlayerId())->AddToken(rivalToken);
 
-
                     rivalToken->SetSelectable(false);
                     rivalToken->SetIsInBase(true);
                     GetCell(_newPosition)->RemoveToken(rivalToken);
-                    // Moverlo 20 posiciones más
-                    token->UpdateIdPosition(_newPosition);
 
+                    std::cout << "[DEBUG] Rival enviado a base. Relanzando movimiento +20." << std::endl;
+                    token->UpdateIdPosition(_newPosition);
                     UpdatePositions(token->Move(20));
-                    return; //Acabamos ejecución
+                    return;
                 }
             }
 
-            // Actualizamos la posición del token y lo añadimos a la nueva celda
+            std::cout << "[DEBUG] Posicionando token ID " << token->GetTokenId()
+                << " en celda " << _newPosition << std::endl;
+
             token->UpdateIdPosition(_newPosition);
             GetCell(token->GetIdPosition())->AddToken(token);
             token->EndMove();
         }
     }
+
+    std::cout << "[DEBUG] Fin de UpdatePositions" << std::endl;
 }

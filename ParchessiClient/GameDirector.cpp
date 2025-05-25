@@ -49,8 +49,6 @@ void GameDirector::MoveSelectedToken()
     if (_currentState != GameState::PIECE_SELECTED) 
         return;
 
-    _table.UpdatePositions(_newTokenPosition);
-
     _currentState = GameState::TURN_COMPLETE;
 
     for (Token* currentToken : _table.GetTokens())
@@ -64,7 +62,7 @@ void GameDirector::MoveTokenById(int tokenId, int positionsForward)
     {
         if (currentToken->GetTokenId() == tokenId)
         {
-            currentToken->Move(123);
+            currentToken->Move(1);
         }
         else
         {
