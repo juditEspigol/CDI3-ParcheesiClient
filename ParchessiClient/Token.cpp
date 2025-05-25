@@ -51,17 +51,13 @@ ButtonPacketSender(MOVE_TOKEN, {}, sf::Vector2f(0, 0))
 
 void Token::OnLeftClick(const sf::Event::MouseButtonPressed* _mousePressed, sf::TcpSocket& _socket)
 {
-
 	if (!_stateProvider->IsTokenMoveAllowed())
 		return;
 
-
 	if (_shape.getGlobalBounds().contains(sf::Vector2f(_mousePressed->position)))
 	{
-
 		sf::Packet packet;
 
-		selected = true;
 		std::cout << "Token Selected" << std::endl;
 
 		int diceValue = dynamic_cast<IGameStateProvider*>(_stateProvider)->GetDiceValue();

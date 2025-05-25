@@ -33,7 +33,7 @@ void GameDirector::SelectToken(const sf::Event::MouseButtonPressed* mouse, sf::T
         {
         */
         currentToken->OnLeftClick(mouse, _socket);
-        if (currentToken->GetIsSelectable())
+        if (currentToken->GetIsMoving())
         {
             _selectedToken = currentToken;
             _newTokenPosition = currentToken->Move(_dice->GetDiceValue());
@@ -53,7 +53,6 @@ void GameDirector::MoveSelectedToken()
 
     _currentState = GameState::TURN_COMPLETE;
 
-    // Reset all selectable tokens
     for (Token* currentToken : _table.GetTokens())
     {
         currentToken->SetSelectable(false);

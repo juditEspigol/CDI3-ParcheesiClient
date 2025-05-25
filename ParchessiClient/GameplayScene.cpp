@@ -212,7 +212,14 @@ void GameplayScene::OnReceivePacket(sf::Packet packet)
 void GameplayScene::OnReceiveDiceRoll(int diceValue)
 {
 	std::cout << "Recived dice value packet with value: " << diceValue << std::endl;
-	dice->ForceDiceValue(diceValue);
+	if (diceValue != 5)
+	{
+		dice->ForceDiceValue(diceValue);
+	}
+	else
+	{
+		dice->ForceDiceValue(6);
+	}
 	gameDirector->CalculateMovableTokens();
 }
 
@@ -229,7 +236,7 @@ void GameplayScene::OnReceiveMoveToken(int tokenID, int diceValue)
 	{
 		if (token->GetTokenId() == tokenID)
 		{
-			token->Move(diceValue);
+			gameDirector->MoveSelectedToken();
 			table->UpdatePositions(diceValue);
 			break;
 		}
@@ -280,7 +287,6 @@ void GameplayScene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _wind
 	}
 	//std::cout << "My id: " << gameDirector->GetCurrentPlayer() << "--->" << CLIENT_MANAGER.GetSelfID() <<  std::endl;
 	
-	
 	if (CLIENT_MANAGER.GetSelfID() != gameDirector->GetCurrentPlayer())
 		return;
 		
@@ -299,7 +305,6 @@ void GameplayScene::HandleEvent(const sf::Event& _event, sf::RenderWindow& _wind
 
 void GameplayScene::Render(sf::RenderWindow& _window)
 {
-
 	_window.clear();
 
 	_window.draw(*tableSprite);
